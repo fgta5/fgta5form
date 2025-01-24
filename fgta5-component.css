@@ -1,0 +1,18 @@
+
+.fgta5-button:hover {
+	background-color: orange;
+	cursor: pointer;
+}
+
+.fgta5-button:disabled {
+	background-color: #eee;
+	cursor: not-allowed;
+}
+
+.fgta5-textbox-editmode	{
+	background-color: rgb(255, 207, 118);
+}
+
+.fgta5-textbox-viewmode {
+	background-color: #fff;
+}

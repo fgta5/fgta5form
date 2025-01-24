@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>fgta5js</title>
+		<link rel="stylesheet" href="fgta5-component.css" />
+		<link rel="stylesheet" href="fgta5dev.css" />
+
+		<script type="module">
+			import { $fgta5 } from './src/main.mjs'
+			window.$fgta5 = $fgta5
+		</script>
+	</head>
+	<body>
+		<header>
+			<h1>Fgta5js Development</h1>
+		</header>
+		
+		<main>
+			<form id="form" editmode="True">
+				<div>
+					<input id="obj_txt_nama" type="text" placeholder="Nama">
+					<input id="obj_txt_password" type="password" placeholder="Password">
+					<input id="obj_txt_number" type="text" placeholder="Number">
+					<input id="obj_chk_check" type="checkbox" label="Check">
+				</div>
+				<div>
+					<button id="btn_edit">Edit</button>
+					<button id="btn_reset">Reset</button>
+					<button id="btn_save">Save</button>
+					<button id="btn_new" disabled>New</button>
+				</div>
+			</form>
+		</main>
+
+		<div id="fgta5-loading-pagemask">
+			<div style="font-family: system-ui, sans-serif">
+				Please Wait ...
+			</div>
+		</div>
+	</body>
+
+
+	<script type="module">
+		import * as $page from './fgta5dev.mjs'
+		window.addEventListener("load", async (event) => {
+			await $page.main();
+			var pagemask = document.getElementById('fgta5-loading-pagemask')
+			pagemask.style.opacity = 0
+			pagemask.style.visibility = 'hidden'
+			setTimeout(()=>{
+				pagemask.parentNode.removeChild(pagemask)
+			}, 500);
+		});
+	</script>
+</html>
