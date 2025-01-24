@@ -84,3 +84,4 @@ function form_setEditMode(self, editmode) {
 function form_isEditMode(self) {
 	return self.editmode
 }
+
