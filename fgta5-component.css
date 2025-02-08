@@ -9,10 +9,14 @@
 	cursor: not-allowed;
 }
 
-.fgta5-textbox-editmode	{
+.fgta5-input-editmode	{
 	background-color: rgb(255, 207, 118);
 }
 
-.fgta5-textbox-viewmode {
+.fgta5-input-viewmode {
 	background-color: #fff;
+}
+
+.fgta5-input-readonly	{
+	background-color: rgb(200, 200, 200);
 }

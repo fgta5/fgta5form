@@ -5,7 +5,8 @@
 		<link rel="stylesheet" href="fgta5dev.css" />
 
 		<script type="module">
-			import { $fgta5 } from './src/main.mjs'
+			import $fgta5 from './src/main.mjs'
+			// import $fgta5 from './dist/fgta5.min.js'
 			window.$fgta5 = $fgta5
 		</script>
 	</head>
@@ -22,11 +23,18 @@
 					<input id="obj_txt_number" type="text" placeholder="Number">
 					<input id="obj_chk_check" type="checkbox" label="Check">
 				</div>
-				<div>
+				<div style="padding-top: 10px">
 					<button id="btn_edit">Edit</button>
+					<button id="btn_lock">Lock</button>
 					<button id="btn_reset">Reset</button>
 					<button id="btn_save">Save</button>
-					<button id="btn_new" disabled>New</button>
+					<button id="btn_new">New</button>
+
+					<button id="btn_nonaktif" disabled>Non Aktif</button>
+				</div>
+
+				<div style="padding-top: 10px">
+					<button id="btn_edittogle">Togle Edit State</button>
 				</div>
 			</form>
 		</main>
@@ -40,9 +48,12 @@
 
 
 	<script type="module">
-		import * as $page from './fgta5dev.mjs'
+		import Page from './fgta5dev.mjs'
+
 		window.addEventListener("load", async (event) => {
+			var $page = new Page();
 			await $page.main();
+
 			var pagemask = document.getElementById('fgta5-loading-pagemask')
 			pagemask.style.opacity = 0
 			pagemask.style.visibility = 'hidden'
