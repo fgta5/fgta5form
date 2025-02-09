@@ -8,3 +8,14 @@
 	display: none !important;
 }
 
+.input-field {
+	display: flex;
+	column-gap: 10px;
+}
+
+.input-field > label {
+	margin-top: 4px;
+	font-size: 0.8rem;
+	font-weight: bold;
+
+}

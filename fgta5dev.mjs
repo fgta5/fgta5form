@@ -8,6 +8,7 @@ const btn_testvalidation = new $fgta5.Button('btn_testvalidation')
 
 const form = new $fgta5.Form('form', {
 	txt_nama: new $fgta5.Textbox('obj_txt_nama'),
+	txt_kota: new $fgta5.Combobox('obj_txt_kota'),
 });
 
 export default class Page {

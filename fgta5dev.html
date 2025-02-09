@@ -20,10 +20,25 @@
 		
 		<main>
 			<form id="form" locked="True">
-				<div>
-					<input id="obj_txt_nama" type="text" placeholder="Nama" autocomplete="off" spellcheck="false" validator="required,minlength:3,maxlength:50,window.$validator.TestValidasi" errormessage="Nama tidak boleh kosong dan harus memenuhi syarat TestValidasi">
+				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
+					<div class="input-field">
+						<label for="obj_txt_nama">Nama</label>
+						<input required id="obj_txt_nama" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" maxlength="30" validator="" >
+					</div>
 
+					<div class="input-field">
+						<label for="obj_txt_kota">Kota</label>
+						<input required id="obj_txt_kota" placeholder="Kota" autocomplete="off" spellcheck="false" minlength="3" maxlength="10" validator="" >
+						<datalist for="obj_txt_kota">
+							<option value="JKT">Jakarta</option>
+							<option value="SBY">Surabaya</option>
+							<option value="BAL">Bali</option>
+						</datalist>
+					</div>
 				</div>
+
+
+
 				<div style="padding-top: 10px">
 					<button id="btn_edittogle">Togle Edit State</button>
 					<button id="btn_reset">Reset</button>
