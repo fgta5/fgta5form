@@ -1,4 +1,6 @@
 import Input from "./Input.mjs"
+import { doValidation } from "../validator.mjs"
+
 
 export default class Textbox extends Input {
 
@@ -78,18 +80,22 @@ function Textbox_SetError(self, msg) {
 	}
 }
 
-function Textbox_Validate(self) {
-	var required = self.Element.getAttribute('required')
-	var value = self.Element.value
-	var errormessage = self.Element.getAttribute('errormessage')
-	
-	if (required && !value) {
-		self.SetError(errormessage)
-		return false
-	} else {
-		self.SetError(null)
-		return true
-	}
 
+
+
+function Textbox_Validate(self) {
+	var validator = self.Element.getAttribute('validator')
 	
+	var valid = doValidation(self.Element, validator); 
+	
+	
+
+	// const validating = new CustomEvent('validating', { cancelable: true });
+	// self.Element.dispatchEvent(validating)
+
+	// if (validating.defaultPrevented) {
+	// 	return false
+	// } else {
+	// 	return true
+	// }
 }

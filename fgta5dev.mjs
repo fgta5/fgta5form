@@ -4,6 +4,8 @@ const btn_new = new $fgta5.Button('btn_new')
 const btn_edittogle = new $fgta5.Button('btn_edittogle')
 const btn_nonaktif = new $fgta5.Button('btn_nonaktif')
 
+const btn_testvalidation = new $fgta5.Button('btn_testvalidation')
+
 const form = new $fgta5.Form('form', {
 	txt_nama: new $fgta5.Textbox('obj_txt_nama'),
 });
@@ -22,6 +24,10 @@ async function main(self, args) {
 	btn_save.addEventListener('click', (evt) => { btn_save_click(self, evt) });
 	btn_new.addEventListener('click', (evt) => { btn_new_click(self, evt) });
 	btn_edittogle.addEventListener('click', (evt) => { btn_edittogle_click(self, evt) });
+
+	btn_testvalidation.addEventListener('click', (evt) => { btn_testvalidation_click(self, evt) });
+
+
 
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
@@ -75,4 +81,12 @@ function form_unlocked(self, evt) {
 	console.log('form unlocked')
 	btn_reset.Disabled = false 
 	btn_save.Disabled = false
+}
+
+
+
+function btn_testvalidation_click(self, evt) {
+	console.log('btn_testvalidation_click()')
+
+	form.Inputs.txt_nama.Validate()
 }
