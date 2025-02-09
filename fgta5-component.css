@@ -13,10 +13,37 @@
 	background-color: rgb(255, 207, 118);
 }
 
-.fgta5-input-viewmode {
-	background-color: #fff;
+.fgta5-input-error {
+	background-color: rgb(255, 184, 184);
+	border-color: red !important;
 }
 
-.fgta5-input-readonly	{
+.fgta5-textbox {
+	border: none;
+	border-bottom: 1px solid #ccc; /* Border bawah 1px abu-abu */
+	outline: none;
+	padding: 5px; /* Padding untuk kenyamanan */
+	transition: border-color 0.3s ease; /* Animasi transisi */
+}
+
+.fgta5-wrapper-textbox {
+	display:inline-block;
+	border: none;
+	border-bottom: 1px solid #ccc;
+}
+
+.fgta5-wrapper-textbox:focus-within {
+	border-bottom: 1px solid #000;
+}
+
+.fgta5-textbox:focus {
+	border-bottom: 1px solid #000; /* Border bawah 2px hitam saat focus */
+}
+
+.fgta5-textbox[readonly] {
+	border-bottom: 1px solid #ccc; /* Border bawah 1px abu-abu */
+}
+
+.fgta5-textbox[disabled] {
 	background-color: rgb(200, 200, 200);
 }

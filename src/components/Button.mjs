@@ -17,6 +17,7 @@ export default class Button extends Component {
 
 function Construct(self, id) {
 	self.Element.classList.add('fgta5-button')
+	self.Element.setAttribute('type', 'button')
 }
 
 function Button_setDisabled(self, disabled) {

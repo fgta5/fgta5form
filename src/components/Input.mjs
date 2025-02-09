@@ -8,10 +8,13 @@ export default class Input extends Component {
 		Input_construct(this, id)
 	}
 
-	get Value() {}
-	set Value(v) {}
+	get value() {}
+	set value(v) {}
 	SetEditingMode(editingmode) {} 
+	SetError(msg) {}
 	GetLastValue() {} 
+
+	Validate() { return true }
 
 }
 

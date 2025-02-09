@@ -1,5 +1,3 @@
-const btn_edit = new $fgta5.Button('btn_edit')
-const btn_lock = new $fgta5.Button('btn_lock')
 const btn_reset = new $fgta5.Button('btn_reset')
 const btn_save = new $fgta5.Button('btn_save')
 const btn_new = new $fgta5.Button('btn_new')
@@ -20,61 +18,61 @@ export default class Page {
 
 async function main(self, args) {
 	console.log('starting module')
-	btn_edit.addEventListener('click', () => { btn_edit_click() });
-	btn_lock.addEventListener('click', () => { btn_lock_click() });
-	btn_reset.addEventListener('click', () => { btn_reset_click() });
-	btn_save.addEventListener('click', () => { btn_save_click() });
-	btn_new.addEventListener('click', () => { btn_new_click() });
-	btn_edittogle.addEventListener('click', () => { btn_edittogle_click() });
+	btn_reset.addEventListener('click', (evt) => { btn_reset_click(self, evt) });
+	btn_save.addEventListener('click', (evt) => { btn_save_click(self, evt) });
+	btn_new.addEventListener('click', (evt) => { btn_new_click(self, evt) });
+	btn_edittogle.addEventListener('click', (evt) => { btn_edittogle_click(self, evt) });
 
-	form.addEventListener('locked', () => { form_locked() });
-	form.addEventListener('unlocked', () => { form_unlocked() });
-
+	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
+	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
+	form.Render()
 	
+
+	form.Inputs.txt_nama.addEventListener('change', (evt) => {
+		var value = form.Inputs.txt_nama.value
+		
+		console.log(value)
+		if (value=='error') {
+			form.Inputs.txt_nama.SetError('ini isinya error')
+		} else {
+			form.Inputs.txt_nama.SetError(null)
+		}
+	});
 }
 
 
-function btn_edit_click() {
-	console.log('btn_edit_click()')
-	form.Lock(false)
-}
-
-function btn_lock_click() {
-	console.log('btn_lock_click()')
-	form.Lock(true)
-}
-
-function btn_reset_click() {
+function btn_reset_click(self, evt) {
 	console.log('btn_reset_click()')
 	form.Reset()
 }
 
-function btn_save_click() {
+function btn_save_click(self, evt) {
 	console.log('btn_save_click()')
 	if (form.IsChanged()) {
-		console.log('simpan data')
 		form.AcceptChanges()
 	}
 }
 
-function btn_new_click() {
+function btn_new_click(self, evt) {
 	console.log('btn_new_click()')
 	form.NewData()
+
+	form.Lock(false)
 }
 
-function btn_edittogle_click() {
+function btn_edittogle_click(self, evt) {
 	form.Lock(!form.Locked) 
 }
 
 
-function form_locked() {
+function form_locked(self, evt) {
 	console.log('form locked')
-	btn_edit.Disabled = false
-	btn_lock.Disabled = true
+	btn_reset.Disabled = true 
+	btn_save.Disabled = true
 }
 
-function form_unlocked() {
+function form_unlocked(self, evt) {
 	console.log('form unlocked')
-	btn_edit.Disabled = true
-	btn_lock.Disabled = false
+	btn_reset.Disabled = false 
+	btn_save.Disabled = false
 }

@@ -1,8 +1,5 @@
 import Component from "./Component.mjs"
 
-const formLockedEvent = new CustomEvent('locked')
-const formUnLockedEvent = new CustomEvent('unlocked')
-
 
 export default class Form extends Component {
 	Inputs = {}
@@ -23,6 +20,8 @@ export default class Form extends Component {
 
 	NewData() { Form_NewData(this) }
 
+
+	Render() { Form_Render(this) }
 }
 
 
@@ -31,30 +30,41 @@ function Construct(self, id, inputs) {
  	self.Element = document.getElementById(id)
 	self.Inputs = inputs
 
-	self.addEventListener('submit', (event) => {
+	self.Element.addEventListener('submit', (event) => {
 		event.preventDefault();
 	});
 
-
 	
-
 }
 
 
+function Form_Render(self) {
+	console.log('render form')
+	var locked = self.Element.getAttribute('locked')
+	if (locked.toLowerCase() === 'true') {
+		self.Lock(true)
+	}
+}
+
 function Form_Lock(self, lock) {
+	const formLockedEvent = new CustomEvent('locked')
+	const formUnLockedEvent = new CustomEvent('unlocked')
+
 	self.Locked = lock
+	var editmode = self.Locked ? false : true
+
+	console.log((self.Locked ? "lock" : "unlock") + " semua input")
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		obj.SetEditingMode(editmode)
+	}
 
 	if (lock) {
-		console.log("lock semua input")
 		self.Element.dispatchEvent(formLockedEvent)
 	} else {
-		console.log("unlock semua input")
 		self.Element.dispatchEvent(formUnLockedEvent)
 	}
 	
-	for (var name in self.Inputs) {
-		var obj = self.Inputs[name]
-	}
 }
 
 function Form_AcceptChanges(self) {
@@ -65,12 +75,13 @@ function Form_Reset(self) {
 	console.log("reset form ke state terakhir yang changed accepted")
 }
 
+
+function Form_NewData(self) {
+	console.log("new data, clear all data in forms")
+}
+
 function Form_IsChanged(self) {
 	console.log('get form changed state')
 	return true
 } 
 
-
-function Form_NewData(self) {
-	console.log('new data')
-}

@@ -16,16 +16,13 @@
 		</header>
 		
 		<main>
-			<form id="form" editmode="True">
+			<form id="form" locked="True">
 				<div>
-					<input id="obj_txt_nama" type="text" placeholder="Nama">
-					<input id="obj_txt_password" type="password" placeholder="Password">
-					<input id="obj_txt_number" type="text" placeholder="Number">
-					<input id="obj_chk_check" type="checkbox" label="Check">
+					<input id="obj_txt_nama" type="text" placeholder="Nama" autocomplete="off" spellcheck="false">
+
 				</div>
 				<div style="padding-top: 10px">
-					<button id="btn_edit">Edit</button>
-					<button id="btn_lock">Lock</button>
+					<button id="btn_edittogle">Togle Edit State</button>
 					<button id="btn_reset">Reset</button>
 					<button id="btn_save">Save</button>
 					<button id="btn_new">New</button>
@@ -33,9 +30,6 @@
 					<button id="btn_nonaktif" disabled>Non Aktif</button>
 				</div>
 
-				<div style="padding-top: 10px">
-					<button id="btn_edittogle">Togle Edit State</button>
-				</div>
 			</form>
 		</main>
 
