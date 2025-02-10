@@ -8,16 +8,26 @@ export default class Combobox extends Input {
 		Combobox_construct(this, id)
 	}
 
+
+	SetEditingMode(editingmode) {
+		Combobox_SetEditingMode(this, editingmode)
+	}
+
 }
 
 function Combobox_construct(self, id) {
 	const elContainer =document.createElement('div')
-	const elDisplay = document.createElement('input')
-
-
-	elDisplay.setAttribute('type', 'text')
-	elDisplay.classList.add('fgta5-textbox')
-
+	
+	
+	self.Display = document.createElement('input')
+	self.Display.setAttribute('type', 'text')
+	self.Display.classList.add('fgta5-combobox-display')
+	self.Display.setAttribute('readonly', true)
+	
+	self.Button = document.createElement('button')
+	self.Button.setAttribute('type', 'button')
+	self.Button.classList.add('fgta5-combobox-button')
+	self.Button.innerHTML = '...'
 
 	self.Wrapper = document.createElement("div")
 	self.Element.setAttribute('type', 'hidden') // sembunyikan input utama, nanti diganti dengan textbox untuk display value
@@ -25,8 +35,8 @@ function Combobox_construct(self, id) {
 
 	self.Element.parentNode.insertBefore(self.Wrapper, self.Element)
 
-	// Pindahkan input ke dalam div
-	self.Wrapper.appendChild(self.Element);
+	self.Wrapper.appendChild(self.Display);
+	self.Wrapper.appendChild(self.Button);
 	self.Wrapper.classList.add('fgta5-wrapper-textbox')	
 
 	// masukkan text wrapper ke dalam container
@@ -35,4 +45,23 @@ function Combobox_construct(self, id) {
 	elContainer.classList.add('fgta5-input-container')
 
 	
+}
+
+
+function Combobox_SetEditingMode(self, editingmode) {
+	self.EditingMode = editingmode
+
+	if (self.Button.disabled) {
+		return
+	}
+
+	console.log('combobox set editing mode: ', editingmode)
+	if (editingmode) {
+		self.Display.classList.add('fgta5-input-editmode')
+		self.Wrapper.removeAttribute('readonly')
+	} else {
+		self.Display.classList.remove('fgta5-input-editmode')
+		self.Wrapper.setAttribute('readonly', "true")
+	}
+
 }
