@@ -28,8 +28,6 @@ async function main(self, args) {
 
 	btn_testvalidation.addEventListener('click', (evt) => { btn_testvalidation_click(self, evt) });
 
-
-
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
 	form.Render()
