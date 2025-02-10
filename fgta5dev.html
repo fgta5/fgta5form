@@ -1,6 +1,11 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>fgta5js</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="icon" href="favicon.ico">
+
 		<link rel="stylesheet" href="fgta5-component.css" />
 		<!-- <link rel="stylesheet" href="dist/fgta5.min.css" /> -->
 		
@@ -23,12 +28,12 @@
 				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
 					<div class="input-field">
 						<label for="obj_txt_nama">Nama</label>
-						<input required id="obj_txt_nama" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" maxlength="30" validator="" >
+						<input required id="obj_txt_nama" fgta5-component="Textbox" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" maxlength="30" validator="" >
 					</div>
 
 					<div class="input-field">
 						<label for="obj_txt_kota">Kota</label>
-						<input required id="obj_txt_kota" placeholder="Kota" autocomplete="off" spellcheck="false" minlength="3" maxlength="10" validator="" >
+						<input required id="obj_txt_kota" fgta5-component="Combobox" placeholder="-- Pilih Kota --" fieldValue="kota_id" fieldDisplay="kota_name" validator="" >
 						<datalist for="obj_txt_kota">
 							<option value="JKT">Jakarta</option>
 							<option value="SBY">Surabaya</option>

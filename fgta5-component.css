@@ -105,12 +105,21 @@ button, label {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
 }
 
+.fgta5-combobox-display:not(.fgta5-input-editmode):focus {
+	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
+}
+
 .fgta5-combobox-button {
     position: relative;
     right: 20px;
-    margin-right: -20px;
+    margin-top: 4px;
+	margin-right: -20px;
     width: 20px;
+	height: 20px;
     padding: 0;
+	cursor: pointer;
+	border: 0;
+	background-color: transparent;
 }
 
 .fgta5-combobox-button:focus {
