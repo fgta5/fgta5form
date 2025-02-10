@@ -17,39 +17,44 @@ export default class Combobox extends Input {
 
 function Combobox_construct(self, id) {
 	const elContainer =document.createElement('div')
-
-	self.Display = document.createElement('input')
-	self.Display.setAttribute('type', 'text')
-	self.Display.setAttribute('readonly', true)
-	self.Display.setAttribute('autocomplete', 'off')
-	self.Display.setAttribute('spellcheck', 'false')
-	self.Display.setAttribute('placeholder', self.Element.getAttribute('placeholder'))
-	self.Display.classList.add('fgta5-combobox-display')
+	const el = self.Element
+	const lbl = document.querySelector(`label[for="${self.Id}"]`)
+	const disp = document.createElement('input')
+	const btn = document.createElement('button')
+	const wrap =  document.createElement("div")
 	
-	self.Button = document.createElement('button')
-	self.Button.setAttribute('type', 'button')
-	self.Button.classList.add('fgta5-combobox-button')
-	self.Button.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 3)"><path d="M6 9l6 6 6-6"/></svg>'
-	self.Button.addEventListener('click', () => {
+	self.Display = disp
+	self.Button = btn
+	self.Wrapper = wrap
+	self.Label = lbl
+
+	el.setAttribute('type', 'hidden') // sembunyikan input utama, nanti diganti dengan textbox untuk display value
+	el.parentNode.insertBefore(wrap, el)
+
+	// Setup Display
+	disp.setAttribute('type', 'text')
+	disp.setAttribute('readonly', true)
+	disp.setAttribute('autocomplete', 'off')
+	disp.setAttribute('spellcheck', 'false')
+	disp.setAttribute('placeholder', self.Element.getAttribute('placeholder'))
+	disp.classList.add('fgta5-combobox-display')
+
+	// Setup Button
+	btn.setAttribute('type', 'button')
+	btn.classList.add('fgta5-combobox-button')
+	btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 3)"><path d="M6 9l6 6 6-6"/></svg>'
+	btn.addEventListener('click', () => {
 		Combobox_click(self)
 	})
 
-	self.Wrapper = document.createElement("div")
-	self.Element.setAttribute('type', 'hidden') // sembunyikan input utama, nanti diganti dengan textbox untuk display value
-	self.Label = document.querySelector(`label[for="${self.Id}"]`) // ambil label dari input ini
-
-	self.Element.parentNode.insertBefore(self.Wrapper, self.Element)
-
-	self.Wrapper.appendChild(self.Display);
-	self.Wrapper.appendChild(self.Button);
-	self.Wrapper.classList.add('fgta5-wrapper-textbox')	
-
-	// masukkan text wrapper ke dalam container
-	self.Wrapper.parentNode.insertBefore(elContainer, self.Wrapper)
-	elContainer.appendChild(self.Wrapper)
-	elContainer.classList.add('fgta5-input-container')
-
+	// Setup Wrapper
+	wrap.appendChild(disp);
+	wrap.appendChild(btn);
+	wrap.classList.add('fgta5-wrapper-textbox')	
+	wrap.parentNode.insertBefore(elContainer, wrap)
 	
+	elContainer.appendChild(wrap)
+	elContainer.classList.add('fgta5-input-container')
 }
 
 
