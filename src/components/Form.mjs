@@ -1,14 +1,17 @@
 import Component from "./Component.mjs"
+import Textbox from "./Textbox.mjs"
+import Combobox from "./Combobox.mjs"
 
 
 export default class Form extends Component {
 	Inputs = {}
 	Locked = false
 
-	constructor(id, inputs) {
+	constructor(id) {
 		super(id)
-		Construct(this, id, inputs)
+		Construct(this, id)
 	}
+
 
 	Lock(lock) { Form_Lock(this, lock) }
 
@@ -22,19 +25,37 @@ export default class Form extends Component {
 
 
 	Render() { Form_Render(this) }
+
+	Validate() { return Form_Validate(this) }
+
 }
 
 
-function Construct(self, id, inputs) {
+function Construct(self, id) {
 	self.Id = id
  	self.Element = document.getElementById(id)
-	self.Inputs = inputs
+	self.Inputs = {}
 
 	self.Element.addEventListener('submit', (event) => {
 		event.preventDefault();
 	});
 
-	
+
+	// ambil semua input
+	var inputs = self.Element.querySelectorAll('input')
+	for (var i = 0; i < inputs.length; i++) {
+		var input = inputs[i]
+		var fgtacomp = input.getAttribute('fgta5-component')
+		if (fgtacomp==null || input.id==null || input.id=='') {
+			continue
+		}
+
+		if (fgtacomp=='Textbox') {
+			self.Inputs[input.id] = new Textbox(input.id)
+		} else if (fgtacomp=='Combobox') {
+			self.Inputs[input.id] = new Combobox(input.id)
+		}
+	}
 }
 
 
@@ -85,3 +106,11 @@ function Form_IsChanged(self) {
 	return true
 } 
 
+function Form_Validate(self) {
+	var isValid = true
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		isValid &&= obj.Validate()
+	}
+	return isValid
+}

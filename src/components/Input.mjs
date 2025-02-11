@@ -8,10 +8,18 @@ export default class Input extends Component {
 		Input_construct(this, id)
 	}
 
-	get type() { return this.constructor.name }
+	get Type() { return this.constructor.name }
 
-	get value() {}
-	set value(v) {}
+	
+	get Value() { return this.Element.value }
+	set Value(v) { this.Element.value = v }
+
+	get Disabled() { return this.Element.disabled }
+	set Disabled(v) { this.Element.disabled = v }
+
+	#_form
+	get Form() { return this.#_form }
+	set Form(v) { this.#_form = v }
 
 	SetEditingMode(editingmode) {} 
 	SetError(msg) {}

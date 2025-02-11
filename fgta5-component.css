@@ -50,7 +50,7 @@ button, label {
 }
 
 
-/** Texbox **/
+/** Wrapper Textbox **/
 .fgta5-wrapper-textbox {
 	display:inline-block;
 	border: none;
@@ -65,6 +65,13 @@ button, label {
 	border-bottom: 1px solid transparent !important;
 }
 
+.fgta5-wrapper-textbox:has(.fgta5-combobox-button:focus) .fgta5-combobox-display {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
+}
+
+
+
+/** Texbox **/
 .fgta5-textbox {
 	border: none;
 	border-bottom: 1px solid var(--fgta5-color-input-line); /* Border bawah 1px abu-abu */
@@ -89,9 +96,7 @@ button, label {
 
 /** Combobox **/
 
-.fgta5-wrapper-textbox:has(.fgta5-combobox-button:focus) .fgta5-combobox-display {
-	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
-}
+
 
 .fgta5-combobox-display {
 	border: none;
@@ -101,6 +106,10 @@ button, label {
 	transition: border-color 0.3s ease; /* Animasi transisi */
 }
 
+.fgta5-combobox-value {
+	display: none;
+}
+
 .fgta5-combobox-display:focus {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
 }
@@ -108,6 +117,19 @@ button, label {
 .fgta5-combobox-display:not(.fgta5-input-editmode):focus {
 	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
 }
+
+.fgta5-combobox-display[readonly]:focus {
+	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
+}
+
+.fgta5-combobox-value:disabled + .fgta5-combobox-display {
+	background-color: var(--fgta5-color-input-disabled);
+}
+
+.fgta5-combobox-value:disabled ~ .fgta5-combobox-button {
+	display: none !important; 
+}
+
 
 .fgta5-combobox-button {
     position: relative;

@@ -8,6 +8,10 @@ export default class Combobox extends Input {
 		Combobox_construct(this, id)
 	}
 
+	get Value() { return this.Element.value }
+	set Value(v) {	
+		this.Element.value = v
+	}
 
 	SetEditingMode(editingmode) {
 		Combobox_SetEditingMode(this, editingmode)
@@ -29,6 +33,7 @@ function Combobox_construct(self, id) {
 	self.Label = lbl
 
 	el.setAttribute('type', 'hidden') // sembunyikan input utama, nanti diganti dengan textbox untuk display value
+	el.classList.add('fgta5-combobox-value')
 	el.parentNode.insertBefore(wrap, el)
 
 	// Setup Display
@@ -48,8 +53,9 @@ function Combobox_construct(self, id) {
 	})
 
 	// Setup Wrapper
-	wrap.appendChild(disp);
-	wrap.appendChild(btn);
+	wrap.append(el)
+	wrap.appendChild(disp)
+	wrap.appendChild(btn)
 	wrap.classList.add('fgta5-wrapper-textbox')	
 	wrap.parentNode.insertBefore(elContainer, wrap)
 	

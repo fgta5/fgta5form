@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>fgta5js</title>
+		<title>fgta5form</title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link rel="icon" href="favicon.ico">
@@ -20,21 +20,37 @@
 	</head>
 	<body>
 		<header>
-			<h1>Fgta5js Development</h1>
+			<h1>Fgta5form Development</h1>
 		</header>
 		
 		<main>
+			<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
+				<div>
+					<button id="btn_edittogle">Togle Edit State</button>
+					<button id="btn_reset">Reset</button>
+					<button id="btn_save">Save</button>
+					<button id="btn_new">New</button>
+					<button id="btn_nonaktif" disabled>Non Aktif</button>
+				</div>
+
+				<button id="btn_testvalidation">Test Form Validation</button>
+				<button id="btn_testdised">Test Disabled/Enabled</button>
+				<button id="btn_clearerror">Clear Error</button>
+			</div>
+
+
+			<h2 id="txtState">Edit/View</h2>
 			<form id="form" locked="True">
 				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
 					
 					<div class="input-field">
 						<label for="obj_txt_nama">Nama</label>
-						<input required id="obj_txt_nama" fgta5-component="Textbox" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" maxlength="30" validator="" >
+						<input disabled required id="obj_txt_nama" fgta5-component="Textbox" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" maxlength="30" validator="" >
 					</div>
 
 					<div class="input-field">
 						<label for="obj_txt_kota">Kota</label>
-						<input required id="obj_txt_kota" fgta5-component="Combobox" placeholder="-- Pilih Kota --" fieldValue="kota_id" fieldDisplay="kota_name" validator="" >
+						<input required id="obj_cbo_kota" fgta5-component="Combobox" placeholder="-- Pilih Kota --" fieldValue="kota_id" fieldDisplay="kota_name" validator="" >
 						<datalist for="obj_txt_kota">
 							<option value="JKT">Jakarta</option>
 							<option value="SBY">Surabaya</option>
@@ -45,18 +61,11 @@
 
 
 
-				<div style="padding-top: 10px">
-					<button id="btn_edittogle">Togle Edit State</button>
-					<button id="btn_reset">Reset</button>
-					<button id="btn_save">Save</button>
-					<button id="btn_new">New</button>
 
-					<button id="btn_nonaktif" disabled>Non Aktif</button>
-				</div>
 
 			</form>
 
-			<button id="btn_testvalidation">Test Textbox Validation</button>
+			
 
 		</main>
 
