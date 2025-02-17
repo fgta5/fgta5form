@@ -1,4 +1,5 @@
 import Input from "./Input.mjs"
+import Dialog from "./Dialog.mjs"
 import { customValidation, textLengthValidation } from "../validator.mjs"
 
 
@@ -86,4 +87,27 @@ function Combobox_SetEditingMode(self, editingmode) {
 
 function Combobox_click(self) {
 	console.log('combobox clicked')
+
+	if (self.Dialog === undefined) {
+		self.Dialog = new Dialog()
+	}
+
+	var dlg = self.Dialog
+	dlg.ShowModal()
+}
+
+
+function createDialog(self) {
+	const dialog = document.createElement('dialog')
+	dialog.innerHTML = 'test ini dialog'
+	
+
+	const btnClose = document.createElement('button')
+	btnClose.innerHTML = 'Close'
+	btnClose.addEventListener('click', () => {
+		dialog.close()
+	})
+
+	dialog.appendChild(btnClose) 
+	return dialog
 }

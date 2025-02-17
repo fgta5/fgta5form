@@ -1,10 +1,15 @@
+let counter = 0;
+
 export default class Component {
 	Id;
 	Element;
 
+
 	constructor(id) {
-		this.Id = id
-		this.Element = document.getElementById(id)
+		if (id!=undefined) {
+			this.Id = id
+			this.Element = document.getElementById(id)
+		}
 	}
 	
 	addEventListener(event, callback) {
@@ -12,5 +17,8 @@ export default class Component {
 	}
 
 
+	static GenerateId() {
+		return `comp-${++counter}`;
+	}
 }
 
