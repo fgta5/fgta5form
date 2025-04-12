@@ -25,6 +25,8 @@ export default class Textbox extends Input {
 }
 
 function Textbox_construct(self, id) {
+	console.log(`construct textbox ${id}`)
+
 	const el = self.Element
 	const elContainer =document.createElement('div')
 	const wrap = document.createElement("div")

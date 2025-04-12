@@ -16,6 +16,7 @@ export default class Button extends Component {
 }
 
 function Construct(self, id) {
+	console.log(`construct button ${id}`)
 	self.Element.classList.add('fgta5-button')
 	self.Element.setAttribute('type', 'button') // tambahkan attribut type=button untuk menghindari trigger button click saat tombol enter ditekan 
 }

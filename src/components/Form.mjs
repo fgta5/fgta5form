@@ -1,6 +1,7 @@
 import Component from "./Component.mjs"
 import Textbox from "./Textbox.mjs"
 import Combobox from "./Combobox.mjs"
+import Datepicker from "./Datepicker.mjs"
 
 
 export default class Form extends Component {
@@ -32,6 +33,8 @@ export default class Form extends Component {
 
 
 function Construct(self, id) {
+	console.log(`construct form ${id}`)
+
 	self.Id = id
  	self.Element = document.getElementById(id)
 	self.Inputs = {}
@@ -54,13 +57,15 @@ function Construct(self, id) {
 			self.Inputs[input.id] = new Textbox(input.id)
 		} else if (fgtacomp=='Combobox') {
 			self.Inputs[input.id] = new Combobox(input.id)
+		} else if (fgtacomp=='Datepicker') {
+			self.Inputs[input.id] = new Datepicker(input.id)
 		}
 	}
 }
 
 
 function Form_Render(self) {
-	console.log('render form')
+	console.log(`render form ${self.Id}`)
 	var locked = self.Element.getAttribute('locked')
 	if (locked.toLowerCase() === 'true') {
 		self.Lock(true)

@@ -21,6 +21,8 @@ export default class Combobox extends Input {
 }
 
 function Combobox_construct(self, id) {
+	console.log(`construct combobox ${id}`)
+
 	const elContainer =document.createElement('div')
 	const el = self.Element
 	const lbl = document.querySelector(`label[for="${self.Id}"]`)

@@ -25,7 +25,8 @@
 		
 		<main>
 			<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
-				<div>
+				
+				<div style="display: none;">
 					<button id="btn_edittogle">Togle Edit State</button>
 					<button id="btn_reset">Reset</button>
 					<button id="btn_save">Save</button>
@@ -57,7 +58,32 @@
 							<option value="BAL">Bali</option>
 						</datalist>
 					</div>
+
+
+					<div class="input-field">
+						<label for="obj_dt_tanggal">Tanggal</label>
+						<input required id="obj_dt_tanggal" fgta5-component="Datepicker" placeholder="Tanggal" autocomplete="off" spellcheck="false" validator="" >
+					</div>
+
+				
+					<!--
+					refefence:
+					https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
+					-->
+					<!-- <div class="input-field">
+						<label for="obj_dt_tanggal">Tanggal</label>
+						<input>
+						<button class="fgta5-combobox-button">
+							dt
+							<input type="date" class="fgta5-datepicker-native-input">
+						</button>
+					</div> -->
+				
 				</div>
+
+
+
+
 
 
 

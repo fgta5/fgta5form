@@ -14,6 +14,8 @@ const btn_clearerror = new $fgta5.Button('btn_clearerror')
 const form = new $fgta5.Form('form');
 const obj_txt_nama = form.Inputs.obj_txt_nama
 const obj_cbo_kota = form.Inputs.obj_cbo_kota
+const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
+
 
 
 export default class Page {

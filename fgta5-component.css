@@ -148,3 +148,13 @@ button, label {
 	outline: none;
 }
 
+
+.fgta5-datepicker-native-input {
+	position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
