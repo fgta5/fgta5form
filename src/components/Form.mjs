@@ -95,19 +95,23 @@ function Form_Lock(self, lock) {
 
 function Form_AcceptChanges(self) {
 	console.log("accept changes")
+	console.warn("accpet changes still not implemented")
 }
 
 function Form_Reset(self) {
 	console.log("reset form ke state terakhir yang changed accepted")
+	console.warn("reset still not implemented")
 }
 
 
 function Form_NewData(self) {
 	console.log("new data, clear all data in forms")
+	console.warn("newdata still not implemented")
 }
 
 function Form_IsChanged(self) {
 	console.log('get form changed state')
+	console.warn("IsChanges still not implemented, always return true")
 	return true
 } 
 

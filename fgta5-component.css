@@ -110,6 +110,8 @@ button, label {
 	display: none;
 }
 
+
+
 .fgta5-combobox-display:focus {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
 }
@@ -149,7 +151,7 @@ button, label {
 }
 
 
-.fgta5-datepicker-native-input {
+.fgta5-datepicker-value {
 	position: absolute;
     overflow: hidden;
     width: 100%;
@@ -157,4 +159,12 @@ button, label {
     right: 0;
     top: 0;
     opacity: 0;
+}
+
+.fgta5-datepicker-display {
+	background-color: var(--fgta5-color-input-disabled);
+}
+
+.fgta5-combobox-value:disabled ~ .fgta5-combobox-button {
+	display: none !important; 
 }
