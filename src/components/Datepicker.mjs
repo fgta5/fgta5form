@@ -11,6 +11,13 @@ export default class Datepicker extends Input {
 		this.Element.value = v
 	}
 
+	get Disabled() { return this.Element.disabled }
+	set Disabled(v) { 
+		this.Element.disabled = v 
+		Datepicker_setDisabled(v)
+	}
+
+
 	SetEditingMode(editingmode) {
 		Datepicker_SetEditingMode(this, editingmode)
 	}
