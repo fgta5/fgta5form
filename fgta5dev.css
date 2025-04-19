@@ -22,3 +22,17 @@
 }
 
 
+
+
+.mytextbox {
+	width: 300px;
+	background-color: aquamarine;
+}
+
+.mycombo {
+	width: 100px;
+}
+
+.mydt {
+	width: 250px;
+}

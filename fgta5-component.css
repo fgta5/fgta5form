@@ -19,6 +19,7 @@ button, label {
 
 .fgta5-input-container {
 	display:inline-block;
+	background-color: transparent;
 }
 
 
@@ -28,7 +29,7 @@ button, label {
 }
 
 .fgta5-button:disabled {
-	background-color: #eee;
+	background-color: #eee ;
 	cursor: not-allowed;
 }
 
@@ -36,10 +37,13 @@ button, label {
 	background-color: var(--fgta5-color-editmode-bg);
 }
 
+
+
 .fgta5-input-error {
-	background-color: var(--fgta5-color-inputerror-bg);
+	background-color: var(--fgta5-color-inputerror-bg) !important;
 	border-color: var(--fgta5-color-inputerror-line) !important;
 }
+
 .fgta5-input-error[readonly] {
 	border-bottom: 1px solid transparent !important;
 }
@@ -57,21 +61,24 @@ button, label {
 	border-bottom: 1px solid transparent;
 }
 
+
 .fgta5-wrapper-textbox:focus-within {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line);
-}
+} 
 
 .fgta5-wrapper-textbox[readonly]:focus-within {
 	border-bottom: 1px solid transparent !important;
 }
 
+/*
 .fgta5-wrapper-textbox:has(.fgta5-combobox-button:focus) .fgta5-combobox-display {
-	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
+	border-bottom: 1px solid var(--fgta5-color-editmode-line);
 }
-
+*/
 
 
 /** Texbox **/
+
 .fgta5-textbox {
 	border: none;
 	border-bottom: 1px solid var(--fgta5-color-input-line); /* Border bawah 1px abu-abu */
@@ -94,9 +101,9 @@ button, label {
 
 
 
-/** Combobox **/
 
 
+/* Combobox */
 
 .fgta5-combobox-display {
 	border: none;
@@ -116,12 +123,14 @@ button, label {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
 }
 
+
+
 .fgta5-combobox-display:not(.fgta5-input-editmode):focus {
 	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
 }
 
 .fgta5-combobox-display[readonly]:focus {
-	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
+	border-bottom: 1px solid var(--fgta5-color-input-line) !important; 
 }
 
 .fgta5-combobox-value:disabled + .fgta5-combobox-display {
@@ -136,8 +145,7 @@ button, label {
 .fgta5-combobox-button {
     position: relative;
     right: 20px;
-    margin-top: 4px;
-	margin-right: -20px;
+ 	margin-right: -20px;
     width: 20px;
 	height: 20px;
     padding: 0;
@@ -151,6 +159,20 @@ button, label {
 }
 
 
+
+
+/* Datepicker */
+
+
+.fgta5-datepicker-display {
+	border: none;
+	border-bottom: 1px solid var(--fgta5-color-input-line); /* Border bawah 1px abu-abu */
+	outline: none;
+	padding: 5px; /* Padding untuk kenyamanan */
+	transition: border-color 0.3s ease; /* Animasi transisi */
+}
+
+
 .fgta5-datepicker-value {
 	position: absolute;
     overflow: hidden;
@@ -161,8 +183,20 @@ button, label {
     opacity: 0;
 }
 
+.fgta5-datepicker-display:focus {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); /* Border bawah 1px hitam saat focus */
+}
+
+.fgta5-datepicker-display:not(.fgta5-input-editmode):focus {
+	border-bottom: 1px solid var(--fgta5-color-input-line) !important; /* Border bawah 1px abu-abu */
+}
+
 .fgta5-datepicker-display-disabled {
 	background-color: var(--fgta5-color-input-disabled);
+}
+
+.fgta5-datepicker-display-disabled:focus {
+	border-bottom: none !important;
 }
 
 .fgta5-datepicker-button-disabled {

@@ -14,6 +14,13 @@ export default class Combobox extends Input {
 		this.Element.value = v
 	}
 
+
+	get Disabled() { return this.Element.disabled }
+	set Disabled(v) { 
+		this.Element.disabled = v 
+		Combobox_setDisabled(this, v)
+	}
+
 	SetEditingMode(editingmode) {
 		Combobox_SetEditingMode(this, editingmode)
 	}
@@ -46,7 +53,14 @@ function Combobox_construct(self, id) {
 	disp.setAttribute('autocomplete', 'off')
 	disp.setAttribute('spellcheck', 'false')
 	disp.setAttribute('placeholder', self.Element.getAttribute('placeholder'))
+
+	for (const classname of el.classList) {
+		el.classList.remove(classname)
+		disp.classList.add(classname)	
+	}
 	disp.classList.add('fgta5-combobox-display')
+	
+
 
 	// Modify label
 	lbl.setAttribute('for', `${self.Id}-display`)
@@ -90,6 +104,21 @@ function Combobox_SetEditingMode(self, editingmode) {
 	}
 
 }
+
+
+function Combobox_setDisabled(self, disabled) {
+	if (disabled) {
+		self.Display.setAttribute('disabled', true)
+		self.Display.classList.add('fgta5-combobox-display-disabled')
+		self.Button.classList.add('fgta5-combobox-button-disabled')
+	} else {
+		self.Display.removeAttribute('disabled')
+		self.Display.classList.remove('fgta5-datepicker-display-disabled')
+		self.Button.classList.remove('fgta5-datepicker-button-disabled')
+	}
+	
+}
+
 
 function Combobox_click(self) {
 	console.log('combobox clicked')
