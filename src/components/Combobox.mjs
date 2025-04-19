@@ -40,12 +40,16 @@ function Combobox_construct(self, id) {
 	el.parentNode.insertBefore(wrap, el)
 
 	// Setup Display
+	disp.setAttribute('id', `${self.Id}-display`)
 	disp.setAttribute('type', 'text')
 	disp.setAttribute('readonly', true)
 	disp.setAttribute('autocomplete', 'off')
 	disp.setAttribute('spellcheck', 'false')
 	disp.setAttribute('placeholder', self.Element.getAttribute('placeholder'))
 	disp.classList.add('fgta5-combobox-display')
+
+	// Modify label
+	lbl.setAttribute('for', `${self.Id}-display`)
 
 	// Setup Button
 	btn.setAttribute('type', 'button')

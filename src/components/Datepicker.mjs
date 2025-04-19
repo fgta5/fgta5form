@@ -14,7 +14,7 @@ export default class Datepicker extends Input {
 	get Disabled() { return this.Element.disabled }
 	set Disabled(v) { 
 		this.Element.disabled = v 
-		Datepicker_setDisabled(v)
+		Datepicker_setDisabled(this, v)
 	}
 
 
@@ -45,6 +45,7 @@ function Datepicker_construct(self, id) {
 	el.parentNode.insertBefore(wrap, el)
 
 	//setup display
+	disp.setAttribute('id', `${self.Id}-display`)
 	disp.setAttribute('type', 'text')
 	disp.setAttribute('readonly', true)
 	disp.setAttribute('autocomplete', 'off')
@@ -52,6 +53,9 @@ function Datepicker_construct(self, id) {
 	disp.setAttribute('placeholder', self.Element.getAttribute('placeholder'))
 	disp.classList.add('fgta5-combobox-display')
 	disp.classList.add('fgta5-datepicker-display')
+
+	// Modify label
+	lbl.setAttribute('for', `${self.Id}-display`)
 
 	// Setup Button
 	btn.setAttribute('type', 'button')
@@ -86,6 +90,11 @@ function Datepicker_SetEditingMode(self, editingmode) {
 	}
 	
 	console.log('datepicker set editing mode: ', editingmode)
+}
+
+
+function Datepicker_setDisabled(self, disabled) {
+	
 }
 
 function Datepicker_click(self) {

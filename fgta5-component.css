@@ -161,10 +161,11 @@ button, label {
     opacity: 0;
 }
 
-.fgta5-datepicker-display {
+.fgta5-datepicker-display-disabled {
 	background-color: var(--fgta5-color-input-disabled);
 }
 
-.fgta5-combobox-value:disabled ~ .fgta5-combobox-button {
+.fgta5-datepicker-button-disabled {
 	display: none !important; 
 }
+
