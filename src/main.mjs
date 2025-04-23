@@ -4,7 +4,8 @@ import Button from './components/Button.mjs';
 import Textbox from './components/Textbox.mjs';
 import Combobox from './components/Combobox.mjs';
 import Datepicker from './components/Datepicker.mjs';
-import MessageBox from './components/MessageBox.mjs';
+import {MessageBox, MessageBoxButton} from './components/MessageBox.mjs';
+
 
 
 const $fgta5 = {
@@ -15,6 +16,7 @@ const $fgta5 = {
 	Combobox: Combobox,
 	Datepicker: Datepicker,
 	MessageBox: new MessageBox(),
+	MessageBoxButton: MessageBoxButton
 }
 
 export default $fgta5;

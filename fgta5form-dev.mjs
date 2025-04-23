@@ -70,8 +70,8 @@ async function btn_msgboxShow_click(self, evt) {
 		iconsvg: '',
 		title: 'MessageBox',
 		buttons: {
-			ok: $fgta5.MessageBoxButton('Ok'),
-			cancel: $fgta5.MessageBoxButton('Cancel'),
+			ok: new $fgta5.MessageBoxButton('Ok'),
+			cancel: new $fgta5.MessageBoxButton('Cancel'),
 		}
 	})
 
