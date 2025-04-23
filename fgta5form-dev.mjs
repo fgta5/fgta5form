@@ -5,13 +5,12 @@ const btn_reset = new $fgta5.Button('btn_reset')
 const btn_save = new $fgta5.Button('btn_save')
 const btn_new = new $fgta5.Button('btn_new')
 const btn_edittogle = new $fgta5.Button('btn_edittogle')
-const btn_nonaktif = new $fgta5.Button('btn_nonaktif')
 
 const btn_testvalidation = new $fgta5.Button('btn_testvalidation')
 const btn_testdised = new $fgta5.Button('btn_testdised')
 const btn_clearerror = new $fgta5.Button('btn_clearerror')
 
-const form = new $fgta5.Form('form');
+const form = new $fgta5.Form('myform');
 const obj_txt_nama = form.Inputs.obj_txt_nama
 // const obj_cbo_kota = form.Inputs.obj_cbo_kota
 // const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
@@ -43,6 +42,25 @@ async function main(self, args) {
 
 }
 
+function btn_edittogle_click(self, evt) {
+	
+
+
+	if (form.IsChanged()) {
+
+	}
+
+
+	// 	form.AcceptChanges()
+	// } else {
+	// 	form.Lock(!form.Locked) 
+	// }
+
+
+
+
+}
+
 
 function btn_reset_click(self, evt) {
 	console.log('btn_reset_click()')
@@ -63,11 +81,7 @@ function btn_new_click(self, evt) {
 	form.Lock(false)
 }
 
-function btn_edittogle_click(self, evt) {
-	form.Lock(!form.Locked) 
 
-
-}
 
 
 function form_locked(self, evt) {

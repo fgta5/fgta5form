@@ -34,7 +34,7 @@ export default class Form extends Component {
 
 
 function Construct(self, id) {
-	console.log(`construct form ${id}`)
+	// console.log(`construct form ${id}`)
 
 	self.Id = id
  	self.Element = document.getElementById(id)

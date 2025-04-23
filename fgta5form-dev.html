@@ -6,11 +6,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link rel="icon" href="favicon.ico">
 
-		<link rel="stylesheet" href="./src/fgta5.css" />
+		<link rel="stylesheet" href="./src/fgta5form.css" />
 		<!-- <link rel="stylesheet" href="dist/fgta5.min.css" /> -->
 		
 		
-		<link rel="stylesheet" href="fgta5dev.css" />
+		<link rel="stylesheet" href="fgta5form-dev.css" />
 
 		<script type="module">
 			import $fgta5 from './src/main.mjs'
@@ -31,7 +31,6 @@
 					<button id="btn_reset">Reset</button>
 					<button id="btn_save">Save</button>
 					<button id="btn_new">New</button>
-					<button id="btn_nonaktif" disabled>Non Aktif</button>
 				</div>
 
 				<button id="btn_testvalidation">Test Form Validation</button>
@@ -41,7 +40,7 @@
 
 
 			<h2 id="txtState">Edit/View</h2>
-			<form id="form" locked="True">
+			<form id="myform" locked="True">
 				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
 					
 					<div class="input-field">
@@ -99,7 +98,7 @@
 
 
 	<script type="module">
-		import Page from './fgta5dev.mjs'
+		import Page from './fgta5form-dev.mjs'
 
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();
