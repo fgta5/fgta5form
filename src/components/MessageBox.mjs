@@ -33,6 +33,7 @@ async function MessageBox_Show(self, message, config) {
 		btnClose.innerHTML = 'Close'
 		btnClose.addEventListener('click', () => {
 			dialog.close()
+			dialog.parentNode.removeChild(dialog)
 			resolve(true)
 		})
 		dialog.appendChild(btnClose) 
