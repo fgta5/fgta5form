@@ -1,6 +1,6 @@
 {
-  "name": "fgta5js",
-  "version": "1.0.0",
+  "name": "fgta5form",
+  "version": "0.2.0",
   "description": "",
   "type": "module",
   "main": "rollup.config.js",

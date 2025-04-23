@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const server = createServer((req, res) => {
 	if (req.url === '/') {
-		req.url = 'fgta5dev.html';
+		req.url = 'fgta5form-dev.html';
 	}
 
 	var filePath = path.join(__dirname, req.url);

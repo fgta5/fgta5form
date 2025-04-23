@@ -22,8 +22,9 @@ export default class Form extends Component {
 
 	IsChanged() { return Form_IsChanged(this) }
 
-	NewData() { Form_NewData(this) }
+	IsLocked() { return Form_IsLocked(this) }
 
+	NewData() { Form_NewData(this) }
 
 	Render() { Form_Render(this) }
 
@@ -92,6 +93,11 @@ function Form_Lock(self, lock) {
 	}
 	
 }
+
+function Form_IsLocked(self) {
+	return self.Locked
+}
+
 
 function Form_AcceptChanges(self) {
 	console.log("accept changes")
