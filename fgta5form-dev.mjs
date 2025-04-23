@@ -3,6 +3,15 @@ import $fgta5 from "./src/main.mjs"
 const txtState = document.getElementById('txtState')
 
 
+const btn_msgboxShow = new $fgta5.Button('btn_msgbox_show')
+const btn_msgboxInfo = new $fgta5.Button('btn_msgbox_info')
+const btn_msgboxWarn = new $fgta5.Button('btn_msgbox_warn')
+const btn_msgboxError = new $fgta5.Button('btn_msgbox_error')
+const btn_msgboxConfirm = new $fgta5.Button('btn_msgbox_confirm')
+
+
+
+
 const btn_reset = new $fgta5.Button('btn_reset')
 const btn_save = new $fgta5.Button('btn_save')
 const btn_new = new $fgta5.Button('btn_new')
@@ -29,6 +38,16 @@ export default class Page {
 
 async function main(self, args) {
 	console.log('starting module')
+
+	btn_msgboxShow.addEventListener('click', (evt) => { btn_msgboxShow_click(self, evt) });
+	btn_msgboxInfo.addEventListener('click', (evt) => { btn_msgboxInfo_click(self, evt) });
+	btn_msgboxWarn.addEventListener('click', (evt) => { btn_rmsgboxWarn_click(self, evt) });
+	btn_msgboxError.addEventListener('click', (evt) => { btn_msgboxError_click(self, evt) });
+	btn_msgboxConfirm.addEventListener('click', (evt) => { btn_msgboxConfirm_click(self, evt) });
+
+
+
+
 	btn_reset.addEventListener('click', (evt) => { btn_reset_click(self, evt) });
 	btn_save.addEventListener('click', (evt) => { btn_save_click(self, evt) });
 	btn_new.addEventListener('click', (evt) => { btn_new_click(self, evt) });
@@ -43,6 +62,38 @@ async function main(self, args) {
 	form.Render()
 
 }
+
+
+
+async function btn_msgboxShow_click(self, evt) {
+	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
+		iconsvg: '',
+		title: 'MessageBox',
+		buttons: {
+			ok: $fgta5.MessageBoxButton('Ok'),
+			cancel: $fgta5.MessageBoxButton('Cancel'),
+		}
+	})
+
+	console.log(ret)
+}
+
+async function btn_msgboxInfo_click(self, evt) {
+	$fgta5.MessageBox.Info("ini messagebox ditampilkan")
+}
+
+async function btn_rmsgboxWarn_click(self, evt) {
+
+}
+
+async function btn_msgboxError_click(self, evt) {
+
+}
+
+async function btn_msgboxConfirm_click(self, evt) {
+
+}
+
 
 function btn_edittogle_click(self, evt) {
 	
