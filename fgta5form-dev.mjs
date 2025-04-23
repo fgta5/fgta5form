@@ -1,3 +1,5 @@
+import $fgta5 from "./src/main.mjs"
+
 const txtState = document.getElementById('txtState')
 
 
@@ -44,11 +46,12 @@ async function main(self, args) {
 
 function btn_edittogle_click(self, evt) {
 	
-
-
-	if (form.IsChanged()) {
-
-	}
+	$fgta5.MessageBox.Show('test messagebox')
+	
+	// if (form.IsChanged()) {
+		// alert('Ada perubahan data, silakan batalkan perubahan atau simpa data terlebih dahulu')
+		// return
+	// }
 
 
 	// 	form.AcceptChanges()
