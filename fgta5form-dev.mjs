@@ -76,24 +76,25 @@ async function btn_maskOpen_click(self, evt) {
 	mask.close();
 }
 
-async function btn_progressOpen_click(self, evt) {	
+async function btn_progressOpen_click(self, evt) {
 	var prog = $fgta5.Dialog.Progress({buttonClose: false})
 	prog.setProgress(0, "initializing") 
 
 	try {
 		var test_error = true
-		for (var i = 0; i < 10; i++) {
+		for (var i = 1; i <= 10; i++) {
+			
 			await new Promise(resolve => setTimeout(resolve, 1000));
-			var progress = (i+1) * 10
-			prog.setProgress((i+1) * 10, "processing " + progress + "%")
 	
+			var progress = i * 10
+			prog.setProgress(i * 10, "processing " + progress + "%")
+
 			if (test_error && i==5) {
 				throw new Error(`error at ${progress}%`)
 			}
 		}
 		prog.finish()
 	} catch (err) {
-		console.error(err)
 		prog.setError(err.message)
 		prog.finish('Close', false)
 	}

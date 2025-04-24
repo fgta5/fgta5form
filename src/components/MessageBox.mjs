@@ -6,11 +6,11 @@ const iconsCss = {
 }
 
 export class MessageBox {
-	async Show (message, config) { return await MessageBox_Show(this, message, config) }
-	async Error(message) { return await MessageBox_Error(this, message) }
-	async Info(message) { return await MessageBox_Info(this, message) }
-	async Warning(message) { return await MessageBox_Warning(this, message) }
-	async Confirm(message) { return await MessageBox_Confirm(this, message) }
+	static async Show (message, config) { return await MessageBox_Show(this, message, config) }
+	static async Error(message) { return await MessageBox_Error(this, message) }
+	static async Info(message) { return await MessageBox_Info(this, message) }
+	static async Warning(message) { return await MessageBox_Warning(this, message) }
+	static async Confirm(message) { return await MessageBox_Confirm(this, message) }
 }
 
 

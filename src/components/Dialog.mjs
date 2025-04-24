@@ -1,9 +1,9 @@
 import Component from "./Component.mjs"
 
 export default class Dialog  {
-	Show (content) { return Dialog_Show(this, content) }
-	Mask (message) { return Dialog_Mask(this, message) }
-	Progress (config) { return Dialog_Progress(this, config) }
+	static Show (content) { return Dialog_Show(this, content) }
+	static Mask (message) { return Dialog_Mask(this, message) }
+	static Progress (config) { return Dialog_Progress(this, config) }
 }
 
 
@@ -39,6 +39,10 @@ function Dialog_Progress(self, config) {
 
 	dialog.IsError = false
 	
+
+	var prgBarErrIcon = document.createElement('div')
+	dialog.appendChild(prgBarErrIcon)
+
 	var prgBarContainer = document.createElement('div')
 	prgBarContainer.classList.add('fgta5-progressbar-container')
 	dialog.appendChild(prgBarContainer)
@@ -61,6 +65,11 @@ function Dialog_Progress(self, config) {
 
 	dialog.setError = function (message) {
 		dialog.IsError = true
+
+		prgBarErrIcon.classList.add('fgta5-messagebox-icon-error')
+		prgBarErrIcon.style.height = '32px'
+		prgBarErrIcon.style.marginBottom = '10px'
+
 		prgMsg.innerHTML = message
 		prgMsg.setAttribute('error', 'true')
 		prgBar.setAttribute('error', 'true')

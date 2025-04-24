@@ -16,9 +16,9 @@ const $fgta5 = {
 	Textbox: Textbox,
 	Combobox: Combobox,
 	Datepicker: Datepicker,
-	MessageBox: new MessageBox(),
+	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
-	Dialog: new Dialog(),
+	Dialog: Dialog,
 }
 
 export default $fgta5;
