@@ -1,0 +1,48 @@
+
+.fgta5-dialog {
+	border: none;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
+	min-width: 270px;
+	user-select: none;
+}
+
+.fgta5-dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.6); /* Masking gelap */
+}
+
+
+.fgta5-progressbar-container {
+	background-color:  #ccc;
+	max-width: 500px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.fgta5-progressbar-text {
+	padding: 5px 0 0 0;
+	font-size: 0.8rem;
+	user-select: text;
+}
+
+.fgta5-progressbar-text[error=true] {
+	color: red;
+}
+
+.fgta5-progressbar {
+	display: inline-block;
+	text-align: center;
+	font-size: 0.8rem;
+	background-color: rgb(41, 41, 255);
+	padding: 3px 0;
+	color: #fff;
+	transition: width 0.5s ease;
+}
+
+.fgta5-progressbar[error=true] {
+	background-color: red;
+}
+
+.fgta5-dialog-button {
+	min-width: 80px;
+	padding: 5px 3px;
+}

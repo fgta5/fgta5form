@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>fgta5form</title>
+		<title><%= title %></title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link rel="icon" href="favicon.ico">
+	
 
 		<style>
 			body {
@@ -13,17 +14,13 @@
 			}
 		</style>
 
-		<link rel="stylesheet" href="./src/fgta5form.css" />
-		<!-- <link rel="stylesheet" href="dist/fgta5.min.css" /> -->
-		
-		
-		<link rel="stylesheet" href="fgta5form-dev.css" />
 
-		<script type="module">
-			import $fgta5 from './src/main.mjs'
-			// import $fgta5 from './dist/fgta5.min.js'
-			window.$fgta5 = $fgta5
-		</script>
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
 	</head>
 	<body>
 		<header>
@@ -118,7 +115,7 @@
 
 
 	<script type="module">
-		import Page from './fgta5form-dev.mjs'
+		import Page from './src/demo.mjs'
 
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();

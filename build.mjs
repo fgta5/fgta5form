@@ -1,4 +1,7 @@
-import "./src/fgta5form.css"
+import "./styles/fgta5form-root.css"
+import "./styles/fgta5form-messagebox.css"
+import "./styles/fgta5form-dialog.css"
+
 import $fgta5 from "./src/main.mjs"
 
 

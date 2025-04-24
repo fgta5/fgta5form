@@ -1,36 +1,36 @@
-import fs from 'node:fs';
-import mime from 'mime';
-import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
-
+import express from 'express';
+import favicon from 'serve-favicon';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const app = express();
+
+app.set('view engine', 'ejs');
 
 
-const server = createServer((req, res) => {
-	if (req.url === '/') {
-		req.url = 'fgta5form-dev.html';
-	}
+app.use('/dist', express.static('dist'))
+app.use('/images', express.static('images'))
+app.use('/src', express.static('src'))
+app.use('/styles', express.static('styles'))
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 
-	var filePath = path.join(__dirname, req.url);
-	if (!fs.existsSync(filePath)) {
-		res.writeHead(404, { 'Content-Type': 'text/plain' })
-		res.end(`File ${req.url} not found`)
-		return
-	} else {
-		var stream = fs.createReadStream(filePath)
-		var mimeType = mime.getType(filePath) || 'application/octet-stream';
-		res.writeHead(200, {'Content-Type': mimeType})
-		stream.pipe(res)
-	}
+app.get('/', function(req, res) {
+	res.render('index', {
+		title: 'fgta5form Debug',
+		script: 'head-script-dev.ejs',
+		style: 'head-style-dev.ejs'
+	});
 });
 
-// starts a simple http server locally on port 3000
-server.listen(3000, '127.0.0.1', () => {
-	console.log('Listening on 127.0.0.1:3000');
+app.get('/build', function(req, res) {
+	res.render('index', {
+		title: 'fgta5form Build',
+		script: 'head-script-build.ejs',
+		style: 'head-style-build.ejs'
+	});
 });
 
-
-
+app.listen(3000);
+console.log('Server is listening on port 3000');

@@ -1,0 +1,17 @@
+:root {
+	--fgta5-color-editmode-bg: var(--color-editmode-bg, rgb(255, 207, 118));
+	--fgta5-color-editmode-line: var(--color-editmode-line, rgb(60, 89, 255));
+
+	--fgta5-color-inputerror-bg: var(--color-inputerror-bg, rgb(255, 184, 184));
+	--fgta5-color-inputerror-line: var(--color-inputerror-line, red);
+	--fgta5-color-inputerror-text: var(--color-inputerror-text, darkred);
+
+	--fgta5-color-input-line: var(--color-input-line, #ccc);
+	--fgta5-color-input-disabled: var(--color-input-line, rgb(200, 200, 200));
+}
+
+
+
+
+
+

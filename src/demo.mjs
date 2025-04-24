@@ -1,5 +1,3 @@
-import $fgta5 from "./src/main.mjs"
-
 const txtState = document.getElementById('txtState')
 
 const btn_maskOpen = new $fgta5.Button('btn_mask_open')
