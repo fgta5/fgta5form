@@ -44,16 +44,3 @@
 	padding: 5px 3px;
 }
 
-.fgta5-messagebox-icon-info {
-	background: url(./../images/icon-dialog-info.svg) no-repeat center center;
-}
-
-.fgta5-messagebox-icon-error {
-	background: url(./../images/icon-dialog-error.svg) no-repeat center center;
-}
-.fgta5-messagebox-icon-warning {
-	background: url(./../images/icon-dialog-warning.svg) no-repeat center center;
-}
-.fgta5-messagebox-icon-question {
-	background: url(./../images/icon-dialog-question.svg) no-repeat center center;
-}

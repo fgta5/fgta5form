@@ -1,9 +1,9 @@
 import Component from "./Component.mjs"
 
 export default class Dialog  {
-	static Show (content) { return Dialog_Show(this, content) }
-	static Mask (message) { return Dialog_Mask(this, message) }
-	static Progress (config) { return Dialog_Progress(this, config) }
+	static Show (content) { return Dialog_Show(content) }
+	static Mask (message) { return Dialog_Mask(message) }
+	static Progress (config) { return Dialog_Progress(config) }
 }
 
 
@@ -19,19 +19,19 @@ function CreateDialog() {
 }
 
 
-function Dialog_Show(self, content) {
+function Dialog_Show(content) {
 	const dialog = CreateDialog()
 	return dialog
 }
 
-function Dialog_Mask(self, message) {
+function Dialog_Mask(message) {
 	const dialog = CreateDialog()
 	dialog.innerHTML = message	
 	return dialog
 }
 
 
-function Dialog_Progress(self, config) {
+function Dialog_Progress(config) {
 	if (config === undefined) config = {}
 	
 
@@ -66,7 +66,7 @@ function Dialog_Progress(self, config) {
 	dialog.setError = function (message) {
 		dialog.IsError = true
 
-		prgBarErrIcon.classList.add('fgta5-messagebox-icon-error')
+		prgBarErrIcon.classList.add('fgta5-icon-error')
 		prgBarErrIcon.style.height = '32px'
 		prgBarErrIcon.style.marginBottom = '10px'
 

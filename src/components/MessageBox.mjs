@@ -1,16 +1,16 @@
 const iconsCss = {
-	'info': 'fgta5-messagebox-icon-info',
-	'warning': 'fgta5-messagebox-icon-warning',
-	'error': 'fgta5-messagebox-icon-error',
-	'question': 'fgta5-messagebox-icon-question',
+	'info': 'fgta5-icon-info',
+	'warning': 'fgta5-icon-warning',
+	'error': 'fgta5-icon-error',
+	'question': 'fgta5-icon-question',
 }
 
 export class MessageBox {
-	static async Show (message, config) { return await MessageBox_Show(this, message, config) }
-	static async Error(message) { return await MessageBox_Error(this, message) }
-	static async Info(message) { return await MessageBox_Info(this, message) }
-	static async Warning(message) { return await MessageBox_Warning(this, message) }
-	static async Confirm(message) { return await MessageBox_Confirm(this, message) }
+	static async Show (message, config) { return await MessageBox_Show(message, config) }
+	static async Error(message) { return await MessageBox_Error(message) }
+	static async Info(message) { return await MessageBox_Info(message) }
+	static async Warning(message) { return await MessageBox_Warning(message) }
+	static async Confirm(message) { return await MessageBox_Confirm(message) }
 }
 
 
@@ -24,7 +24,7 @@ export class MessageBoxButton {
 }
 
 
-function Create(self, message, config) {
+function Create(message, config) {
 	const dialog = document.createElement('dialog')
     dialog.classList.add('fgta5-messagebox-dialog')
 
@@ -62,10 +62,10 @@ function Create(self, message, config) {
 }
 
 
-async function MessageBox_Show(self, message, config) {
+async function MessageBox_Show(message, config) {
 	if (config === undefined) config = {}
 
-	var dialog = Create(self, message, config)
+	var dialog = Create(message, config)
 	return new Promise((resolve)=>{
 		if (config.buttons) {
 			for (const [key, btn] of Object.entries(config.buttons)) {
@@ -94,18 +94,18 @@ async function MessageBox_Show(self, message, config) {
 }
 
 
-async function MessageBox_Error(self, message) {
-	return await MessageBox_Show(self, message, {iconcss: 'error'})
+async function MessageBox_Error(message) {
+	return await MessageBox_Show(message, {iconcss: 'error'})
 }
 
-async function MessageBox_Info(self, message) {
-	return await MessageBox_Show(self, message, {iconcss: 'info'})
+async function MessageBox_Info(message) {
+	return await MessageBox_Show(message, {iconcss: 'info'})
 }
-async function MessageBox_Warning(self, message) {
-	return await MessageBox_Show(self, message, {iconcss: 'warning'})
+async function MessageBox_Warning(message) {
+	return await MessageBox_Show(message, {iconcss: 'warning'})
 }
-async function MessageBox_Confirm(self, message) {
-	return await MessageBox_Show(self, message, {
+async function MessageBox_Confirm(message) {
+	return await MessageBox_Show(message, {
 		iconcss: 'question',
 		buttons: {
 			ok: new MessageBoxButton('Ok'),
