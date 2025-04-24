@@ -2,6 +2,8 @@ import $fgta5 from "./src/main.mjs"
 
 const txtState = document.getElementById('txtState')
 
+const btn_maskOpen = new $fgta5.Button('btn_mask_open')
+const btn_progress_open = new $fgta5.Button('btn_progress_open')
 
 const btn_msgboxShow = new $fgta5.Button('btn_msgbox_show')
 const btn_msgboxInfo = new $fgta5.Button('btn_msgbox_info')
@@ -39,6 +41,10 @@ export default class Page {
 async function main(self, args) {
 	console.log('starting module')
 
+
+	btn_maskOpen.addEventListener('click', (evt) => { btn_maskOpen_click(self, evt) });
+	btn_progress_open.addEventListener('click', (evt) => { btn_progressOpen_click(self, evt) });
+
 	btn_msgboxShow.addEventListener('click', (evt) => { btn_msgboxShow_click(self, evt) });
 	btn_msgboxInfo.addEventListener('click', (evt) => { btn_msgboxInfo_click(self, evt) });
 	btn_msgboxWarn.addEventListener('click', (evt) => { btn_rmsgboxWarn_click(self, evt) });
@@ -64,39 +70,73 @@ async function main(self, args) {
 }
 
 
+async function btn_maskOpen_click(self, evt) {
+	var mask = $fgta5.Dialog.Mask('please wait ...')
+	await new Promise(resolve => setTimeout(resolve, 1000));
+	mask.close();
+}
+
+async function btn_progressOpen_click(self, evt) {	
+	var prog = $fgta5.Dialog.Progress({buttonClose: false})
+	prog.setProgress(0, "initializing") 
+
+	try {
+		var test_error = true
+		for (var i = 0; i < 10; i++) {
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			var progress = (i+1) * 10
+			prog.setProgress((i+1) * 10, "processing " + progress + "%")
+	
+			if (test_error && i==5) {
+				throw new Error(`error at ${progress}%`)
+			}
+		}
+		prog.finish()
+	} catch (err) {
+		console.error(err)
+		prog.setError(err.message)
+		prog.finish('Close', false)
+	}
+	
+
+
+	
+}
+
+
 
 async function btn_msgboxShow_click(self, evt) {
-	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
-		iconsvg: '',
-		title: 'MessageBox',
-		buttons: {
-			ok: new $fgta5.MessageBoxButton('Ok'),
-			cancel: new $fgta5.MessageBoxButton('Cancel'),
-		}
-	})
+	// var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
+	// 	iconcss: 'warning',
+	// 	// buttons: {
+	// 	// 	ok: new $fgta5.MessageBoxButton('Ok'),
+	// 	// 	cancel: new $fgta5.MessageBoxButton('Cancel'),
+	// 	// }
+	// })
 
+	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan")
 	console.log(ret)
 }
 
 async function btn_msgboxInfo_click(self, evt) {
-	$fgta5.MessageBox.Info("ini messagebox ditampilkan")
+	$fgta5.MessageBox.Info("ini info ditampilkan")
 }
 
 async function btn_rmsgboxWarn_click(self, evt) {
-
+	$fgta5.MessageBox.Warning("ini warning ditampilkan")
 }
 
 async function btn_msgboxError_click(self, evt) {
-
+	$fgta5.MessageBox.Error("ini error ditampilkan")
 }
 
 async function btn_msgboxConfirm_click(self, evt) {
-
+	var ret = await $fgta5.MessageBox.Confirm("konfirmasi, oke tidak ?")
+	console.log(ret)
 }
 
 
 function btn_edittogle_click(self, evt) {
-	
 	$fgta5.MessageBox.Show('test messagebox')
 	
 	// if (form.IsChanged()) {

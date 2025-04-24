@@ -6,6 +6,12 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link rel="icon" href="favicon.ico">
 
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+			}
+		</style>
+
 		<link rel="stylesheet" href="./src/fgta5form.css" />
 		<!-- <link rel="stylesheet" href="dist/fgta5.min.css" /> -->
 		
@@ -26,6 +32,11 @@
 		<main>
 			<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
 				
+				<div>
+					<button id="btn_mask_open">Open Process Mask</button>
+					<button id="btn_progress_open">Do Something</button>
+				</div>
+
 				<div>
 					<button id="btn_msgbox_show">MsgBox</button>
 					<button id="btn_msgbox_info">Info</button>

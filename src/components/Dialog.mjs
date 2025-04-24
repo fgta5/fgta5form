@@ -1,38 +1,99 @@
 import Component from "./Component.mjs"
 
-export default class Dialog extends Component {
-	constructor(id) {
-		console.log('Dialog')
-		if (id!=undefined) {
-			super(id)
-		} else {
-			var el = document.createElement('dialog')
-			el.id = Component.GenerateId()
-			document.body.appendChild(el)
-			super(el.id)
-		}
-		Dialog_construct(this, id)
-	}
-
-	ShowModal() {
-		Dialog_ShowModal(this)
-	}
-
+export default class Dialog  {
+	Show (content) { return Dialog_Show(this, content) }
+	Mask (message) { return Dialog_Mask(this, message) }
+	Progress (config) { return Dialog_Progress(this, config) }
 }
 
 
-function Dialog_construct(self, id) {
-	var dlg = self.Element
+function CreateDialog() {
+	const dialog = document.createElement('dialog')
+	dialog.classList.add('fgta5-dialog')
+	dialog.addEventListener('close', (evt) => {
+		dialog.parentNode.removeChild(dialog)
+	});
+	document.body.appendChild(dialog)
+	dialog.showModal()
+	return dialog
+}
+
+
+function Dialog_Show(self, content) {
+	const dialog = CreateDialog()
+	return dialog
+}
+
+function Dialog_Mask(self, message) {
+	const dialog = CreateDialog()
+	dialog.innerHTML = message	
+	return dialog
+}
+
+
+function Dialog_Progress(self, config) {
+	if (config === undefined) config = {}
 	
-	const btnClose = document.createElement('button')
-	btnClose.innerHTML = 'Close'
-	btnClose.addEventListener('click', () => {
-		dlg.close()
-	})
 
-	dlg.appendChild(btnClose)
+	const dialog = CreateDialog()
+
+	dialog.IsError = false
+	
+	var prgBarContainer = document.createElement('div')
+	prgBarContainer.classList.add('fgta5-progressbar-container')
+	dialog.appendChild(prgBarContainer)
+
+	var prgBar = document.createElement('label')
+	prgBar.classList.add('fgta5-progressbar')
+	prgBarContainer.appendChild(prgBar)
+
+	var prgMsg = document.createElement('div')
+	prgMsg.classList.add('fgta5-progressbar-text')
+	dialog.appendChild(prgMsg)
+
+	dialog.setProgress = function (progress, message) {
+		if (progress > 100) progress = 100
+		prgBar.innerHTML = `${progress}%`
+		prgBar.style.width = `${progress}%`
+		prgMsg.innerHTML = message
+	}
+
+
+	dialog.setError = function (message) {
+		dialog.IsError = true
+		prgMsg.innerHTML = message
+		prgMsg.setAttribute('error', 'true')
+		prgBar.setAttribute('error', 'true')
+	}
+
+	dialog.finish = function (text, completed) {
+		if (text===undefined) text = 'Done'
+		if (completed===undefined) completed = true
+
+		if (config.buttonClose===true || dialog.IsError) {
+			if (completed) {
+				prgMsg.style.display = 'none'
+				prgBar.style.width = '100%'
+				prgBar.innerHTML = '100%'
+			}
+
+			var div = document.createElement('div')
+			div.style.textAlign = 'center'
+			div.style.marginTop = '10px'
+			div.style.marginBottom = '0'
+			var btn = document.createElement('button')
+			btn.classList.add('fgta5-dialog-button')
+			btn.innerHTML = text
+			btn.addEventListener('click', () => {
+				dialog.close()
+			})
+			div.appendChild(btn)
+			dialog.appendChild(div)
+		} else {
+			dialog.close()
+		}
+	}
+
+	return dialog
 }
 
-function Dialog_ShowModal(self) {
-	self.Element.showModal()
-}
