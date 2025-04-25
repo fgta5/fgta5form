@@ -8,6 +8,7 @@ const btn_msgboxInfo = new $fgta5.Button('btn_msgbox_info')
 const btn_msgboxWarn = new $fgta5.Button('btn_msgbox_warn')
 const btn_msgboxError = new $fgta5.Button('btn_msgbox_error')
 const btn_msgboxConfirm = new $fgta5.Button('btn_msgbox_confirm')
+const btn_msgbox_choose = new $fgta5.Button('btn_msgbox_choose')
 
 
 
@@ -48,14 +49,13 @@ async function main(self, args) {
 	btn_msgboxWarn.addEventListener('click', (evt) => { btn_rmsgboxWarn_click(self, evt) });
 	btn_msgboxError.addEventListener('click', (evt) => { btn_msgboxError_click(self, evt) });
 	btn_msgboxConfirm.addEventListener('click', (evt) => { btn_msgboxConfirm_click(self, evt) });
+	btn_msgbox_choose.addEventListener('click', (evt) => { btn_msgbox_choose_click(self, evt) });
 
 
-
-
+	btn_edittogle.addEventListener('click', (evt) => { btn_edittogle_click(self, evt) });
 	btn_reset.addEventListener('click', (evt) => { btn_reset_click(self, evt) });
 	btn_save.addEventListener('click', (evt) => { btn_save_click(self, evt) });
 	btn_new.addEventListener('click', (evt) => { btn_new_click(self, evt) });
-	btn_edittogle.addEventListener('click', (evt) => { btn_edittogle_click(self, evt) });
 
 	btn_testvalidation.addEventListener('click', (evt) => { btn_testvalidation_click(self, evt) });
 	btn_testdised.addEventListener('click', (evt) => { btn_testdised_click(self, evt) });
@@ -69,8 +69,8 @@ async function main(self, args) {
 
 
 async function btn_maskOpen_click(self, evt) {
-	var mask = $fgta5.Dialog.Mask('please wait ...')
-	await new Promise(resolve => setTimeout(resolve, 1000));
+	var mask = $fgta5.Dialog.Mask()
+	await new Promise(resolve => setTimeout(resolve, 3000));
 	mask.close();
 }
 
@@ -105,14 +105,6 @@ async function btn_progressOpen_click(self, evt) {
 
 
 async function btn_msgboxShow_click(self, evt) {
-	// var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
-	// 	iconcss: 'warning',
-	// 	// buttons: {
-	// 	// 	ok: new $fgta5.MessageBoxButton('Ok'),
-	// 	// 	cancel: new $fgta5.MessageBoxButton('Cancel'),
-	// 	// }
-	// })
-
 	var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan")
 	console.log(ret)
 }
@@ -133,6 +125,17 @@ async function btn_msgboxConfirm_click(self, evt) {
 	var ret = await $fgta5.MessageBox.Confirm("konfirmasi, oke tidak ?")
 	console.log(ret)
 }
+
+async function btn_msgbox_choose_click(self, evt) {
+	// var ret = await $fgta5.MessageBox.Show("ini messagebox ditampilkan", {
+	// 	iconcss: 'warning',
+	// 	// buttons: {
+	// 	// 	ok: new $fgta5.MessageBoxButton('Ok'),
+	// 	// 	cancel: new $fgta5.MessageBoxButton('Cancel'),
+	// 	// }
+	// })
+}
+
 
 
 function btn_edittogle_click(self, evt) {

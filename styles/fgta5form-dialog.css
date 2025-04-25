@@ -10,6 +10,12 @@
 	background-color: rgba(0, 0, 0, 0.6); /* Masking gelap */
 }
 
+.fgta5-dialog-button {
+	min-width: 80px;
+	padding: 5px 3px;
+}
+
+
 
 .fgta5-progressbar-container {
 	background-color:  #ccc;
@@ -42,7 +48,23 @@
 	background-color: red;
 }
 
-.fgta5-dialog-button {
-	min-width: 80px;
-	padding: 5px 3px;
+
+
+
+
+.fgta5-loadermask-msg {
+	display: flex;
+	column-gap: 10px;
+}
+
+.fgta5-loadermask-msg-icon {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+}
+
+.fgta5-loadermask-msg-text {
+	display: inline-block;
+	margin-top: auto;
+	margin-bottom: auto;
 }
