@@ -5,7 +5,7 @@ import Textbox from './components/Textbox.mjs';
 import Combobox from './components/Combobox.mjs';
 import Datepicker from './components/Datepicker.mjs';
 import {MessageBox, MessageBoxButton} from './components/MessageBox.mjs';
-import Dialog from './components/Dialog.mjs';
+import Modal from './components/Modal.mjs';
 
 
 
@@ -18,7 +18,7 @@ const $fgta5 = {
 	Datepicker: Datepicker,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
-	Dialog: Dialog,
+	Modal: Modal,
 }
 
 export default $fgta5;

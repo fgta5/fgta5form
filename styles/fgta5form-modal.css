@@ -1,40 +1,40 @@
 
-.fgta5-dialog {
+.fgta5-modal-message {
 	border: none;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
 	min-width: 270px;
 	user-select: none;
 }
 
-.fgta5-dialog::backdrop {
+.fgta5-modal-message::backdrop {
 	background-color: rgba(0, 0, 0, 0.6); /* Masking gelap */
 }
 
-.fgta5-dialog-button {
+.fgta5-modal-button {
 	min-width: 80px;
 	padding: 5px 3px;
 }
 
 
 
-.fgta5-progressbar-container {
+.fgta5-modal-progressbar-container {
 	background-color:  #ccc;
 	max-width: 500px;
 	margin: 0 auto;
 	padding: 0;
 }
 
-.fgta5-progressbar-text {
+.fgta5-modal-progressbar-text {
 	padding: 5px 0 0 0;
 	font-size: 0.8rem;
 	user-select: text;
 }
 
-.fgta5-progressbar-text[error=true] {
+.fgta5-modal-progressbar-text[error=true] {
 	color: red;
 }
 
-.fgta5-progressbar {
+.fgta5-modal-progressbar {
 	display: inline-block;
 	text-align: center;
 	font-size: 0.8rem;
@@ -44,7 +44,7 @@
 	transition: width 0.5s ease;
 }
 
-.fgta5-progressbar[error=true] {
+.fgta5-modal-progressbar[error=true] {
 	background-color: red;
 }
 
@@ -52,18 +52,18 @@
 
 
 
-.fgta5-loadermask-msg {
+.fgta5-modal-loadermask-msg {
 	display: flex;
 	column-gap: 10px;
 }
 
-.fgta5-loadermask-msg-icon {
+.fgta5-modal-loadermask-msg-icon {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
 }
 
-.fgta5-loadermask-msg-text {
+.fgta5-modal-loadermask-msg-text {
 	display: inline-block;
 	margin-top: auto;
 	margin-bottom: auto;

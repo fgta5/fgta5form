@@ -1,0 +1,29 @@
+
+.input-field {
+	display: flex;
+	column-gap: 10px;
+}
+
+.input-field > label {
+	margin-top: 4px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	width: 80px;
+	text-align: right;
+}
+
+
+
+
+.mytextbox {
+	width: 300px;
+	background-color: aquamarine;
+}
+
+.mycombo {
+	width: 100px;
+}
+
+.mydt {
+	width: 250px;
+}

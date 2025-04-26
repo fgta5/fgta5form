@@ -5,15 +5,6 @@ const iconsCss = {
 	'question': 'fgta5-icon-question',
 }
 
-export class MessageBox {
-	static async Show (message, config) { return await MessageBox_Show(message, config) }
-	static async Error(message) { return await MessageBox_Error(message) }
-	static async Info(message) { return await MessageBox_Info(message) }
-	static async Warning(message) { return await MessageBox_Warning(message) }
-	static async Confirm(message) { return await MessageBox_Confirm(message) }
-}
-
-
 export class MessageBoxButton {
 	Text = 'button'
 	
@@ -22,6 +13,21 @@ export class MessageBoxButton {
 	}
 
 }
+
+export class MessageBox {
+	static ButtonOkCancel = Object.freeze({ok:new MessageBoxButton('Ok'), cancel:new MessageBoxButton('Cancel')})
+	static ButtonYesNo = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No')})
+	static ButtonYesNoCancel = Object.freeze({yes:new MessageBoxButton('Yes'), no:new MessageBoxButton('No'), cancel:new MessageBoxButton('Cancel')})
+
+	static async Show (message, config) { return await MessageBox_Show(message, config) }
+	static async Error(message) { return await MessageBox_Error(message) }
+	static async Info(message) { return await MessageBox_Info(message) }
+	static async Warning(message) { return await MessageBox_Warning(message) }
+	static async Confirm(message, buttons) { return await MessageBox_Confirm(message, buttons) }
+}
+
+
+
 
 
 function Create(message, config) {
@@ -104,12 +110,11 @@ async function MessageBox_Info(message) {
 async function MessageBox_Warning(message) {
 	return await MessageBox_Show(message, {iconcss: 'warning'})
 }
-async function MessageBox_Confirm(message) {
+async function MessageBox_Confirm(message, buttons) {
+	buttons = buttons===undefined ? MessageBox.ButtonOkCancel : buttons 
+
 	return await MessageBox_Show(message, {
 		iconcss: 'question',
-		buttons: {
-			ok: new MessageBoxButton('Ok'),
-			cancel: new MessageBoxButton('Cancel')
-		}
+		buttons: buttons
 	})
 }
