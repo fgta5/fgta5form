@@ -42,7 +42,7 @@
 					<button id="btn_clearerror">Clear Error</button>
 				</div>
 			</div>
-
+			
 
 			<h2 id="txtState">Edit/View</h2>
 			<form id="myform" locked="True">
@@ -50,9 +50,31 @@
 					
 					<div class="demo-input-field">
 						<label for="obj_txt_nama">Nama</label>
-						<input class="demo-textbox-nama" id="obj_txt_nama" required  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" minlength="3" width="300" validator="" >
+						<input required id="obj_txt_nama" fgta5-component="Textbox" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" width="300" validator="" class="mytextbox">
 					</div>
 
+					<!-- <div class="input-field">
+						<label for="obj_cbo_kota">Kota</label>
+						<input required id="obj_cbo_kota" fgta5-component="Combobox" placeholder="Kota" fieldValue="kota_id" fieldDisplay="kota_name" class="mycombo">
+						<datalist for="obj_cbo_kota">
+							<option value="JKT">Jakarta</option>
+							<option value="SBY">Surabaya</option>
+							<option value="BAL">Bali</option>
+						</datalist>
+					</div> -->
+
+<!-- 
+					<div class="input-field">
+						<label for="obj_dt_tanggal">Tanggal</label>
+						<input required id="obj_dt_tanggal" fgta5-component="Datepicker" placeholder="Tanggal" class="mydt" >
+					</div> -->
+
+				
+					<!--
+					refefence:
+					https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
+					-->
+					
 				
 				</div>
 

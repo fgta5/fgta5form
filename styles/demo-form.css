@@ -1,10 +1,9 @@
-
-.input-field {
+.demo-input-field {
 	display: flex;
 	column-gap: 10px;
 }
 
-.input-field > label {
+.demo-input-field > label {
 	margin-top: 4px;
 	font-size: 0.8rem;
 	font-weight: bold;
@@ -15,15 +14,8 @@
 
 
 
-.mytextbox {
+.demo-textbox-nama {
 	width: 300px;
 	background-color: aquamarine;
 }
 
-.mycombo {
-	width: 100px;
-}
-
-.mydt {
-	width: 250px;
-}
