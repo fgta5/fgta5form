@@ -1,5 +1,5 @@
-.fgta5-entry-input-container {
-	display: block;
+.fgta5-entry-container {
+	display: inline-block;
 }
 
 .fgta5-entry-display-wrapper {
@@ -17,6 +17,10 @@
 
 
 .fgta5-entry-input {
+	display: inline-block;
+}
+
+.fgta5-entry-button {
 	display: inline-block;
 }
 
