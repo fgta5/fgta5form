@@ -44,43 +44,51 @@ async function main(self, args) {
 
 
 
-function btn_edittogle_click(self, evt) {
-	$fgta5.MessageBox.Show('test messagebox')
+async function btn_edittogle_click(self, evt) {
+	if (!form.IsLocked()) {
+		// dalam posisi edit
+		if (form.IsChanged()) {
+			await $fgta5.MessageBox.Warning('Ada perubahan data, simpam data terlebih dahulu atau batalkan perubahan')
+			return
+		}
+	}
 	
-	// if (form.IsChanged()) {
-		// alert('Ada perubahan data, silakan batalkan perubahan atau simpa data terlebih dahulu')
-		// return
-	// }
-
-
-	// 	form.AcceptChanges()
-	// } else {
-	// 	form.Lock(!form.Locked) 
-	// }
-
-
-
-
+	form.Lock(!form.IsLocked()) 
 }
 
 
-function btn_reset_click(self, evt) {
+async function btn_reset_click(self, evt) {
 	console.log('btn_reset_click()')
-	form.Reset()
-}
-
-function btn_save_click(self, evt) {
-	console.log('btn_save_click()')
 	if (form.IsChanged()) {
-		form.AcceptChanges()
+		var ret = await $fgta5.MessageBox.Confirm("data pada form berubah, apakah akan reset data?")
+		if (ret=='ok') {
+			form.Reset()
+		}
 	}
 }
 
-function btn_new_click(self, evt) {
-	console.log('btn_new_click()')
-	form.NewData()
+async function btn_save_click(self, evt) {
+	console.log('btn_save_click()')
+	form.AcceptChanges()
 
-	form.Lock(false)
+}
+
+async function btn_new_click(self, evt) {
+	console.log('btn_new_click()')
+	var newdata = true;
+	if (form.IsChanged()) {
+		newdata = false
+		var ret = await $fgta5.MessageBox.Confirm("data pada form berubah, apakah akan membuat data baru?")
+		if (ret=='ok') {
+			newdata = true
+		}
+	}
+
+
+	if (newdata) {
+		form.NewData()
+		form.Lock(false)
+	}
 }
 
 

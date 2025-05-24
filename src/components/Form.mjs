@@ -2,17 +2,31 @@ import Component from "./Component.mjs"
 import Textbox from "./Textbox.mjs"
 
 
+const formLockedEvent = new CustomEvent('locked')
+const formUnLockedEvent = new CustomEvent('unlocked')
+
+
 export default class Form extends Component {
+	#_locked = false
+
 	Inputs = {}
-	Locked = false
 
 	constructor(id) {
 		super(id)
+
+		this.#readAttributes()
 		Construct(this, id)
 	}
 
 
-	Lock(lock) { Form_Lock(this, lock) }
+	Lock(lock) { 
+		this.#_locked = Form_Lock(this, lock) 
+	}
+
+	IsLocked() { 
+		return this.#_locked
+	}
+
 
 	Reset() { Form_Reset(this) }
 
@@ -20,13 +34,26 @@ export default class Form extends Component {
 
 	IsChanged() { return Form_IsChanged(this) }
 
-	IsLocked() { return Form_IsLocked(this) }
+	
 
 	NewData() { Form_NewData(this) }
 
 	Render() { Form_Render(this) }
 
 	Validate() { return Form_Validate(this) }
+
+
+	#readAttributes() {
+		var locked = this.Element.getAttribute('locked') 
+		if (locked == null) {
+			locked = 'false'
+		}
+		if (locked.toLowerCase() === 'true') {
+			this.#_locked = true
+		} else {
+			this.#_locked = false
+		}
+	}
 
 }
 
@@ -43,6 +70,7 @@ function Construct(self, id) {
 	});
 
 
+
 	// ambil semua input
 	var inputs = self.Element.querySelectorAll('input')
 	for (var i = 0; i < inputs.length; i++) {
@@ -54,31 +82,34 @@ function Construct(self, id) {
 
 		if (fgtacomp=='Textbox') {
 			self.Inputs[input.id] = new Textbox(input.id)
-		} else if (fgtacomp=='Combobox') {
-			self.Inputs[input.id] = new Combobox(input.id)
+		} else if (fgtacomp=='Numberbox') {
 		} else if (fgtacomp=='Datepicker') {
-			self.Inputs[input.id] = new Datepicker(input.id)
+		} else if (fgtacomp=='Combobox') {
+		} else if  (fgtacomp=='Checkbox') {
 		}
+	
 	}
 }
 
 
 function Form_Render(self) {
-	console.log(`render form ${self.Id}`)
-	var locked = self.Element.getAttribute('locked')
-	if (locked.toLowerCase() === 'true') {
-		self.Lock(true)
+	// render semua input
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		obj.bindForm(self)
 	}
+
+	var locked = self.IsLocked() ? true : false
+	if (locked) {
+		Form_Lock(self, true)
+	} else {
+		Form_Lock(self, false)
+	}
+
 }
 
 function Form_Lock(self, lock) {
-	const formLockedEvent = new CustomEvent('locked')
-	const formUnLockedEvent = new CustomEvent('unlocked')
-
-	self.Locked = lock
-	var editmode = self.Locked ? false : true
-
-	console.log((self.Locked ? "lock" : "unlock") + " semua input")
+	var editmode = lock ? false : true
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
 		obj.SetEditingMode(editmode)
@@ -86,37 +117,47 @@ function Form_Lock(self, lock) {
 
 	if (lock) {
 		self.Element.dispatchEvent(formLockedEvent)
+		self.Element.setAttribute('locked', lock)
 	} else {
 		self.Element.dispatchEvent(formUnLockedEvent)
+		self.Element.removeAttribute('locked')
 	}
-	
+	return lock
 }
 
-function Form_IsLocked(self) {
-	return self.Locked
-}
+
 
 
 function Form_AcceptChanges(self) {
-	console.log("accept changes")
-	console.warn("accpet changes still not implemented")
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		obj.AcceptChanges()
+	}
 }
 
 function Form_Reset(self) {
-	console.log("reset form ke state terakhir yang changed accepted")
-	console.warn("reset still not implemented")
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		obj.Reset()
+	}
 }
 
 
 function Form_NewData(self) {
-	console.log("new data, clear all data in forms")
-	console.warn("newdata still not implemented")
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		obj.NewData()
+	}
 }
 
 function Form_IsChanged(self) {
-	console.log('get form changed state')
-	console.warn("IsChanges still not implemented, always return true")
-	return true
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		if (obj.IsChanged()) {
+			return true
+		}
+	}
+	return false
 } 
 
 function Form_Validate(self) {

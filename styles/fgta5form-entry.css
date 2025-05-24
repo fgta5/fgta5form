@@ -1,28 +1,42 @@
 .fgta5-entry-container {
 	display: inline-block;
+	border: none;
+	border-bottom: 1px solid var(--fgta5-color-input-line);
+	padding: 0;
 }
 
-.fgta5-entry-display-wrapper {
-	display: inline-block;
-}
-
-.fgta5-entry-input-wrapper {
-	display: inline-block;
+.fgta5-entry-container[editmode="true"]:focus-within {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line);
 }
 
 
-.fgta5-entry-display {
-	display: inline-block;
-}
 
 
 .fgta5-entry-input {
-	display: inline-block;
+	border: none;
+	border-bottom: 1px solid transparent;
+	outline: none;
+	margin: 0;
+	padding: 5px; /* Padding untuk kenyamanan */
+	transition: border-color 0.3s ease; /* Animasi transisi */
 }
 
-.fgta5-entry-button {
-	display: inline-block;
+.fgta5-entry-input:not(.fgta5-entry-input[disabled]):focus {
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
 }
+
+.fgta5-entry-input[disabled] {
+	background-color: var(--fgta5-color-input-disabled);
+}
+
+.fgta5-entry-input[editmode="true"]:not([disabled]) {
+	background-color: var(--fgta5-color-editmode-bg);
+}
+
+
+/* .fgta5-entry-button {
+	display: inline-block;
+} */
 
 
 .fgta5-entry-lastvalue {
