@@ -58,7 +58,6 @@ async function btn_edittogle_click(self, evt) {
 
 
 async function btn_reset_click(self, evt) {
-	console.log('btn_reset_click()')
 	if (form.IsChanged()) {
 		var ret = await $fgta5.MessageBox.Confirm("data pada form berubah, apakah akan reset data?")
 		if (ret=='ok') {
@@ -68,13 +67,18 @@ async function btn_reset_click(self, evt) {
 }
 
 async function btn_save_click(self, evt) {
-	console.log('btn_save_click()')
-	form.AcceptChanges()
-
+	var isValid = form.Validate()
+	if (!isValid) {
+		var err = new Error('Ada kesalahan pada form, silahkan perbaiki');
+		console.warn(err.message);
+		await $fgta5.MessageBox.Error(err.message)
+		return
+	} else {
+		form.AcceptChanges()
+	}
 }
 
 async function btn_new_click(self, evt) {
-	console.log('btn_new_click()')
 	var newdata = true;
 	if (form.IsChanged()) {
 		newdata = false
@@ -84,9 +88,15 @@ async function btn_new_click(self, evt) {
 		}
 	}
 
-
 	if (newdata) {
-		form.NewData()
+		form.NewData({
+			nama: "Nama Baru",   // textbox
+			nilai: 2500,  // numberbox
+			kota: {value:"JKT", display:"Jakarta"},  // combobox
+			tanggal: new Date(), // datebox
+			aktif: true, // checkbox
+			alamat: "Alamat Baru", // textarea
+		})
 		form.Lock(false)
 	}
 }
@@ -95,42 +105,30 @@ async function btn_new_click(self, evt) {
 
 
 function form_locked(self, evt) {
-	console.log('form locked')
 	txtState.innerHTML = "View"
 	btn_reset.Disabled = true 
 	btn_save.Disabled = true
+	btn_testvalidation.Disabled = true
 }
 
 function form_unlocked(self, evt) {
-	console.log('form unlocked')
 	txtState.innerHTML = "Edit"
 	btn_reset.Disabled = false 
 	btn_save.Disabled = false
+	btn_testvalidation.Disabled = false
 }
 
 
 
 function btn_testvalidation_click(self, evt) {
-	console.log('btn_testvalidation_click()')
-
 	var isValid = form.Validate()
 	if (!isValid) {	
-		console.error('ada error, di default validation');
-	} else {
-		console.log('default validation passed');
-	}
-
-	if (!isValid) {
+		console.warn('ada error, di default validation');
 		return
-	}
-
-	console.log('Test Set Error')
-	obj_txt_nama.SetError('error message')
-
+	} 
 }
 
 function btn_testdised_click(self, evt) {
-	console.log('btn_testdised_click()')
 	for (var name in form.Inputs) {	
 		var obj = form.Inputs[name]
 		obj.Disabled = !obj.Disabled
@@ -138,8 +136,6 @@ function btn_testdised_click(self, evt) {
 }
 
 function btn_clearerror_click(self, evt) {
-	console.log('btn_clearerror_click()')
-	console.log('btn_testdised_click()')
 	for (var name in form.Inputs) {	
 		var obj = form.Inputs[name]
 		obj.SetError(null)

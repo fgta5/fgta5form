@@ -36,13 +36,33 @@ export default class Input extends Component {
 	SetError(msg) {}
 	GetLastValue() {} 
 
+	GetBindingName() {
+		var binding = this.Element.getAttribute('binding')
+		if (binding === null) {
+			return null
+		} else {
+			return binding
+		}
+	}
+
 	Validate() { return true }
 
-
-
+	#_validators = {}
+	get Validators() { return this.#_validators }
+	AddValidator(fnName, fnParams) {
+		this.#_validators[fnName] = fnParams
+	}
+	RemoveValidator(str) {
+		if (this.#_validators[str] !== undefined) {
+			delete this.#_validators[str]
+		}			
+	}
 }
 
 function Input_construct(self, id) {
 
 }
+
+
+
 

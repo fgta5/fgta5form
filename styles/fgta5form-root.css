@@ -7,7 +7,9 @@
 	--fgta5-color-inputerror-text: var(--color-inputerror-text, darkred);
 
 	--fgta5-color-input-line: var(--color-input-line, #ccc);
-	--fgta5-color-input-disabled: var(--color-input-line, rgb(200, 200, 200));
+	--fgta5-color-input-disabled: var(--color-input-disabled, rgb(200, 200, 200));
+	--fgta5-color-input-descr-text: var(--color-input-descr-text, #616161);
+	
 }
 
 

@@ -3,7 +3,9 @@ import Form from './components/Form.mjs';
 import Button from './components/Button.mjs';
 import {MessageBox, MessageBoxButton} from './components/MessageBox.mjs';
 import Modal from './components/Modal.mjs';
+import * as Validators from './components/Validators.mjs';
 import Textbox from './components/Textbox.mjs';
+import Numberbox from './components/Numberbox.mjs';
 
 
 const $fgta5 = {
@@ -11,9 +13,16 @@ const $fgta5 = {
 	Form: Form,
 	Button: Button,
 	Textbox: Textbox,
+	Numberbox: Numberbox,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
-	Modal: Modal,
+	Modal: Modal
+}
+
+if (window.$validators === undefined) {
+	window.$validators = Validators;
+} else {
+	Object.assign(window.$validators, Validators);
 }
 
 export default $fgta5;

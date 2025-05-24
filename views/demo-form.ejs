@@ -46,13 +46,30 @@
 
 			<h2 id="txtState">Edit/View</h2>
 			<form id="myform" locked="true">
-				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
+				<div style="display: flex; column-gap: 10px; row-gap: 10px; flex-wrap: wrap;">
 					<div class="demo-input-field">
 						<label for="obj_txt_nama">Nama</label>
-						<input class="demo-textbox-nama" id="obj_txt_nama" required fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" minlength="3" width="300" validator="" >
+						<input class="demo-textbox-nama" id="obj_txt_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" x-style="background-color: aquamarine;"
+							required minlength="3" maxlength="15" validator="" 
+							binding="nama"
+							value="agung"
+							description="isi dengan nama anda, minimal 3 karakter, maksimal 15 karakter"
+							invalid-message="Nama harus diisi, minimal 3 karakter, maksimal 15 karakter"
+							invalid-message-required="Nama harus diisi"
+							invalid-message-minlength="Nama minimal 3 karakter"
+							invalid-message-maxlength="Nama maksimal 15 karakter"
+							>
 					</div>
-				</div>
 
+					<div class="demo-input-field">
+						<label for="obj_txt_nilai">Nilai</label>
+						<input id="obj_txt_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" x-style="background-color: aquamarine;"
+							required minlength="2" maxlength="5" minvalue="50" maxvalue="200" validator=""
+							binding="nilai" 
+						>
+					</div>
+
+				</div>
 			</form>
 
 			

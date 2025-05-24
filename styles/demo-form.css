@@ -8,6 +8,7 @@
 	font-size: 0.8rem;
 	font-weight: bold;
 	width: 80px;
+	min-width: 80px;
 	text-align: right;
 }
 

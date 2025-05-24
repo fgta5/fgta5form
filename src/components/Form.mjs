@@ -1,5 +1,6 @@
 import Component from "./Component.mjs"
 import Textbox from "./Textbox.mjs"
+import Numberbox from "./Numberbox.mjs"
 
 
 const formLockedEvent = new CustomEvent('locked')
@@ -36,7 +37,7 @@ export default class Form extends Component {
 
 	
 
-	NewData() { Form_NewData(this) }
+	NewData(data) { Form_NewData(this, data) }
 
 	Render() { Form_Render(this) }
 
@@ -60,9 +61,10 @@ export default class Form extends Component {
 
 function Construct(self, id) {
 	// console.log(`construct form ${id}`)
+	var formEl =  document.getElementById(id)
 
 	self.Id = id
- 	self.Element = document.getElementById(id)
+ 	self.Element = formEl
 	self.Inputs = {}
 
 	self.Element.addEventListener('submit', (event) => {
@@ -72,7 +74,7 @@ function Construct(self, id) {
 
 
 	// ambil semua input
-	var inputs = self.Element.querySelectorAll('input')
+	var inputs = formEl.querySelectorAll('input')
 	for (var i = 0; i < inputs.length; i++) {
 		var input = inputs[i]
 		var fgtacomp = input.getAttribute('fgta5-component')
@@ -83,6 +85,7 @@ function Construct(self, id) {
 		if (fgtacomp=='Textbox') {
 			self.Inputs[input.id] = new Textbox(input.id)
 		} else if (fgtacomp=='Numberbox') {
+			self.Inputs[input.id] = new Numberbox(input.id)
 		} else if (fgtacomp=='Datepicker') {
 		} else if (fgtacomp=='Combobox') {
 		} else if  (fgtacomp=='Checkbox') {
@@ -109,6 +112,7 @@ function Form_Render(self) {
 }
 
 function Form_Lock(self, lock) {
+	var formEl = self.Element
 	var editmode = lock ? false : true
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
@@ -116,11 +120,11 @@ function Form_Lock(self, lock) {
 	}
 
 	if (lock) {
-		self.Element.dispatchEvent(formLockedEvent)
-		self.Element.setAttribute('locked', lock)
+		formEl.dispatchEvent(formLockedEvent)
+		formEl.setAttribute('locked', lock)
 	} else {
-		self.Element.dispatchEvent(formUnLockedEvent)
-		self.Element.removeAttribute('locked')
+		formEl.dispatchEvent(formUnLockedEvent)
+		formEl.removeAttribute('locked')
 	}
 	return lock
 }
@@ -143,10 +147,12 @@ function Form_Reset(self) {
 }
 
 
-function Form_NewData(self) {
+function Form_NewData(self, data) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		obj.NewData()
+		var bindingName = obj.GetBindingName()
+		var initialvalue = data[bindingName]
+		obj.NewData(initialvalue)
 	}
 }
 

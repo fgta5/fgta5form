@@ -1,44 +1,76 @@
 .fgta5-entry-container {
 	display: inline-block;
 	border: none;
+	padding: 0;
+
+}
+
+.fgta5-entry-input-wrapper {
+	border: none;
 	border-bottom: 1px solid var(--fgta5-color-input-line);
 	padding: 0;
+	display: inline-block;
 }
 
-.fgta5-entry-container[editmode="true"]:focus-within {
+.fgta5-entry-input-wrapper[editmode="true"]:focus-within {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line);
-}
+} 
 
-
+.fgta5-entry-input-wrapper[editmode="false"]:focus-within {
+	border-bottom: 1px solid var(--fgta5-color-input-line);
+} 
 
 
 .fgta5-entry-input {
 	border: none;
 	border-bottom: 1px solid transparent;
+	border-left: 2px solid transparent;
 	outline: none;
 	margin: 0;
-	padding: 5px; /* Padding untuk kenyamanan */
+	padding: 5px 5px 3px 5px; /* Padding untuk kenyamanan */
 	transition: border-color 0.3s ease; /* Animasi transisi */
 }
 
-.fgta5-entry-input:not(.fgta5-entry-input[disabled]):focus {
+.fgta5-entry-input[disabled] {
+	background-color: var(--fgta5-color-input-disabled) !important;
+}
+
+
+
+.fgta5-entry-input[editmode="true"]:not([disabled]) {
+	background-color: var(--fgta5-color-editmode-bg) !important;
+}
+
+.fgta5-entry-input[editmode="true"][invalid]:not([disabled]) {
+	background-color: var(--fgta5-color-inputerror-bg) !important;
+}
+
+.fgta5-entry-input[editmode="true"]:not([disabled]):focus {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
 }
 
-.fgta5-entry-input[disabled] {
-	background-color: var(--fgta5-color-input-disabled);
+.fgta5-entry-input[editmode="false"]:not([disabled]):focus {
+	border-bottom: 1px solid var(--fgta5-color-input-line); 
 }
 
-.fgta5-entry-input[editmode="true"]:not([disabled]) {
-	background-color: var(--fgta5-color-editmode-bg);
+.fgta5-entry-input[changed="true"] {
+	border-left: 2px solid var(--fgta5-color-editmode-line);
 }
-
-
-/* .fgta5-entry-button {
-	display: inline-block;
-} */
 
 
 .fgta5-entry-lastvalue {
 	display: none;
+}
+
+.fgta5-entry-error {
+	color: var(--fgta5-color-inputerror-text);
+	font-size: 0.8rem;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.fgta5-entry-description {
+	font-size: 0.7rem;
+	color: var(--fgta5-color-input-descr-text);
+	margin-top: 3px;
 }
