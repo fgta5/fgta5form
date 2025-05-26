@@ -21,6 +21,7 @@
 } 
 
 
+.fgta5-entry-display,
 .fgta5-entry-input {
 	border: none;
 	border-bottom: 1px solid transparent;
@@ -31,31 +32,51 @@
 	transition: border-color 0.3s ease; /* Animasi transisi */
 }
 
+.fgta5-entry-display[disabled],
 .fgta5-entry-input[disabled] {
 	background-color: var(--fgta5-color-input-disabled) !important;
 }
 
-
-
+.fgta5-entry-display[editmode="true"]:not([disabled]),
 .fgta5-entry-input[editmode="true"]:not([disabled]) {
 	background-color: var(--fgta5-color-editmode-bg) !important;
 }
 
+.fgta5-entry-display[editmode="true"][invalid]:not([disabled]),
 .fgta5-entry-input[editmode="true"][invalid]:not([disabled]) {
 	background-color: var(--fgta5-color-inputerror-bg) !important;
 }
 
+.fgta5-entry-display[editmode="true"]:not([disabled]):focus,
 .fgta5-entry-input[editmode="true"]:not([disabled]):focus {
 	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
 }
 
+.fgta5-entry-display[editmode="false"]:not([disabled]):focus,
 .fgta5-entry-input[editmode="false"]:not([disabled]):focus {
 	border-bottom: 1px solid var(--fgta5-color-input-line); 
 }
 
+.fgta5-entry-display[changed="true"],
 .fgta5-entry-input[changed="true"] {
 	border-left: 2px solid var(--fgta5-color-editmode-line);
 }
+
+
+
+.fgta5-entry-display[type="number"]::-webkit-outer-spin-button, 
+.fgta5-entry-display[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.fgta5-entry-display[type="number"] {
+    /* -moz-appearance: textfield; */
+	text-align: right;
+}
+
+
+
 
 
 .fgta5-entry-lastvalue {
