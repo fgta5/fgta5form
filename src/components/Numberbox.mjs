@@ -1,18 +1,23 @@
-import $fgta5 from "../main.mjs"
 import Input from "./Input.mjs"
-
-const formatterFixed = new Intl.NumberFormat('en-US', {
-	minimumFractionDigits: 2,
-	maximumFractionDigits: 2
-});
 
 
 export default class Numberbox extends Input {
 
 	constructor(id) {
 		super(id)
+
+		this.formatterFixed = new Intl.NumberFormat('en-US', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
+
 		Numberbox_construct(this, id)
-		Numberbox_readValidators(this)
+	}
+
+	get Value() { return this.Element.value }
+	set Value(v) { 
+		this.Element.value = v 
+		Numberbox_setValue(this, v)
 	}
 
 	get Disabled() { return this.Element.disabled }
@@ -21,49 +26,55 @@ export default class Numberbox extends Input {
 		Numberbox_setDisabled(this, v)
 	}
 
+	#_ineditmode = true
+	get InEditMode() { return this.#_ineditmode }
 	SetEditingMode(ineditmode) {
+		this.#_ineditmode = ineditmode
 		Numberbox_SetEditingMode(this, ineditmode)
+	}
+
+	AcceptChanges() {
+		super.AcceptChanges()
+		Numberbox_AcceptChanges(this)
+		
+	}
+
+	Reset() {
+		super.Reset()
+		Numberbox_Reset(this)
+	}
+
+	SetError(msg) {
+		super.SetError(msg)
+		Numberbox_SetError(this, msg)
 	}
 
 }
 
+
+
 function Numberbox_construct(self, id) {
-	const container = document.createElement('div')
+	const container = self.Nodes.Container
+	const lastvalue = self.Nodes.LastValue
+	const input = self.Nodes.Input
 	const wrapinput = document.createElement('div')
-	const input = self.Element
 	const display = document.createElement('input')
-	const lstvalue = document.createElement('input')
 	const label = document.querySelector(`label[for="${self.Id}"]`)
+
+
+	input.classList.add('fgta5-entry-input')
+	input.parentNode.insertBefore(container, input)
+	input.setAttribute('type', 'hidden')
+
+	wrapinput.classList.add('fgta5-entry-input-wrapper')
+	display.classList.add('fgta5-entry-display')
 	
 
-	container.classList.add('fgta5-entry-container')
-	wrapinput.classList.add('fgta5-entry-input-wrapper')
-	input.classList.add('fgta5-entry-input')
-	display.classList.add('fgta5-entry-display')
-	lstvalue.classList.add('fgta5-entry-lastvalue')
-
-	input.parentNode.insertBefore(container, input)
-	container.appendChild(wrapinput)
 	wrapinput.appendChild(display)
 	wrapinput.appendChild(input)
-	container.appendChild(lstvalue)
+	container.appendChild(wrapinput)
+	container.appendChild(lastvalue)
 
-	display.setAttribute('type', 'number')
-	display.setAttribute('fgta5-component', 'Numberbox')
-	input.setAttribute('type', 'hidden')
-	lstvalue.setAttribute('type', 'hidden') 
-
-
-	if (input.value === null || input.value === '') {
-		input.value = '0'
-	}
-
-	// set input value
-	display.value = formatterFixed.format(input.value)
-	lstvalue.value = display.value
-
-	// set display attributes
-	display.setAttribute('maxlength', input.getAttribute('maxlength') || '20')
 
 
 	// set input description
@@ -76,21 +87,55 @@ function Numberbox_construct(self, id) {
 		container.appendChild(decrdiv)
 	}
 
+	// set precission
+	var precision = self.Element.getAttribute('precision')
+	if (precision !== null && precision.trim() !== '') {
+		precision = parseInt(precision.trim())
+		if (isNaN(precision) || precision < 0) {
+			precision = 0
+		}
+		display.setAttribute('precision', precision)
+	} else {
+		precision = 0
+		display.setAttribute('precision', precision)
+	}
+	input.precision = precision
+	self.formatterFixed.minimumFractionDigits = precision
+	self.formatterFixed.maximumFractionDigits = precision
+	if (input.value === null || input.value === '') {
+		input.value = '0'
+	}
+	display.value = self.formatterFixed.format(input.value)
+	lastvalue.value = display.value
 
+
+	display.id = self.Id + '-display'
+	display.min = input.min
+	display.max = input.max
+	display.minlength = input.minlength
+	display.maxlength = input.maxlength
+	display.required = input.required
+	display.setAttribute('style', input.getAttribute('style') || '')
+	display.setAttribute('type', 'text')
+	display.setAttribute('fgta5-component', 'Numberbox')
+
+
+	label.setAttribute('for', display.id)
+
+	// event listener for display
 	display.addEventListener('focus', function(e) {
+		console.log('numberbox focus')
 		Numberbox_displayFocus(self, e)
 	})
 
 	display.addEventListener('blur', function(e) {
+		console.log('numberbox blur')
 		Numberbox_displayBlur(self, e)
 	})
 
-	display.addEventListener('change', function(e) {
-		Numberbox_displayChanged(self, e)
-	})
 
 	display.addEventListener("input", function(event) {
-		if (display.value !== lstvalue.value) {
+		if (display.value !== lastvalue.value) {
 			display.setAttribute('changed', 'true')
 		} else {
 			display.removeAttribute('changed')
@@ -98,18 +143,28 @@ function Numberbox_construct(self, id) {
 	})
 
 
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
+	self.Nodes.Display = display
 
 
-	self.Nodes = {
-		Container: container,
-		InputWrapper: wrapinput,
-		Input: input,
-		Display: display,
-		LastValue: lstvalue,
-		Label: label
-	}	
+	self.Nodes.Input.getInputCaption = () => {
+		return label.innerHTML
+	}
 
 }
+
+function Numberbox_setValue(self, v) {
+	var num = Number(self.Nodes.Input.value)
+	var formattedValue = self.formatterFixed.format(num)
+	if (self.Nodes.Display.type === 'text') {
+		self.Nodes.Display.value = formattedValue
+	} else {
+		self.Nodes.Display.value = num
+	}
+}
+
 
 function Numberbox_setDisabled(self, v) {
 	if (v) {
@@ -140,46 +195,51 @@ function Numberbox_displayFocus(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	
+	if (self.InEditMode) {
+		display.setAttribute('type', 'number')
 	
-	display.setAttribute('type', 'number')
-	
-	var num = Number(input.value)
-	display.value = num
-
+		var num = Number(input.value)
+		display.value = num
+	}
 }
 
 function Numberbox_displayBlur(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
 	
-	console.log('blur')
-	var num = Number(display.value)
-	if (isNaN(num)) {
-		self.SetError('Invalid number')
-	} else {
-		self.SetError(null)
-		input.value = num
+	if (self.InEditMode) {
+		var num = Number(display.value)
+		if (isNaN(num)) {
+			self.SetError('Invalid number')
+		} else {
+			self.SetError(null)
 
-		var formattedValue = formatterFixed.format(num)
-		display.setAttribute('type', 'text')
-		display.value = formattedValue
+			input.value = num
+			self.Validate()
 
+			var formattedValue = self.formatterFixed.format(num)
+			display.setAttribute('type', 'text')
+			display.value = formattedValue
+		}
 	}
 }
 
-function Numberbox_displayChanged(self, e) {
-	var display = self.Nodes.Display
-	var input = self.Nodes.Input
-	
-	// set nilai input menjadi nilai display
-	console.log('changed')
 
-	
+
+
+function Numberbox_AcceptChanges(self) {
+	self.Nodes.Display.removeAttribute('changed')
 }
 
+function Numberbox_Reset(self) {
+	self.Nodes.Display.removeAttribute('changed')
+}
 
-
-function Numberbox_readValidators(self) {
-
+function Numberbox_SetError(self, msg) {
+	if (msg!== null && msg !== '') {
+		self.Nodes.Display.setAttribute('invalid', 'true')
+	} else {
+		self.Nodes.Display.removeAttribute('invalid')
+	}
 }
 

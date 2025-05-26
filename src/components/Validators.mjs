@@ -1,3 +1,12 @@
+export function getInvalidMessage(name, input, defaultMessage) {
+	var msg = input.getAttribute(`invalid-message-${name}`);
+	if (msg == null || msg === '') {
+		msg = defaultMessage;
+	}
+	return msg;
+}
+
+
 export function parseFunctionParam(paramString) {
 	const [fnName, ...fnParams] = paramString.split(":");
 	const fnParamsString = fnParams.length > 0 ? fnParams.join(":") : null;
@@ -44,4 +53,24 @@ export function pattern(value, strpattern) {
 
 export function email(value, minLength) {
 	return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+}
+
+export function min(value, minValue) {
+	if (minValue == null || minValue === 0) {
+		return true; // no minimum value specified, so always valid
+	}
+	if (value == null || value < minValue) {
+		return false; // value is less than minimum
+	}
+	return true; // value meets the minimum requirement
+}
+
+export function max(value, maxValue) {
+	if (maxValue == null || maxValue === 0) {
+		return true; // no maximum value specified, so always valid
+	}
+	if (value == null || value > maxValue) {
+		return false; // value is greater than maximum
+	}
+	return true; // value meets the maximum requirement
 }

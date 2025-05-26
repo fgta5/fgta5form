@@ -49,7 +49,9 @@
 				<div style="display: flex; column-gap: 10px; row-gap: 10px; flex-wrap: wrap;">
 					<div class="demo-input-field">
 						<label for="obj_txt_nama">Nama</label>
-						<input class="demo-textbox-nama" id="obj_txt_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" x-style="background-color: aquamarine;"
+						<input id="obj_txt_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
+							class="demo-textbox-nama" 
+							style="background-color: aquamarine;"
 							required minlength="3" maxlength="15" validator="" 
 							binding="nama"
 							value="agung"
@@ -61,11 +63,13 @@
 							>
 					</div>
 
-					<div class="demo-input-field">
-						<label for="obj_txt_nilai">Nilai</label>
-						<input id="obj_txt_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" x-style="background-color: aquamarine;"
-							required minlength="2" maxlength="5" minvalue="50" maxvalue="200" validator=""
+					<div class="demo-input-field" style="min-width: 250px; max-width: 250px; width: 250px;">
+						<label for="obj_num_nilai">Nilai</label>
+						<input id="obj_num_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" 
+							style="background-color: aquamarine; min-width: 50px; width: 50px;"
+							min="50" max="200" decimal="2" validator=""
 							binding="nilai" 
+							value="100"
 							description="isi dengan angka, 50 s/d 200"
 							invalid-message="nilai harus dalam range 50 s/d 200"
 						>

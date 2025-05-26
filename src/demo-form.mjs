@@ -11,6 +11,13 @@ const btn_clearerror = new $fgta5.Button('btn_clearerror')
 
 const form = new $fgta5.Form('myform');
 const obj_txt_nama = form.Inputs.obj_txt_nama
+const obj_num_nilai = form.Inputs.obj_num_nilai
+
+
+window.test = {
+	obj_txt_nama: obj_txt_nama,
+	obj_num_nilai: obj_num_nilai
+}
 
 
 
