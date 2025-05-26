@@ -1,6 +1,11 @@
 import $fgta5 from "../main.mjs"
 import Input from "./Input.mjs"
 
+const formatterFixed = new Intl.NumberFormat('en-US', {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2
+});
+
 
 export default class Numberbox extends Input {
 
@@ -49,8 +54,17 @@ function Numberbox_construct(self, id) {
 	lstvalue.setAttribute('type', 'hidden') 
 
 
+	if (input.value === null || input.value === '') {
+		input.value = '0'
+	}
+
 	// set input value
-	lstvalue.value = input.value
+	display.value = formatterFixed.format(input.value)
+	lstvalue.value = display.value
+
+	// set display attributes
+	display.setAttribute('maxlength', input.getAttribute('maxlength') || '20')
+
 
 	// set input description
 	var description = self.Element.getAttribute('description')
@@ -84,7 +98,7 @@ function Numberbox_construct(self, id) {
 	})
 
 
-	
+
 
 	self.Nodes = {
 		Container: container,
@@ -146,18 +160,11 @@ function Numberbox_displayBlur(self, e) {
 		self.SetError(null)
 		input.value = num
 
-		// // tampilkan kembali nilai terformat ke display
-		const formatterFixed = new Intl.NumberFormat('en-US', {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
-		});
-
 		var formattedValue = formatterFixed.format(num)
 		display.setAttribute('type', 'text')
 		display.value = formattedValue
 
 	}
-
 }
 
 function Numberbox_displayChanged(self, e) {
