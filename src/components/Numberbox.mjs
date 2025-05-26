@@ -107,6 +107,7 @@ function Numberbox_construct(self, id) {
 	}
 	display.value = self.formatterFixed.format(input.value)
 	lastvalue.value = display.value
+	console.log(`init numberbox ${self.Id} value: ${input.value}, display: ${display.value}, lastvalue: ${lastvalue.value}`)
 
 
 	display.id = self.Id + '-display'

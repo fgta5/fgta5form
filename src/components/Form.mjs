@@ -44,6 +44,11 @@ export default class Form extends Component {
 	Validate() { return Form_Validate(this) }
 
 
+	GetData() {
+		return Form_GetData(this)
+	}
+
+
 	#readAttributes() {
 		var locked = this.Element.getAttribute('locked') 
 		if (locked == null) {
@@ -150,8 +155,8 @@ function Form_Reset(self) {
 function Form_NewData(self, data) {
 	for (var name in self.Inputs) {
 		var obj = self.Inputs[name]
-		var bindingName = obj.GetBindingName()
-		var initialvalue = data[bindingName]
+		var bindingdata = obj.GetBindingData()
+		var initialvalue = data[bindingdata]
 		obj.NewData(initialvalue)
 	}
 }
@@ -173,4 +178,17 @@ function Form_Validate(self) {
 		isValid &&= obj.Validate()
 	}
 	return isValid
+}
+
+
+function Form_GetData(self) {
+	var data = {}
+	for (var name in self.Inputs) {
+		var obj = self.Inputs[name]
+		var bindingdata = obj.GetBindingData()
+		if (bindingdata) {
+			data[bindingdata] = obj.Value
+		}
+	}
+	return data
 }

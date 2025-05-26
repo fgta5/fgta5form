@@ -74,6 +74,11 @@ async function btn_reset_click(self, evt) {
 }
 
 async function btn_save_click(self, evt) {
+	if (!form.IsChanged()) {
+		console.log('tidak ada perubahan data, tidak perlu disimpan')
+		return
+	}
+
 	var isValid = form.Validate()
 	if (!isValid) {
 		var err = new Error('Ada kesalahan pada form, silahkan perbaiki');
@@ -82,6 +87,9 @@ async function btn_save_click(self, evt) {
 		return
 	} else {
 		form.AcceptChanges()
+
+		var data = form.GetData()
+		console.log('data yang akan disimpan:', data)
 	}
 }
 

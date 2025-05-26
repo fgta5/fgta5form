@@ -56,7 +56,7 @@ export default class Input extends Component {
 		return Input_GetLastValue(this)
 	} 
 
-	GetBindingName() {
+	GetBindingData() {
 		var binding = this.Element.getAttribute('binding')
 		if (binding === null) {
 			return null
@@ -134,6 +134,7 @@ function Input_SetError(self, msg) {
 
 
 function Input_setLastValue(self, v) {
+	console.log(`Input '${self.Id}' set last value from '${self.Nodes.LastValue.value}' to '${v}'`)
 	self.Nodes.LastValue.value = v
 }
 
@@ -168,6 +169,7 @@ function Input_Reset(self) {
 
 function Input_IsChanged(self) {
 	if (self.GetLastValue() != self.Value) {
+		console.log(`Input '${self.Id}' is changed from '${self.GetLastValue()}' to '${self.Value}'`)
 		return true
 	} else {
 		return false
