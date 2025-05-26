@@ -44,6 +44,7 @@ function Numberbox_construct(self, id) {
 	container.appendChild(lstvalue)
 
 	display.setAttribute('type', 'number')
+	display.setAttribute('fgta5-component', 'Numberbox')
 	input.setAttribute('type', 'hidden')
 	lstvalue.setAttribute('type', 'hidden') 
 
@@ -82,6 +83,8 @@ function Numberbox_construct(self, id) {
 		}
 	})
 
+
+	
 
 	self.Nodes = {
 		Container: container,
@@ -122,13 +125,39 @@ function Numberbox_SetEditingMode(self, ineditmode) {
 function Numberbox_displayFocus(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
-	console.log('display focus')
+	
+	
+	display.setAttribute('type', 'number')
+	
+	var num = Number(input.value)
+	display.value = num
+
 }
 
 function Numberbox_displayBlur(self, e) {
 	var display = self.Nodes.Display
 	var input = self.Nodes.Input
-	console.log('display blur')
+	
+	console.log('blur')
+	var num = Number(display.value)
+	if (isNaN(num)) {
+		self.SetError('Invalid number')
+	} else {
+		self.SetError(null)
+		input.value = num
+
+		// // tampilkan kembali nilai terformat ke display
+		const formatterFixed = new Intl.NumberFormat('en-US', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
+
+		var formattedValue = formatterFixed.format(num)
+		display.setAttribute('type', 'text')
+		display.value = formattedValue
+
+	}
+
 }
 
 function Numberbox_displayChanged(self, e) {
@@ -136,11 +165,9 @@ function Numberbox_displayChanged(self, e) {
 	var input = self.Nodes.Input
 	
 	// set nilai input menjadi nilai display
-	input.value = display.value
+	console.log('changed')
 
 	
-	
-
 }
 
 

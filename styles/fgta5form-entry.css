@@ -70,7 +70,7 @@
     margin: 0;
 }
 
-.fgta5-entry-display[type="number"] {
+.fgta5-entry-display[fgta5-component="Numberbox"] {
     /* -moz-appearance: textfield; */
 	text-align: right;
 }
