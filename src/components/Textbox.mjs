@@ -9,6 +9,11 @@ export default class Textbox extends Input {
 	}
 
 
+	get Value() { 
+		return Textbox_GetValue(this) 
+	}
+
+
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
 	SetEditingMode(ineditmode) {
@@ -42,8 +47,14 @@ function Textbox_construct(self, id) {
 		input.style.backgroundColor = 'transparent'
 	}
 
+
+	var charCase = self.Element.getAttribute('character-case') 
+	if (charCase !== null && charCase.trim() !== '') {
+		input.charCase = charCase.trim().toLowerCase()
+	}
+
 	// set input value
-	self._setLastValue(input.value)
+	self._setLastValue(self.Value)
 
 	// set input description
 	var description = self.Element.getAttribute('description')
@@ -64,8 +75,8 @@ function Textbox_construct(self, id) {
 	});
 
 	input.addEventListener('blur', function(e) {
-		self.SetError(null)
-		self.Validate()
+		Textbox_blur(self, e)
+		
 	})
 
 
@@ -76,6 +87,18 @@ function Textbox_construct(self, id) {
 	self.Nodes.Input.getInputCaption = () => {
 		return label.innerHTML
 	}
+}
+
+
+function Textbox_GetValue(self) {
+	var input = self.Nodes.Input
+	var value = input.value
+	if (input.charCase === 'uppercase') {
+		value = value.toUpperCase()
+	} else if (input.charCase === 'lowercase') {
+		value = value.toLowerCase()
+	}
+	return value
 }
 
 
@@ -92,3 +115,9 @@ function Textbox_SetEditingMode(self, ineditmode) {
 	}
 }
 
+function Textbox_blur(self, e) {
+	if (self.InEditMode) {
+		self.SetError(null)
+		self.Validate()
+	}
+}

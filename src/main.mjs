@@ -6,6 +6,7 @@ import Modal from './components/Modal.mjs';
 import * as Validators from './components/Validators.mjs';
 import Textbox from './components/Textbox.mjs';
 import Numberbox from './components/Numberbox.mjs';
+import Checkbox from './components/Checkbox.mjs';	
 
 
 const $fgta5 = {
@@ -14,6 +15,7 @@ const $fgta5 = {
 	Button: Button,
 	Textbox: Textbox,
 	Numberbox: Numberbox,
+	Checkbox: Checkbox,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
 	Modal: Modal

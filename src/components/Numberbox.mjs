@@ -49,6 +49,14 @@ export default class Numberbox extends Input {
 		Numberbox_SetError(this, msg)
 	}
 
+	/* * Override addEventListener to use the Display element
+	 * This allows the Numberbox to handle events on the display input
+	 * instead of the hidden input element.
+	 */
+	addEventListener(event, callback) {
+		this.Nodes.Display.addEventListener(event, callback)
+	}
+
 }
 
 
@@ -59,7 +67,7 @@ function Numberbox_construct(self, id) {
 	const input = self.Nodes.Input
 	const wrapinput = document.createElement('div')
 	const display = document.createElement('input')
-	const label = document.querySelector(`label[for="${self.Id}"]`)
+	const label = document.querySelector(`label[for="${id}"]`)
 
 
 	input.classList.add('fgta5-entry-input')
@@ -105,9 +113,11 @@ function Numberbox_construct(self, id) {
 	if (input.value === null || input.value === '') {
 		input.value = '0'
 	}
+
+	self._setLastValue(input.value)
+
 	display.value = self.formatterFixed.format(input.value)
-	lastvalue.value = display.value
-	console.log(`init numberbox ${self.Id} value: ${input.value}, display: ${display.value}, lastvalue: ${lastvalue.value}`)
+	// console.log(`init numberbox ${self.Id} value: ${input.value}, display: ${display.value}, lastvalue: ${lastvalue.value}`)
 
 
 	display.id = self.Id + '-display'
@@ -125,12 +135,12 @@ function Numberbox_construct(self, id) {
 
 	// event listener for display
 	display.addEventListener('focus', function(e) {
-		console.log('numberbox focus')
+		// console.log('numberbox focus')
 		Numberbox_displayFocus(self, e)
 	})
 
 	display.addEventListener('blur', function(e) {
-		console.log('numberbox blur')
+		// console.log('numberbox blur')
 		Numberbox_displayBlur(self, e)
 	})
 
@@ -142,6 +152,8 @@ function Numberbox_construct(self, id) {
 			display.removeAttribute('changed')
 		}
 	})
+
+
 
 
 	// tambahkan referensi elemen ke Nodes

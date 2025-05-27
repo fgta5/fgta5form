@@ -42,6 +42,16 @@ async function main(self, args) {
 	btn_testdised.addEventListener('click', (evt) => { btn_testdised_click(self, evt) });
 	btn_clearerror.addEventListener('click', (evt) => { btn_clearerror_click(self, evt) });
 
+
+	obj_txt_nama.addEventListener('change', (evt) => {
+		console.log('obj_txt_nama changed', evt)
+	})
+
+	obj_num_nilai.addEventListener('change', (evt) => {
+		console.log('obj_num_nilai changed', evt)
+	})
+
+
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
 	form.Render()

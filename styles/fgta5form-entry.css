@@ -20,6 +20,13 @@
 	border-bottom: 1px solid var(--fgta5-color-input-line);
 } 
 
+.fgta5-entry-input[character-case="uppercase"] {
+	text-transform: uppercase;
+}
+
+.fgta5-entry-input[character-case="lowercase"] {
+	text-transform: lowercase;
+}
 
 .fgta5-entry-display,
 .fgta5-entry-input {
