@@ -7,6 +7,7 @@ import * as Validators from './components/Validators.mjs';
 import Textbox from './components/Textbox.mjs';
 import Numberbox from './components/Numberbox.mjs';
 import Checkbox from './components/Checkbox.mjs';	
+import Datepicker from './components/Datepicker.mjs';	
 
 
 const $fgta5 = {
@@ -16,6 +17,7 @@ const $fgta5 = {
 	Textbox: Textbox,
 	Numberbox: Numberbox,
 	Checkbox: Checkbox,
+	Datepicker: Datepicker,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
 	Modal: Modal

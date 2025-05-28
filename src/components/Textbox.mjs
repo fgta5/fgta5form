@@ -12,6 +12,9 @@ export default class Textbox extends Input {
 	get Value() { 
 		return Textbox_GetValue(this) 
 	}
+	set Value(v) { this.Element.value = v }
+
+
 
 
 	#_ineditmode = true

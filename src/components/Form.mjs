@@ -2,6 +2,7 @@ import Component from "./Component.mjs"
 import Textbox from "./Textbox.mjs"
 import Numberbox from "./Numberbox.mjs"
 import Checkbox from "./Checkbox.mjs"
+import Datepicker from "./Datepicker.mjs"
 
 const formLockedEvent = new CustomEvent('locked')
 const formUnLockedEvent = new CustomEvent('unlocked')
@@ -92,6 +93,7 @@ function Construct(self, id) {
 		} else if (fgtacomp=='Numberbox') {
 			self.Inputs[input.id] = new Numberbox(input.id)
 		} else if (fgtacomp=='Datepicker') {
+			self.Inputs[input.id] = new Datepicker(input.id)
 		} else if (fgtacomp=='Combobox') {
 		} else if  (fgtacomp=='Checkbox') {
 			self.Inputs[input.id] = new Checkbox(input.id)

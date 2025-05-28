@@ -102,3 +102,17 @@
 	color: var(--fgta5-color-input-descr-text);
 	margin-top: 3px;
 }
+
+
+
+.fgta5-entry-display-datepicker {
+	width: 120px;
+}
+
+.fgta5-entry-button-datepicker {
+	background-color: darkseagreen;
+	width: 30px;
+	max-width: 30px;
+	margin-bottom: 5px;
+	opacity: 0;
+}
