@@ -24,6 +24,8 @@
 	.demo-input-field > label {
 		text-align: left;
 		margin-bottom: 2px;
+		width: fit-content;
+		min-width: unset;
 	}
 
 }

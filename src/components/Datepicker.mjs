@@ -1,11 +1,39 @@
 import Input from "./Input.mjs"
 
 
+const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stroke="currentColor" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		<rect x="1.3095" y="6.6682" width="21.393" height="1.8579" fill="none" stroke-width="2"/>
+		<rect x=".81949" y="10" width="22.341" height="13.251" fill="none" stroke-width="1.02"/>
+		<rect x="3.8664" y="1.1531" width="2.5776" height="1.4923" fill="none" stroke-width="2"/>
+		<rect x="17.223" y="1.1203" width="2.5776" height="1.6958" fill="none" stroke-width="2"/>
+		<path d="m1.2888 16.278 21.367-0.13566" fill="none" stroke-width="1.02"/>
+		<path d="m8.2775 10.07-0.13566 12.888" fill="none" stroke-width="1.02"/>
+		<path d="m15.799 9.9671-0.13566 12.888" fill="none" stroke-width="1.02"/>
+		</svg>`
+
+
+/*
+ * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
+ */
 export default class Datepicker extends Input {
 
 	constructor(id) {
 		super(id)
 		Datepicker_construct(this, id)
+	}
+
+	get Disabled() { return this.Element.disabled }
+	set Disabled(v) { 
+		this.Element.disabled = v 
+		Datepicker_setDisabled(this, v)
+	}
+
+
+	#_ineditmode = true
+	get InEditMode() { return this.#_ineditmode }
+	SetEditingMode(ineditmode) {
+		this.#_ineditmode = ineditmode
+		Datepicker_SetEditingMode(this, ineditmode)
 	}
 
 }
@@ -29,7 +57,9 @@ function Datepicker_construct(self, id) {
 
 	wrapinput.appendChild(display)
 	wrapinput.appendChild(button)
-	button.appendChild(input)
+	button.innerHTML = button_icon
+	// button.appendChild(input)
+	button.insertBefore(input, button.firstChild)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
 
@@ -52,11 +82,12 @@ function Datepicker_construct(self, id) {
 		display.setAttribute('style', cssstyle)
 	}
 
-	
+
 	input.setAttribute('type', 'date')
 	input.removeAttribute('class')
 	input.removeAttribute('style')
 	input.classList.add('fgta5-entry-input')
+	input.classList.add('fgta5-entry-input-datepicker')
 	
 	
 	
@@ -67,4 +98,50 @@ function Datepicker_construct(self, id) {
 
 
 	label.setAttribute('for', button.id)
+
+
+
+		// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
+	self.Nodes.Display = display
+	self.Nodes.Button = button
+
+
+	self.Nodes.Input.getInputCaption = () => {
+		return label.innerHTML
+	}
+}
+
+
+
+function Datepicker_setDisabled(self, v) {
+	if (v) {
+		self.Nodes.Display.disabled = true
+		self.Nodes.InputWrapper.setAttribute('disabled', 'true')
+		self.Nodes.Button.setAttribute('disabled', 'true')
+	} else {
+		self.Nodes.Display.disabled = false
+		self.Nodes.InputWrapper.removeAttribute('disabled')
+		self.Nodes.Button.removeAttribute('disabled')
+
+	}
+}
+
+
+function Datepicker_SetEditingMode(self, ineditmode) {
+	var attrval = ineditmode ? 'true' : 'false'
+
+	self.Nodes.Display.setAttribute('editmode', attrval)
+	self.Nodes.Input.setAttribute('editmode', attrval)
+	self.Nodes.InputWrapper.setAttribute('editmode', attrval)
+
+	if (ineditmode) {
+		self.Nodes.Input.removeAttribute('readonly')
+		// self.Nodes.Display.removeAttribute('readonly')
+	} else {
+		self.Nodes.Input.setAttribute('readonly', 'true')
+		// self.Nodes.Display.setAttribute('readonly', 'true')
+		self.SetError(null)
+	}
 }
