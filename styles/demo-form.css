@@ -1,7 +1,11 @@
 .demo-input-field {
 	display: flex;
 	column-gap: 10px;
+	background-color: aliceblue;
 }
+
+
+
 
 .demo-input-field > label {
 	margin-top: 4px;
@@ -12,11 +16,28 @@
 	text-align: right;
 }
 
+@media screen and (max-width: 500px) {
+	.demo-input-field {
+		flex-direction: column;
+	}
 
+	.demo-input-field > label {
+		text-align: left;
+		margin-bottom: 2px;
+	}
+
+}
 
 
 .demo-textbox-nama {
 	width: 300px;
 	background-color: aquamarine;
 }
+
+
+.demo-input-field[field=obj_txt_alamat] {
+	flex-basis: 100%;
+}
+
+
 

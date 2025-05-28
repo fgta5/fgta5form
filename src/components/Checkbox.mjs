@@ -1,6 +1,12 @@
 import Input from "./Input.mjs"
 
 
+/*
+* reference:
+* https://moderncss.dev/pure-css-custom-checkbox-style/
+*/
+
+
 export default class Checkbox extends Input {
 
 	constructor(id) {
@@ -36,10 +42,7 @@ export default class Checkbox extends Input {
 }
 
 
-/*
-* reference:
-* https://moderncss.dev/pure-css-custom-checkbox-style/
-*/
+
 function Checkbox_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
@@ -70,6 +73,14 @@ function Checkbox_construct(self, id) {
 	self._setLastValue(self.Value)
 
 
+	input.addEventListener('change', (event) => {
+		if (self.GetLastValue() != self.Value) {
+			input.setAttribute('changed', 'true')
+		} else {
+			input.removeAttribute('changed')
+		}
+	});
+
 	self.Nodes.Caption = caption
 	self.Nodes.Label = label 
 }
@@ -87,24 +98,37 @@ function Checkbox_getDisabled(self) {
 }
 
 function Checkbox_setDisabled(self, v) {
+	
+	var editmode = self.Nodes.Input.getAttribute('editmode')
+	var ineditmode = ((editmode==null || editmode=='' || editmode=='false')) ? false : true
+
+	
+
 	if (v) {
 		self.Nodes.Input.setAttribute('permanent-disabled', 'true')
+		self.Nodes.Caption.setAttribute('permanent-disabled', 'true')
 	} else {
 		self.Nodes.Input.removeAttribute('permanent-disabled')
+		self.Nodes.Caption.removeAttribute('permanent-disabled')
+		if (!ineditmode) {
+			self.Nodes.Input.disabled = true	
+		}
 	}
 }
 
 
 function Checkbox_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
-
-	if (self.Disabled) {
-		return
-	}
+	var permdisattr = self.Nodes.Input.getAttribute('permanent-disabled')
+	var permanentDisabled = ((permdisattr==null || permdisattr=='' || permdisattr=='false')) ? false : true
 
 	self.Nodes.Input.setAttribute('editmode', attrval)
 	if (ineditmode) {
-		self.Nodes.Input.removeAttribute('disabled')
+		if (permanentDisabled) {
+			self.Nodes.Input.setAttribute('disabled', 'true')
+		} else {
+			self.Nodes.Input.removeAttribute('disabled')
+		}
 	} else {
 		self.Nodes.Input.setAttribute('disabled', 'true')
 	}

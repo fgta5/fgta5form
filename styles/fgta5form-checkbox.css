@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+.fgta5-checkbox[permanent-disabled="true"] {
+  color: var(--fgta5-color-checkbox-disabled-text)
+}
+
 
 .fgta5-checkbox-input {
   /* Add if not using autoprefixer */
@@ -31,6 +35,18 @@
 
 }
 
+.fgta5-checkbox-input[changed="true"] {
+  /* border: 1px solid var(--fgta5-color-editmode-line); */
+  border-left: 2px solid var(--fgta5-color-editmode-line);
+}
+
+
+.fgta5-checkbox-input:focus {
+  outline: 1px solid var(--fgta5-color-editmode-line);
+  border: 1px solid var(--fgta5-color-editmode-line);
+  outline-offset: 0;
+}
+
 
 .fgta5-checkbox-input::before {
   content: "";
@@ -47,6 +63,18 @@
 }
 
 
-.fgta5-checkbox-input[permanent-disabled=true] {
+.fgta5-checkbox-input[permanent-disabled="true"] {
   background-color: var(--fgta5-color-checkbox-disabled);
+}
+
+.fgta5-checkbox-input[permanent-disabled="true"]:checked::before {
+  box-shadow: inset 9px 9px var(--fgta5-color-checkbox-checked-disabled);;
+}
+
+
+
+.fgta5-checkbox-input[editmode="true"]:not([permanent-disabled]),
+.fgta5-checkbox-input[editmode="true"][permanent-disabled=false]
+{
+  background-color: var(--fgta5-color-editmode-bg);
 }

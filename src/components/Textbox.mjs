@@ -67,7 +67,7 @@ function Textbox_construct(self, id) {
 	}
 
 	input.addEventListener("input", function(event) {
-		if (self.GetLastValue() != input.value) {
+		if (self.GetLastValue() != self.Value) {
 			input.setAttribute('changed', 'true')
 		} else {
 			input.removeAttribute('changed')

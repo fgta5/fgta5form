@@ -8,10 +8,12 @@
 
 	--fgta5-color-input-line: var(--color-input-line, #ccc);
 	--fgta5-color-input-disabled: var(--color-input-disabled, rgb(200, 200, 200));
-	--fgta5-color-input-descr-text: var(--color-input-descr-text, #616161);
+	--fgta5-color-input-descr-text: var(--color-input-descr-text, rgb(97, 97, 97));
 	
-	--fgta5-color-checkbox-checked: var(--color-checkbox-checked, rgb(60, 89, 255));
+	--fgta5-color-checkbox-checked: var(--color-checkbox-checked, rgb(0, 0, 0));
+	--fgta5-color-checkbox-checked-disabled: var(--color-checkbox-disabled, rgb(136, 136, 136));
 	--fgta5-color-checkbox-disabled: var(--color-checkbox-disabled, rgb(200, 200, 200));
+	--fgta5-color-checkbox-disabled-text: var(--color-checkbox-disabled, rgb(136, 136, 136));
 }
 
 
