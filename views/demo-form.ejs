@@ -90,7 +90,7 @@
 							description="isi dengan angka, 50 s/d 200"
 							invalid-message="nilai harus dalam range 50 s/d 200"
 						>
-					</div> -->
+					</div> 
 
 					<div class="demo-input-field" field="obj_dt_tanggal">
 						<label for="obj_dt_tanggal">Tanggal</label>
@@ -111,7 +111,25 @@
 							description="isi jam"
 							invalid-message="jam harus dalam range 08:00 s/d 12:00"
 							>
-					</div>					
+					</div>		
+					
+					-->
+					<div class="demo-input-field" field="obj_cbo_kota">
+						<label for="obj_cbo_kota">Kota</label>
+						<input id="obj_cbo_kota" fgta5-component="Combobox" placeholder="pilih kota" autocomplete="off" spellcheck="false" 
+							binding="kota"
+							description="isi kota"
+							invalid-message="kota harus diisi"
+							>
+						<datalist for="obj_cbo_kota">
+							<option value="JKT">Jakarta</option>
+							<option value="MGL">Magelang</option>
+							<option value="JGJ">Jogjakarta</option>	
+							<option value="SLG">Salatiga</option>
+							<option value="SLO">Solo</option>
+						</datalist>
+					</div>	
+
 
 				</div>
 			</form>

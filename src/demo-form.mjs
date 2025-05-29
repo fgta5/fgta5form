@@ -12,13 +12,13 @@ const btn_clearerror = new $fgta5.Button('btn_clearerror')
 const form = new $fgta5.Form('myform');
 // const obj_txt_nama = form.Inputs.obj_txt_nama
 // const obj_num_nilai = form.Inputs.obj_num_nilai
-const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
+// const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
 
 
 window.test = {
 	//obj_txt_nama: obj_txt_nama,
 	// obj_num_nilai: obj_num_nilai,
-	obj_dt_tanggal: obj_dt_tanggal
+	// obj_dt_tanggal: obj_dt_tanggal
 }
 
 
@@ -120,7 +120,8 @@ async function btn_new_click(self, evt) {
 			nama: "Nama Baru",   // textbox
 			nilai: 2500,  // numberbox
 			kota: {value:"JKT", display:"Jakarta"},  // combobox
-			// tanggal: new Date(), // datebox
+			tanggal: new Date(), // datebox
+			jam: '16:00',
 			aktif: true, // checkbox
 			alamat: "Alamat Baru", // textarea
 		})
