@@ -274,6 +274,10 @@ function Input_readValidators(self) {
 			var mindate = new Date(min)
 			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('mindate', mindate, msg)
+		} else if (cname=="Timepicker") {
+			var mintime = min
+			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('mintime', mintime, msg)
 		} else {
 			min = parseInt(min)
 			if (!isNaN(min)) {
@@ -289,6 +293,10 @@ function Input_readValidators(self) {
 			var maxdate = new Date(max)
 			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('maxdate', maxdate, msg)
+		} else if (cname=="Timepicker") {
+			var maxtime = max
+			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('maxtime', maxtime, msg)
 		} else {
 			max = parseInt(max)
 			if (!isNaN(max)) {

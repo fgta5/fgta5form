@@ -120,7 +120,7 @@ async function btn_new_click(self, evt) {
 			nama: "Nama Baru",   // textbox
 			nilai: 2500,  // numberbox
 			kota: {value:"JKT", display:"Jakarta"},  // combobox
-			tanggal: new Date(), // datebox
+			// tanggal: new Date(), // datebox
 			aktif: true, // checkbox
 			alamat: "Alamat Baru", // textarea
 		})

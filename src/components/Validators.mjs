@@ -104,3 +104,20 @@ export function maxdate(value, maxDate) {
 	}
 	
 }
+
+
+export function mintime(value, minTime) {
+	if (value<minTime) {
+		return false
+	} else {
+		return true
+	}
+}
+
+export function maxtime(value, maxTime) {
+	if (value>maxTime) {
+		return false
+	} else {
+		return true
+	}
+}

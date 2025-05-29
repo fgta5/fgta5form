@@ -8,7 +8,7 @@ import Textbox from './components/Textbox.mjs';
 import Numberbox from './components/Numberbox.mjs';
 import Checkbox from './components/Checkbox.mjs';	
 import Datepicker from './components/Datepicker.mjs';	
-
+import Timepicker from './components/Timepicker.mjs';	
 
 const $fgta5 = {
 	Component: Component,
@@ -18,6 +18,7 @@ const $fgta5 = {
 	Numberbox: Numberbox,
 	Checkbox: Checkbox,
 	Datepicker: Datepicker,
+	Timepicker: Timepicker,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
 	Modal: Modal
