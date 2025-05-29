@@ -60,15 +60,9 @@ function Textbox_construct(self, id) {
 	self._setLastValue(self.Value)
 
 	// set input description
-	var description = self.Element.getAttribute('description')
-	if (description !== null && description.trim() !== '') {
-		description = description.trim()
-		const decrdiv = document.createElement('div')
-		decrdiv.classList.add('fgta5-entry-description')
-		decrdiv.innerHTML = description
-		container.appendChild(decrdiv)
-	}
+	self._setupDescription()
 
+	
 	input.addEventListener("input", function(event) {
 		if (self.GetLastValue() != self.Value) {
 			input.setAttribute('changed', 'true')

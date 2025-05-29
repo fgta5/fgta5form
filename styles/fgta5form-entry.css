@@ -138,9 +138,10 @@
 
 .fgta5-entry-input-datepicker {
 	position: absolute;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
     right: 0;
+	left: -107px;
     top: 0;
     opacity: 0;
 	padding: 0;

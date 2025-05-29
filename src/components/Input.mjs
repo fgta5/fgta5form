@@ -85,7 +85,16 @@ export default class Input extends Component {
 		}			
 	}
 
-
+	_setupDescription() {
+		var description = this.Element.getAttribute('description')
+		if (description !== null && description.trim() !== '') {
+			description = description.trim()
+			const decrdiv = document.createElement('div')
+			decrdiv.classList.add('fgta5-entry-description')
+			decrdiv.innerHTML = description
+			this.Nodes.Container.appendChild(decrdiv)
+		}		
+	}
 
 
 }
@@ -146,6 +155,8 @@ function Input_GetLastValue(self) {
 function Input_NewData(self, initialvalue) {
 	if (initialvalue === undefined || initialvalue === null) {
 		initialvalue = ''
+	} else if (initialvalue instanceof Date) {
+		initialvalue = initialvalue.toISOString().split("T")[0]
 	} else if (typeof initialvalue !== 'string') {
 		initialvalue = String(initialvalue)
 	}
@@ -191,6 +202,11 @@ function Input_Validate(self) {
 				throw err
 			}
 
+			if (fnName=='mindate') {
+				var t = 0
+			}
+
+
 			var valid = fnValidate(self.Value, fnParams)
 			if (!valid) {
 				var err = new Error( `Invalid value '${self.Value}' for '${self.Nodes.Input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
@@ -214,6 +230,7 @@ function Input_Validate(self) {
 
 
 function Input_readValidators(self) {
+	const cname = self.Nodes.Input.getAttribute('fgta5-component')
 	var default_invalid_message = self.Nodes.Input.getAttribute(`invalid-message`)
 
 	var required = self.Nodes.Input.getAttribute('required')
@@ -253,19 +270,31 @@ function Input_readValidators(self) {
 
 	var min = self.Nodes.Input.getAttribute('min')
 	if (min != null) {
-		min = parseInt(min)
-		if (!isNaN(min)) {
+		if (cname=="Datepicker") {
+			var mindate = new Date(min)
 			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('min', min, msg)
+			self.AddValidator('mindate', mindate, msg)
+		} else {
+			min = parseInt(min)
+			if (!isNaN(min)) {
+				var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
+				self.AddValidator('min', min, msg)
+			}
 		}
 	}
 
 	var max = self.Nodes.Input.getAttribute('max')
 	if (max != null) {
-		max = parseInt(max)
-		if (!isNaN(max)) {
+		if (cname=="Datepicker") {
+			var maxdate = new Date(max)
 			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('max', max, msg)
+			self.AddValidator('maxdate', maxdate, msg)
+		} else {
+			max = parseInt(max)
+			if (!isNaN(max)) {
+				var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
+				self.AddValidator('max', max, msg)
+			}
 		}
 	}
 

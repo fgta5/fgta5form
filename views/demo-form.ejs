@@ -47,7 +47,7 @@
 			<h2 id="txtState">Edit/View</h2>
 			<form id="myform" locked="true">
 				<div style="display: flex; column-gap: 10px; row-gap: 16px; flex-wrap: wrap;">
-					<div class="demo-input-field" field="obj_txt_nama">
+					<!-- <div class="demo-input-field" field="obj_txt_nama">
 						<label for="obj_txt_nama">Nama</label>
 						<input id="obj_txt_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
 							class="demo-textbox-nama" 
@@ -84,20 +84,22 @@
 						<label for="obj_num_nilai">Nilai</label>
 						<input id="obj_num_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" 
 							style="background-color: aquamarine; min-width: 50px; width: 50px;"
-							min="50" max="200" decimal="2" validator=""
+							x-min="50" x-max="200" decimal="2" validator=""
 							binding="nilai" 
 							value="100"
 							description="isi dengan angka, 50 s/d 200"
 							invalid-message="nilai harus dalam range 50 s/d 200"
 						>
-					</div>
+					</div> -->
 
-					<div class="demo-input-field" field="obj_txt_tanggal">
-						<label for="obj_txt_tanggal">Tanggal</label>
-						<input id="obj_txt_tanggal" fgta5-component="Datepicker" placeholder="dd MMM yyyy" autocomplete="off" spellcheck="false" 
-							
-							maxlength="90" validator="" 
+					<div class="demo-input-field" field="obj_dt_tanggal">
+						<label for="obj_dt_tanggal">Tanggal</label>
+						<input id="obj_dt_tanggal" fgta5-component="Datepicker" placeholder="dd MMM yyyy" autocomplete="off" spellcheck="false" 
+							min="2025-05-17" max="2025-05-27"
+							value="2025-01-01"
 							binding="tanggal"
+							description="isi tanggal anda"
+							invalid-message="tanggal harus dalam range 2025-05-17 s/d 2025-05-27"
 							>
 					</div>
 

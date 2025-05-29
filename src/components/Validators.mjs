@@ -74,3 +74,33 @@ export function max(value, maxValue) {
 	}
 	return true; // value meets the maximum requirement
 }
+
+
+function parseDate(value, boundaryDate) {
+	var dtparsed = new Date(value)
+	var dt = new Date(dtparsed.getFullYear(), dtparsed.getMonth(), dtparsed.getDate())
+	var boundary = new Date(boundaryDate.getFullYear(), boundaryDate.getMonth(), boundaryDate.getDate())
+	return {
+		dt: dt,
+		boundary: boundary
+	}
+}
+
+export function mindate(value, minDate) {
+	var {dt, boundary} = parseDate(value, minDate)
+	if (dt<boundary) {
+		return false
+	} else {
+		return true
+	}
+}
+
+export function maxdate(value, maxDate) {
+	var {dt, boundary} = parseDate(value, maxDate)
+	if (dt>boundary) {
+		return false
+	} else {
+		return true
+	}
+	
+}

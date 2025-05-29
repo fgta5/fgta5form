@@ -10,13 +10,15 @@ const btn_testdised = new $fgta5.Button('btn_testdised')
 const btn_clearerror = new $fgta5.Button('btn_clearerror')
 
 const form = new $fgta5.Form('myform');
-const obj_txt_nama = form.Inputs.obj_txt_nama
-const obj_num_nilai = form.Inputs.obj_num_nilai
+// const obj_txt_nama = form.Inputs.obj_txt_nama
+// const obj_num_nilai = form.Inputs.obj_num_nilai
+const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
 
 
 window.test = {
-	obj_txt_nama: obj_txt_nama,
-	obj_num_nilai: obj_num_nilai
+	//obj_txt_nama: obj_txt_nama,
+	// obj_num_nilai: obj_num_nilai,
+	obj_dt_tanggal: obj_dt_tanggal
 }
 
 
@@ -43,13 +45,13 @@ async function main(self, args) {
 	btn_clearerror.addEventListener('click', (evt) => { btn_clearerror_click(self, evt) });
 
 
-	obj_txt_nama.addEventListener('change', (evt) => {
-		console.log('obj_txt_nama changed', evt)
-	})
+	// obj_txt_nama.addEventListener('change', (evt) => {
+	// 	console.log('obj_txt_nama changed', evt)
+	// })
 
-	obj_num_nilai.addEventListener('change', (evt) => {
-		console.log('obj_num_nilai changed', evt)
-	})
+	// obj_num_nilai.addEventListener('change', (evt) => {
+	// 	console.log('obj_num_nilai changed', evt)
+	// })
 
 
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });

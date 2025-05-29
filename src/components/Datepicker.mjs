@@ -22,6 +22,49 @@ export default class Datepicker extends Input {
 		Datepicker_construct(this, id)
 	}
 
+
+	get Value() { return this.Element.value }
+	set Value(v) {
+		if (v instanceof Date) {
+			v = v.toISOString().split("T")[0]
+		}
+		this.Element.value = v
+		Datepicker_setValue(this, v)
+	}
+
+	get Min() { 
+		if (this.Element.min!="") {
+			var dt = new Date(this.Element.min );
+			return dt
+		} else {
+			return null
+		}
+	}
+	set Min(v) {
+		if (v instanceof Date) {
+			this.Element.min = v.toISOString().split("T")[0]
+		} else if (typeof v === "string") {
+			this.Element.min = v
+		}
+	}
+
+	get Max() { 
+		if (this.Element.max!="") {
+			var dt = new Date(this.Element.max);
+			return dt
+		} else {
+			return null
+		}
+	}
+	set Max(v) {
+		if (v instanceof Date) {
+			this.Element.max = v.toISOString().split("T")[0]
+		} else if (typeof v === "string") {
+			this.Element.max = v
+		}
+	}
+
+
 	get Disabled() { return this.Element.disabled }
 	set Disabled(v) { 
 		this.Element.disabled = v 
@@ -35,6 +78,13 @@ export default class Datepicker extends Input {
 		this.#_ineditmode = ineditmode
 		Datepicker_SetEditingMode(this, ineditmode)
 	}
+
+
+	SetError(msg) {
+		super.SetError(msg)
+		Datepicker_SetError(this, msg)
+	}
+	
 
 }
 
@@ -89,24 +139,32 @@ function Datepicker_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
 	
-	
+	input.addEventListener('change', (e)=>{
+		Datepicker_changed(self)
+	})
 	
 
-	
 
 	button.id = self.Id + '-button'
-
 
 	label.setAttribute('for', button.id)
 
 
+	// set input description
+	self._setupDescription()
 
-		// tambahkan referensi elemen ke Nodes
+	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
 	self.Nodes.Label = label 
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 
+	if (input.value === null || input.value === '') {
+		self.Value = new Date()
+	} else {
+		self.Value = input.value
+	}
+	self._setLastValue(input.value)
 
 	self.Nodes.Input.getInputCaption = () => {
 		return label.innerHTML
@@ -145,3 +203,35 @@ function Datepicker_SetEditingMode(self, ineditmode) {
 		self.SetError(null)
 	}
 }
+
+function Datepicker_setValue(self, dt) {
+	Datepicker_setDisplay(self, dt)
+}
+
+function Datepicker_changed(self) {
+	Datepicker_setDisplay(self, self.Nodes.Input.value)
+	if (self.InEditMode) {
+		self.SetError(null)
+		self.Validate()
+	}
+}
+
+function Datepicker_setDisplay(self, dt) {
+	const date = new Date(dt);
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+
+	const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
+	self.Nodes.Display.value = formattedDate
+
+
+}
+
+
+function Datepicker_SetError(self, msg) {
+	if (msg!== null && msg !== '') {
+		self.Nodes.Display.setAttribute('invalid', 'true')
+	} else {
+		self.Nodes.Display.removeAttribute('invalid')
+	}
+}
+

@@ -7,6 +7,7 @@
 	],
 	
 	"settings": {
-		"editor.insertSpaces": false
+		"editor.insertSpaces": false,
+		"codium.codeCompletion.enable": false
 	}
 }

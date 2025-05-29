@@ -86,14 +86,7 @@ function Numberbox_construct(self, id) {
 
 
 	// set input description
-	var description = self.Element.getAttribute('description')
-	if (description !== null && description.trim() !== '') {
-		description = description.trim()
-		const decrdiv = document.createElement('div')
-		decrdiv.classList.add('fgta5-entry-description')
-		decrdiv.innerHTML = description
-		container.appendChild(decrdiv)
-	}
+	self._setupDescription()
 
 	// set precission
 	var precision = self.Element.getAttribute('precision')
@@ -134,18 +127,18 @@ function Numberbox_construct(self, id) {
 	label.setAttribute('for', display.id)
 
 	// event listener for display
-	display.addEventListener('focus', function(e) {
+	display.addEventListener('focus', (e)=>{
 		// console.log('numberbox focus')
 		Numberbox_displayFocus(self, e)
 	})
 
-	display.addEventListener('blur', function(e) {
+	display.addEventListener('blur', (e)=>{
 		// console.log('numberbox blur')
 		Numberbox_displayBlur(self, e)
 	})
 
 
-	display.addEventListener("input", function(event) {
+	display.addEventListener("input", (e)=>{
 		if (display.value !== lastvalue.value) {
 			display.setAttribute('changed', 'true')
 		} else {
