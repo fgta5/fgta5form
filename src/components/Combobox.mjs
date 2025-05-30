@@ -87,10 +87,12 @@ function Combobox_construct(self, id) {
 	// dialog
 	dialog.classList.add('fgta5-combobox-dialog')
 	dialog.addEventListener("cancel", (e)=>{
-		dialog.removeAttribute('showed')
+		dialog.setAttribute('removing', 'true')
 		e.preventDefault()
 		setTimeout(() => {
 			dialog.close()
+			dialog.removeAttribute('removing')
+			dialog.removeAttribute('showed')
 		}, 200);
     });
 

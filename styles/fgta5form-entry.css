@@ -222,6 +222,11 @@
 	transform: scale(1);
 }
 
+.fgta5-combobox-dialog[removing] {
+	opacity: 0;
+	transform:translateX(-100vw)
+}
+
 
 .fgta5-combobox-dialog::backdrop {
 	opacity: 0;
@@ -232,8 +237,10 @@
 
 .fgta5-combobox-dialog[showed="true"]::backdrop {
 	opacity: 0.6;
-	background-color: rgba(0, 0, 0); 
 } 
 
+.fgta5-combobox-dialog[removing]::backdrop {
+	opacity: 0;
+} 
 
 
