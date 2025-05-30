@@ -5,10 +5,9 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 <svg transform="translate(0 3)" width="12" height="12" stroke="currentColor" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="m12.339 12.142 0.01403-6.5322" fill="none" stroke-width="2"/>
 <path d="m8.4232 14.469 3.7103-1.9861" fill="none" stroke-width="2.4"/>
-<ellipse cx="12.004" cy="11.983" rx="10.102" ry="9.9964" fill="none" stroke="#d4aa00" stroke-width="1.6"/>
-<path d="m1.8825 11.645c0.68615-12.959 19.274-13.28 20.26-0.19198" fill="none" stroke-width="2.4"/>
-<path d="m22.115 11.629c-0.4442 13.693-19.881 13.619-20.217 0.50701" fill="none" stroke-width="2.4"/>
+<ellipse cx="12.004" cy="11.983" rx="10.102" ry="9.9964" fill="none" stroke-width="2.4"/>
 </svg>
+
 `
 
 
