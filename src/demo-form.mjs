@@ -13,6 +13,7 @@ const form = new $fgta5.Form('myform');
 // const obj_txt_nama = form.Inputs.obj_txt_nama
 // const obj_num_nilai = form.Inputs.obj_num_nilai
 // const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
+const obj_cbo_kota = form.Inputs.obj_cbo_kota
 
 
 window.test = {
@@ -57,6 +58,11 @@ async function main(self, args) {
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
 	form.Render()
+
+
+	obj_cbo_kota.addEventListener('change', (evt)=>{
+		console.log(evt.detail)
+	})
 
 }
 

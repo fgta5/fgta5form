@@ -251,8 +251,77 @@
 .fgta5-combobox-dialog-head {
 	position: sticky;
     top: 0;
-    background: azure;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    padding: 0 5px 0 10px;
+	background: var(--fgta-cbo-head-bgcolor);
+	color: var(--fgta-cbo-head-color);
+	height: var(--fgta-cbo-head-height);
+	transition: box-shadow 0.3s ease-in-out; /* Transisi bayangan */
+	display: flex;
+    align-items: center;
+	
 }
 
+.fgta5-combobox-dialog-head > button {
+	filter: invert(100%);
+	cursor: pointer;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	margin-left: auto;
+	padding: 0;
+	width: 24px;
+	height: 24px;
+}
+
+.fgta5-combobox-dialog-head.scrolled {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Efek bayangan saat di-scroll */
+}
+
+
+.fgta5-combobox-dialog table {
+    border-spacing: 0; /* Sama seperti cellspacing="5" */
+	margin: 0;
+	width: 100%;
+}
+
+.fgta5-combobox-dialog thead {
+	position: sticky;
+	top: calc(var(--fgta-cbo-head-height));
+	height: var(--fgta-cbo-thead-height);
+	background-color: var(--fgta-cbo-thead-bgcolor);
+	color: var(--fgta-cbo-thead-color);
+	
+}
+
+.fgta5-combobox-dialog thead > tr > td {
+	border-bottom: 1px solid red;
+}
+
+
+.fgta5-combobox-dialog tfoot {
+	position: sticky;
+	bottom: 0px;
+	height: 30px;
+	background-color: white;
+	border-top: 1px solid black;
+}
+
+.fgta5-combobox-dialog tbody tr td {
+	display: block;
+	padding: 10px 0 10px 0px;
+	cursor: pointer;
+}
+
+.fgta5-combobox-dialog tbody tr:first-child td {
+    margin-top: 10px;
+
+}
+
+.fgta5-combobox-dialog tbody tr td:first-child {
+	padding-left: 10px;
+}
+
+
+.fgta5-combobox-dialog tbody td:hover {
+	background-color: antiquewhite;
+}

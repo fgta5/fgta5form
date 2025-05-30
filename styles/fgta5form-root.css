@@ -14,6 +14,18 @@
 	--fgta5-color-checkbox-checked-disabled: var(--color-checkbox-disabled, rgb(136, 136, 136));
 	--fgta5-color-checkbox-disabled: var(--color-checkbox-disabled, rgb(200, 200, 200));
 	--fgta5-color-checkbox-disabled-text: var(--color-checkbox-disabled, rgb(136, 136, 136));
+
+
+
+	--fgta-cbo-head-bgcolor: rgb(30, 30, 30);
+	--fgta-cbo-head-color: white;
+	--fgta-cbo-head-height: 40px;
+	--fgta-cbo-thead-height: 26px;
+	--fgta-cbo-thead-bgcolor: rgb(97, 97, 79);
+	--fgta-cbo-thead-color: white;
+
+
+
 }
 
 

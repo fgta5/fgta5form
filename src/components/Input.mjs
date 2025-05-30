@@ -113,6 +113,7 @@ function Input_construct(self, id) {
 	}
 
 
+	self.Listener = new EventTarget()
 	self.Nodes = {
 		Input: self.Element,
 		Container: container,

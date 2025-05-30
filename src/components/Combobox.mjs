@@ -1,11 +1,20 @@
 import Input from "./Input.mjs"
 
+const events = {
+	change: new CustomEvent('change')
+}
 
-const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
+const icon_cbo_button = `<?xml version="1.0" encoding="UTF-8"?>
 <svg transform="translate(0 3)" width="12" height="12" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path transform="matrix(.8169 0 0 -.64538 10.987 14.119)" d="m11.299 11.275h-10.157l-10.157-1e-6 10.157-17.593 5.0786 8.7965z"/>
 </svg>
 `
+
+const icon_cbo_close = `<?xml version="1.0" encoding="UTF-8"?>
+<svg transform="translate(0 3)" width="12" height="12" stroke="currentColor" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m3.5642 20.295 16.853-16.833" fill="none" stroke-width="4"/>
+<path d="m3.5741 3.4523 16.833 16.853" fill="none" stroke-width="4"/>
+</svg>`
 
 
 export default class Combobox extends Input {
@@ -28,7 +37,17 @@ export default class Combobox extends Input {
 		Combobox_SetEditingMode(this, ineditmode)
 	}
 
+	addEventListener = (evt, callback) => {
+		if (['change'].includes(evt)) {
+			this.Listener.addEventListener(evt, callback)
+		} else {
+			super.addEventListener(evt, callback)
+		}
+	}
+	
 }
+
+
 
 
 function Combobox_construct(self, id) {
@@ -75,7 +94,7 @@ function Combobox_construct(self, id) {
 
 	// setup button
 	button.classList.add('fgta5-entry-button-combobox')	
-	button.innerHTML = button_icon
+	button.innerHTML = icon_cbo_button
 	button.addEventListener('click', (e)=>{
 		Combobox_buttonClick(self, e)
 	})
@@ -96,11 +115,14 @@ function Combobox_construct(self, id) {
 		}, 200);
     });
 
+
 	// datalist
 	if (datalist!=null) {
 		datalist.remove()
-		Combobox_createStaticOptions(dialog, datalist)
+		Combobox_createStaticOptions(self, dialog, datalist)
 	}
+
+
 
 
 	// tambahkan referensi elemen ke Nodes
@@ -109,6 +131,7 @@ function Combobox_construct(self, id) {
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 	self.Nodes.Dialog = dialog
+	
 }
 
 
@@ -130,6 +153,19 @@ function Combobox_buttonClick(self, e) {
 
 	self.Nodes.Dialog.showModal()
 	self.Nodes.Dialog.setAttribute('showed', 'true')
+
+	var btnClose = self.Nodes.Dialog.querySelector('.fgta5-combobox-dialog-head > button')
+	if (btnClose.onclick==null) {
+		btnClose.onclick=(e) => {
+			self.Nodes.Dialog.setAttribute('removing', 'true')
+			setTimeout(() => {
+				self.Nodes.Dialog.close()
+				self.Nodes.Dialog.removeAttribute('removing')
+				self.Nodes.Dialog.removeAttribute('showed')
+			}, 200);
+		}
+	}
+
 }
 
 function Combobox_SetEditingMode(self, ineditmode) {
@@ -148,28 +184,76 @@ function Combobox_SetEditingMode(self, ineditmode) {
 	}
 }
 
-function Combobox_createStaticOptions(dialog, datalist) {
+function Combobox_createStaticOptions(self, dialog, datalist) {
 	const options = datalist.getElementsByTagName("option");
-	let dataArray = [];
+	
+
+	var thead = dialog.getElementsByTagName('thead')[0]
+	var tbody = dialog.getElementsByTagName('tbody')[0]
+	var tfoot = dialog.getElementsByTagName('tfoot')[0]
+
+	
+	thead.style.display='none'
+	tfoot.style.display='none'
 
 	for (let option of options) {
-		var value = option.value
-		var text = option.textContent || option.innerText
-		var line = document.createTextNode(text)
-		dialog.appendChild(line)
-		var br = document.createElement('br')
-		dialog.appendChild(br)
+		let value = option.value
+		let text = option.textContent || option.innerText
+
+		var tr = document.createElement('tr')
+		var td = document.createElement('td')
+		
+		td.setAttribute('option', '')
+		td.setAttribute('value', value)
+		
+		td.innerHTML = text
+
+		tr.appendChild(td)
+		tbody.appendChild(tr)
+
+		td.addEventListener('click', (e)=>{
+			self.Nodes.Input.value = value
+			self.Nodes.Display.value = text
+
+			// trigger event
+			let change = new CustomEvent('change', {
+				detail: {value: value, text: text}
+			})
+			self.Listener.dispatchEvent(change)
+
+			// tutup
+			self.Nodes.Dialog.removeAttribute('showed')
+			setTimeout(() => {
+				self.Nodes.Dialog.close()
+			}, 200);
+		})
 	}
-	
 
 }
 
 function Combobox_createDialog(dialog) {
 	dialog.classList.add('fgta5-combobox-dialog')
 
+	// buat header dialog
 	var head = document.createElement('div')
 	head.classList.add('fgta5-combobox-dialog-head')
-	head.innerHTML = 'header'
-
+	head.innerHTML = 'judul'
 	dialog.appendChild(head)
+
+	// tombol tutup dialog (tanpa memilih)
+	var btnClose = document.createElement('button')
+	btnClose.innerHTML = icon_cbo_close
+	head.appendChild(btnClose)
+	
+	// template tabel dialog
+	var table = document.createElement('table')
+	var thead = document.createElement('thead')
+	var tbody = document.createElement('tbody')
+	var tfoot = document.createElement('tfoot')
+
+	dialog.appendChild(table)
+	table.appendChild(tbody)
+	table.appendChild(tfoot)
+	table.appendChild(thead)
+
 }
