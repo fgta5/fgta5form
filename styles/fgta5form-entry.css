@@ -144,7 +144,19 @@
 	right: 20px;
 }
 
-.fgta5-entry-button-combobox > svg,
+.fgta5-entry-button-combobox[editmode="false"] {
+	cursor: default;
+}
+
+.fgta5-entry-button-combobox[editmode="true"] {
+	cursor: pointer;
+}
+
+
+.fgta5-entry-button-combobox:disabled {
+    display: none;
+}
+
 .fgta5-entry-button-datepicker > svg {
 	cursor: pointer;
 	pointer-events: none;
@@ -160,6 +172,8 @@
 	padding: 0;
 	margin: 0;
 }
+
+
 
 .fgta5-entry-input-datepicker[picker="time"] {
 	left: -47px;
@@ -183,3 +197,43 @@
 .fgta5-entry-input-wrapper:focus-within > .fgta5-entry-display-datepicker[editmode="false"] {
 	border-bottom: 1px solid var(--fgta5-color-input-line); 
 }
+
+.fgta5-entry-input-wrapper:focus-within:has(button:active) > .fgta5-entry-display[editmode="true"], 
+.fgta5-entry-input-wrapper:focus-within:has(button:focus) > .fgta5-entry-display[editmode="true"]
+{
+	border-bottom: 1px solid var(--fgta5-color-editmode-line); 
+} 
+
+
+.fgta5-combobox-dialog {
+	border: none;
+	outline: none; 
+	position: fixed;
+	opacity: 1;
+	height: 100vh;
+	width: 100vw;
+	transform: scale(0.5);
+    transition: opacity 0.5s ease, transform 0.3s ease; 
+	user-select: none; 
+}
+
+.fgta5-combobox-dialog[showed="true"] {
+	opacity: 1;
+	transform: scale(1);
+}
+
+
+.fgta5-combobox-dialog::backdrop {
+	opacity: 0;
+	transition: opacity 0.5s ease-out;
+	background-color: rgba(0, 0, 0); /* Masking gelap */
+}
+
+
+.fgta5-combobox-dialog[showed="true"]::backdrop {
+	opacity: 0.6;
+	background-color: rgba(0, 0, 0); 
+} 
+
+
+
