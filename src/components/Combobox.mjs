@@ -52,7 +52,7 @@ function Combobox_construct(self, id) {
 	wrapinput.appendChild(button)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
-	container.appendChild(dialog)
+	document.body.appendChild(dialog)
 
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
@@ -85,7 +85,7 @@ function Combobox_construct(self, id) {
 	label.setAttribute('for', display.id)
 
 	// dialog
-	dialog.classList.add('fgta5-combobox-dialog')
+	Combobox_createDialog(dialog)
 	dialog.addEventListener("cancel", (e)=>{
 		dialog.setAttribute('removing', 'true')
 		e.preventDefault()
@@ -153,13 +153,23 @@ function Combobox_createStaticOptions(dialog, datalist) {
 	let dataArray = [];
 
 	for (let option of options) {
-		dataArray.push({
-			value: option.value,
-			text: option.textContent || option.innerText
-		});
+		var value = option.value
+		var text = option.textContent || option.innerText
+		var line = document.createTextNode(text)
+		dialog.appendChild(line)
+		var br = document.createElement('br')
+		dialog.appendChild(br)
 	}
+	
 
-	console.log(dataArray)
-	// compose dialog
-	dialog.innerHTML = "ini pilihannya"
+}
+
+function Combobox_createDialog(dialog) {
+	dialog.classList.add('fgta5-combobox-dialog')
+
+	var head = document.createElement('div')
+	head.classList.add('fgta5-combobox-dialog-head')
+	head.innerHTML = 'header'
+
+	dialog.appendChild(head)
 }
