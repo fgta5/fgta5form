@@ -73,6 +73,10 @@ function Combobox_construct(self, id) {
 	container.appendChild(lastvalue)
 	document.body.appendChild(dialog)
 
+
+	// setup container
+	container.setAttribute('fgta5-component', 'Combobox')
+
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
 
@@ -122,6 +126,8 @@ function Combobox_construct(self, id) {
 		Combobox_createStaticOptions(self, dialog, datalist)
 	}
 
+	// set input description
+	self._setupDescription()
 
 
 

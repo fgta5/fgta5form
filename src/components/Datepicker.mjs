@@ -116,8 +116,7 @@ function Datepicker_construct(self, id) {
 	wrapinput.appendChild(display)
 	wrapinput.appendChild(button)
 	button.innerHTML = button_icon
-	// button.appendChild(input)
-	button.insertBefore(input, button.firstChild)
+	button.appendChild(input)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
 	container.setAttribute('fgta5-component', 'Datepicker')

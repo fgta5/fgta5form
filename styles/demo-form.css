@@ -1,3 +1,5 @@
+/* begin form basic style */
+
 .demo-input-field {
 	display: flex;
 	column-gap: 10px;
@@ -8,25 +10,35 @@
 	margin-top: 4px;
 	font-size: 0.8rem;
 	font-weight: bold;
-	text-align: right;
+	
+}
+
+@media screen and (max-width: 500px) {
+	.demo-input-field {
+		flex-direction: column;
+	}
+
+	.demo-input-field > div[label],
+	.demo-input-field > label {
+		text-align: left;
+		margin-bottom: 5px;
+		width: fit-content;
+		min-width: unset;
+	}
 }
 
 
+@media screen and (min-width: 501px) {
+	.demo-input-field > label {
+		text-align: right;
+		width: 80px;
+	}
+}
+
+/* end of form basic style layout */
 
 
 
-
-
-
-/* .demo-input-field[field=obj_txt_nama] {
-	flex-basis: 300px;
-} */
-
-/* .demo-input-field[field=obj_txt_nama] .fgta5-entry-input-wrapper {
-	min-width: 200px;
-	max-width: 200px;
-	
-} */
 
 .demo-input-field[field=obj_txt_nama] .fgta5-entry-container {
 	width: 12.5rem;
@@ -47,28 +59,6 @@
 }
 
 
-@media screen and (max-width: 500px) {
-	.demo-input-field {
-		flex-direction: column;
-	}
-
-	.demo-input-field > div[label],
-	.demo-input-field > label {
-		text-align: left;
-		margin-bottom: 5px;
-		width: fit-content;
-		min-width: unset;
-	}
-}
-
-
-@media screen and (min-width: 501px) {
-	.demo-input-field > label {
-		width: 80px;
-	}
-
-
-}
 
 
 

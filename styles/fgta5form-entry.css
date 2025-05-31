@@ -11,14 +11,20 @@
 }
 
 .fgta5-entry-container[fgta5-component="Timepicker"] {
-	width: 5rem; /* default width untuk datepicker */
+	width: 5rem; /* default width untuk timepicker */
 }
+
+.fgta5-entry-container[fgta5-component="Combobox"] {
+	width: 15rem; /* default width untuk combobox */
+}
+
 
 .fgta5-entry-input-wrapper {
 	border: none;
 	border-bottom: 1px solid var(--fgta5-color-input-line);
 	padding: 0;
 	display: flex;
+	position: relative;
 }
 
 .fgta5-entry-input-wrapper[editmode="true"]:focus-within {
@@ -98,6 +104,10 @@
 	text-align: right;
 }
 
+.fgta5-entry-display[fgta5-component="Combobox"] {
+
+	padding-right: 1.875rem;
+}
 
 
 
@@ -120,11 +130,6 @@
 }
 
 
-
-
-
-
-.fgta5-entry-button-combobox,
 .fgta5-entry-button-datepicker {
 	background-color: transparent;
 	position: relative;
@@ -137,14 +142,24 @@
 	margin-right: -1.875rem;
 	right: 1.875rem;
 	outline: 0;
+	padding: 0;
 }
 
-.fgta5-entry-button-combobox {
-	width: 20px;
+.fgta5-entry-button-combobox { 
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	width: 1.875rem; /* 30px; */
+		outline: 0;
+	padding: 0;
+	border: 0;
+	
+}
+	/* width: 20px;
 	max-width: 20px;
 	margin-right: -20px;
 	right: 20px;
-}
+}  */
 
 .fgta5-entry-button-combobox[editmode="false"] {
 	cursor: default;
@@ -161,7 +176,6 @@
 
 .fgta5-entry-button-combobox,
 .fgta5-entry-button-datepicker > svg {
-	cursor: pointer;
 	pointer-events: none;
 	width: 0.75rem;
 	height: 0.75rem;
