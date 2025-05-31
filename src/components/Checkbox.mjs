@@ -66,8 +66,12 @@ function Checkbox_construct(self, id) {
 	caption.appendChild(input)
 	caption.appendChild(text)
 
-	label.innerHTML = ""
-	label.removeAttribute("for")
+	
+	var replLabel = document.createElement('div')
+	replLabel.innerHTML = "&nbsp";
+	replLabel.style.display = "inline-block"
+	replLabel.setAttribute('label', '')
+	label.parentNode.replaceChild(replLabel, label);
 
 
 	self._setLastValue(self.Value)

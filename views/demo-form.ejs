@@ -12,7 +12,7 @@
 				user-select: none
 			}
 
-			@media screen and (max-width: 500px) {
+			@media screen and (max-width: 500px) { 
 				html, body, input, button {
 					font-size: 20px;
 				}
@@ -56,7 +56,7 @@
 					<div class="demo-input-field" field="obj_txt_nama">
 						<label for="obj_txt_nama">Nama</label>
 						<input id="obj_txt_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
-							class="demo-textbox-nama" 
+							 
 							style="background-color: aquamarine; "
 							character-case="uppercase"
 							required minlength="3" maxlength="15" validator="" 
@@ -78,7 +78,7 @@
 					<div class="demo-input-field" field="obj_txt_alamat">
 						<label for="obj_txt_alamat">Alamat</label>
 						<input id="obj_txt_alamat"  fgta5-component="Textbox" placeholder="alamat anda" autocomplete="off" spellcheck="false" 
-							style="width: 400px;"
+							x-style="width: 100%;"
 							maxlength="90" validator="" 
 							binding="alamat"
 							invalid-message="Alamat harus diisi, minimal 3 karakter, maksimal 90 karakter"
@@ -86,11 +86,11 @@
 					</div>
 
 
-					<div class="demo-input-field" field="obj_num_nilai" style="min-width: 250px; max-width: 250px; width: 250px;">
+					<div class="demo-input-field" field="obj_num_nilai">
 						<label for="obj_num_nilai">Nilai</label>
 						<input id="obj_num_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" 
-							style="background-color: aquamarine; min-width: 50px; width: 50px;"
-							x-min="50" x-max="200" decimal="2" validator=""
+							style="background-color: aquamarine;"
+							min="50" max="200" maxlength="6" decimal="2" validator=""
 							binding="nilai" 
 							value="100"
 							description="isi dengan angka, 50 s/d 200"

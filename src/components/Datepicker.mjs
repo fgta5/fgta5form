@@ -120,7 +120,9 @@ function Datepicker_construct(self, id) {
 	button.insertBefore(input, button.firstChild)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
+	container.setAttribute('fgta5-component', 'Datepicker')
 
+	display.setAttribute('id', `${id}-display`)
 	display.setAttribute('type', 'text')
 	display.setAttribute('fgta5-component', 'Datepicker')
 	display.setAttribute('readonly', 'true')
@@ -148,6 +150,7 @@ function Datepicker_construct(self, id) {
 	input.classList.add('fgta5-entry-input-datepicker')
 	
 	input.addEventListener('change', (e)=>{
+		console.log('date changed')
 		Datepicker_changed(self)
 	})
 	
@@ -215,6 +218,7 @@ function Datepicker_setValue(self, dt) {
 }
 
 function Datepicker_changed(self) {
+	
 	Datepicker_setDisplay(self, self.Nodes.Input.value)
 	if (self.InEditMode) {
 		self.SetError(null)

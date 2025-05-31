@@ -88,6 +88,9 @@ function Numberbox_construct(self, id) {
 	// set input description
 	self._setupDescription()
 
+
+	input.maxlength = input.getAttribute('maxlength') 
+
 	// set precission
 	var precision = self.Element.getAttribute('precision')
 	if (precision !== null && precision.trim() !== '') {
@@ -100,6 +103,10 @@ function Numberbox_construct(self, id) {
 		precision = 0
 		display.setAttribute('precision', precision)
 	}
+	var step = Math.pow(10, -precision);
+	display.setAttribute('step', step)
+	input.setAttribute('step', step)
+
 	input.precision = precision
 	self.formatterFixed.minimumFractionDigits = precision
 	self.formatterFixed.maximumFractionDigits = precision
@@ -113,10 +120,10 @@ function Numberbox_construct(self, id) {
 	// console.log(`init numberbox ${self.Id} value: ${input.value}, display: ${display.value}, lastvalue: ${lastvalue.value}`)
 
 
+
 	display.id = self.Id + '-display'
 	display.min = input.min
 	display.max = input.max
-	display.minlength = input.minlength
 	display.maxlength = input.maxlength
 	display.required = input.required
 	display.setAttribute('style', input.getAttribute('style') || '')
@@ -146,8 +153,25 @@ function Numberbox_construct(self, id) {
 		}
 	})
 
+	display.addEventListener("keydown", (e)=>{
+		if (display.type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+        	e.preventDefault();
+    	}
+	})
 
 
+	// batasi panjang entri data sesuai maxlength yang di set
+	var maxlegth = display.maxlength
+	if (maxlegth !== null && maxlegth.trim() !== '') {
+		maxlegth = parseInt(maxlegth.trim())
+		if (!isNaN(maxlegth) && maxlegth > 0) {
+			display.addEventListener('beforeinput', (e)=>{
+				if (e.target.value.length >= maxlegth && e.inputType !== "deleteContentBackward" && e.inputType !== "deleteContentForward") {
+					e.preventDefault()
+				}
+			})
+		}
+	}
 
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput

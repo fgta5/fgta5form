@@ -1,9 +1,11 @@
 .fgta5-checkbox {
   line-height: 1.1;
   display: grid;
-  grid-template-columns: 15px auto;
-  gap: 5px;
+  grid-template-columns: 0.9rem auto;
+  gap: 0.4rem;
   cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
 }
 
 .fgta5-checkbox[permanent-disabled="true"] {
@@ -23,8 +25,8 @@
  
   font: inherit;
   color: currentColor;
-  width: 15px;
-  height: 15px;
+  width: 0.93rem; /*15px*/
+  height: 0.93rem /*15px*/;
   border: 1px solid var(--fgta5-color-input-line);
   /* transform: translateY(2px);   */
 
@@ -50,11 +52,11 @@
 
 .fgta5-checkbox-input::before {
   content: "";
-  width: 9px;
-  height: 9px;
+  width: 0.56rem;
+  height: 0.56rem;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 9px 9px var(--fgta5-color-checkbox-checked);
+  box-shadow: inset 0.56rem 0.56rem var(--fgta5-color-checkbox-checked);
  
 }
 

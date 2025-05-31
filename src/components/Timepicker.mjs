@@ -85,7 +85,9 @@ function Timepicker_construct(self, id) {
 	button.insertBefore(input, button.firstChild)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
+	container.setAttribute('fgta5-component', 'Timepicker')
 
+	display.setAttribute('id', `${id}-display`)
 	display.setAttribute('type', 'text')
 	display.setAttribute('picker', 'time')
 	display.setAttribute('fgta5-component', 'Timepicker')
