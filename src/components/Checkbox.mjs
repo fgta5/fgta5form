@@ -14,9 +14,9 @@ export default class Checkbox extends Input {
 		Checkbox_construct(this, id)
 	}
 
-	get Value() { return this.Element.checked ? 1 : 0}
-	set Value(v) { 
-		this.Element.checked = v 
+	get Value() { return Checkbox_getValue(this) }
+	set Value(v) {
+		Checkbox_setValue(this, v)
 	}
 
 
@@ -34,7 +34,22 @@ export default class Checkbox extends Input {
 		Checkbox_SetEditingMode(this, ineditmode)
 	}
 
+	NewData(initialvalue) {
+		super.NewData(initialvalue)
+		Checkbox_NewData(this, initialvalue)
+	}
 
+	GetLastValue() {
+		return Checkbox_GetLastValue(this)
+	} 
+
+	IsChanged() { 
+		return Checkbox_IsChanged(this)
+	}
+
+	Reset() {
+		Checkbox_Reset(this)
+	}
 
 	_setLastValue(v) {
 		Checkbox_setLastValue(this, v)
@@ -48,25 +63,29 @@ function Checkbox_construct(self, id) {
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
 	const label = document.querySelector(`label[for="${id}"]`)
+	const checkboxlabel = document.createElement("label")
 
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.Label = label 
 	
-	input.classList.add('fgta5-checkbox-input')
+
+	// setup input awal component
 	input.parentNode.insertBefore(container, input)
+	input.classList.add('fgta5-checkbox-input')
+	
+	// setup checkbox label untuk menampung checkbox
+	checkboxlabel.classList.add('fgta5-checkbox')
+	checkboxlabel.appendChild(input)
+	checkboxlabel.appendChild(document.createTextNode(label.innerHTML))
 
-
-	var text = document.createTextNode(label.innerHTML)
-	var caption = document.createElement("label")
-
-	caption.classList.add('fgta5-checkbox')
-	caption.text = text
-
-	container.appendChild(caption)
+	// setup container
+	container.appendChild(checkboxlabel)
 	container.appendChild(lastvalue)
 	
-	caption.appendChild(input)
-	caption.appendChild(text)
-
 	
+	// ganti original label tag menjadi div 
+	// karena label di form harus mereferensi ke input
+	// sedangkan label di checkbox kita fungsikan sebagai text pada checkbox untuk di klik
 	var replLabel = document.createElement('div')
 	replLabel.innerHTML = "&nbsp";
 	replLabel.style.display = "inline-block"
@@ -74,19 +93,16 @@ function Checkbox_construct(self, id) {
 	label.parentNode.replaceChild(replLabel, label);
 
 
-	self._setLastValue(self.Value)
+	// inisialisasi last value
+	self._setLastValue(self.Element.checked)
 
 
+	// tambahkan event listener internal
 	input.addEventListener('change', (event) => {
-		if (self.GetLastValue() != self.Value) {
-			input.setAttribute('changed', 'true')
-		} else {
-			input.removeAttribute('changed')
-		}
+		Checkbox_checkedChanged(self)		
 	});
 
-	self.Nodes.Caption = caption
-	self.Nodes.Label = label 
+	
 }
 
 function Checkbox_getDisabled(self) {
@@ -139,6 +155,81 @@ function Checkbox_SetEditingMode(self, ineditmode) {
 }
 
 function Checkbox_setLastValue(self, v) {
-	// console.log(`Checkbox '${self.Id}' set last value from '${self.Nodes.LastValue.value}' to '${v}'`)
-	self.Nodes.LastValue.value = v
+	var lastvalue = 1
+	if (v==='off' || v==='0' || v===0 || v===false) {
+		lastvalue = 0
+	}
+	self.Nodes.LastValue.value = lastvalue
+}
+
+
+function Checkbox_checkedChanged(self) {
+	var input = self.Nodes.Input
+	input.value = input.checked ? 1 : 0
+	if (self.GetLastValue() != self.Value) {
+		input.setAttribute('changed', 'true')
+	} else {
+		input.removeAttribute('changed')
+	}
+}
+
+
+function Checkbox_IsChanged(self) {
+	var lastvalue = self.GetLastValue()
+	var currentvalue = self.Value
+	if (currentvalue!=lastvalue) {
+		console.log(`Checkbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
+		return true
+	} else {
+		return false
+	}
+}
+
+
+
+function Checkbox_getBoolValue(v) {
+	if (v===0||v==='0'||v===false||v===undefined) {
+		return false
+	} else {
+		return true
+	}
+}
+
+
+
+function Checkbox_getValue(self) {
+	return self.Element.checked
+}
+
+function Checkbox_setValue(self, v) {
+	var checked = Checkbox_getBoolValue(v)
+	self.Element.checked = checked
+
+	Checkbox_markChanged(self)
+}
+
+function Checkbox_GetLastValue(self) {
+	var lastvalue = self.Nodes.LastValue.value
+	return Checkbox_getBoolValue(lastvalue)
+}
+
+function Checkbox_Reset(self) {
+	var checked = self.GetLastValue()
+	self.Nodes.Input.checked = checked
+}
+
+
+function Checkbox_NewData(self, initialvalue) {
+	var checked = Checkbox_getBoolValue(initialvalue)
+	self.Nodes.Input.checked = checked
+	self._setLastValue(checked)
+}
+
+function Checkbox_markChanged(self) {
+	var input = self.Nodes.Input
+	if (self.Value!=self.GetLastValue()) {
+		input.setAttribute('changed', 'true')
+	} else {
+		input.removeAttribute('changed')
+	}
 }

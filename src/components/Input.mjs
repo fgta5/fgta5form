@@ -20,13 +20,13 @@ export default class Input extends Component {
 
 	#_form
 	get Form() { return this.#_form }
-	bindForm(form) {
-		this.#_form = form
-	}
+	bindForm(form) { this.#_form = form }
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
-	SetEditingMode(ineditmode) { this.#_ineditmode = ineditmode }
+	SetEditingMode(ineditmode) { 
+		this.#_ineditmode = ineditmode 
+	}
 	
 	NewData(initialvalue) {
 		Input_NewData(this, initialvalue)
@@ -97,6 +97,10 @@ export default class Input extends Component {
 	}
 
 
+
+	addEventListener = (evt, callback) => {
+		this.Listener.addEventListener(evt, callback)
+	}
 }
 
 function Input_construct(self, id) {
@@ -108,10 +112,11 @@ function Input_construct(self, id) {
 
 	container.classList.add('fgta5-entry-container')
 
+	self.InitialValue = '';
+
 	self.Element.getInputCaption = () => {
 		return self.Id;
 	}
-
 
 	self.Listener = new EventTarget()
 	self.Nodes = {
@@ -119,7 +124,6 @@ function Input_construct(self, id) {
 		Container: container,
 		LastValue: lastvalue,
 	}
-
 
 
 }
@@ -154,35 +158,36 @@ function Input_GetLastValue(self) {
 }
 
 function Input_NewData(self, initialvalue) {
-	if (initialvalue === undefined || initialvalue === null) {
-		initialvalue = ''
-	} else if (initialvalue instanceof Date) {
-		initialvalue = initialvalue.toISOString().split("T")[0]
-	} else if (typeof initialvalue !== 'string') {
-		initialvalue = String(initialvalue)
-	}
-	
-	// var initialvalue = ""
+	// if (initialvalue === undefined || initialvalue === null) {
+	// 	initialvalue = ''
+	// } else if (initialvalue instanceof Date) {
+	// 	initialvalue = initialvalue.toISOString().split("T")[0]
+	// } else if (typeof initialvalue !== 'string') {
+	// 	initialvalue = String(initialvalue)
+	// }
 	self.Value = initialvalue
-	self._setLastValue(self.Value)
+	self._setLastValue(self.Nodes.Input.value)
 	self.SetError(null)
 }
 
 function Input_AcceptChanges(self) {
-	self._setLastValue(self.Value)
+	self._setLastValue(self.Nodes.Input.value)
 	self.Nodes.Input.removeAttribute('changed')
 	self.SetError(null)
 }
 
 function Input_Reset(self) {
-	self.Value = self.GetLastValue()
+	self.Nodes.Input.value = self.Nodes.LastValue.value
 	self.Nodes.Input.removeAttribute('changed')
 	self.SetError(null)
 }
 
 function Input_IsChanged(self) {
-	if (self.GetLastValue() != self.Value) {
-		console.log(`Input '${self.Id}' is changed from '${self.GetLastValue()}' to '${self.Value}'`)
+	// bandingkan nilai last value dan input value
+	// bandingkan langsung dari nilai yang ada di element, jangan gunakan self.GetLastValue dan self.Value
+	// karena nilai dari properti self.Value dan method GetLastValue bisa di modif sesuai tipe component
+	if (self.Nodes.LastValue.value != self.Nodes.Input.value) {
+		console.log(`Input '${self.Id}' is changed from '${self.Nodes.LastValue.value}' to '${self.Nodes.Input.value}'`)
 		return true
 	} else {
 		return false
@@ -208,9 +213,9 @@ function Input_Validate(self) {
 			}
 
 
-			var valid = fnValidate(self.Value, fnParams)
+			var valid = fnValidate(self.Nodes.Input.value, fnParams)
 			if (!valid) {
-				var err = new Error( `Invalid value '${self.Value}' for '${self.Nodes.Input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
+				var err = new Error( `Invalid value '${self.Nodes.Input.value}' for '${self.Nodes.Input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
 				console.log(err.message);
 
 				var msg = fnMessage

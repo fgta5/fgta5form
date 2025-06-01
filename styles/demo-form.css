@@ -40,21 +40,21 @@
 
 
 
-.demo-input-field[field=obj_txt_nama] .fgta5-entry-container {
+.demo-input-field[field=obj_nama] .fgta5-entry-container {
 	width: 12.5rem;
 }
 
 
-.demo-input-field[field=obj_txt_alamat] {
+.demo-input-field[field=obj_alamat] {
 	flex-basis: 100%; /* definisikan flex-basis, apabila dalam satu baris hanya akan terdapat maximal 1 field */
 }
 
 
-.demo-input-field[field=obj_chk_nilai] > div[label] {
+.demo-input-field[field=obj_nilai] > div[label] {
 	width: 10px;
 }
 
-.demo-input-field[field=obj_num_nilai] .fgta5-entry-container {
+.demo-input-field[field=obj_nilai] .fgta5-entry-container {
 	width: 3.75rem;
 }
 

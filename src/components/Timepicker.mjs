@@ -14,7 +14,7 @@ const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
 /*
  * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
  */
-export default class Datepicker extends Input {
+export default class Timepicker extends Input {
 	constructor(id) {
 		super(id)
 		Timepicker_construct(this, id)
@@ -55,7 +55,20 @@ export default class Datepicker extends Input {
 			initialvalue = '00:00'
 		}
 		super.NewData(initialvalue)
+		Timepicker_Newdata(this, initialvalue)
 	}
+
+	AcceptChanges() {
+		super.AcceptChanges()
+		Timepicker_AcceptChanges(this)
+		
+	}
+
+	Reset() {
+		super.Reset()
+		Timepicker_Reset(this)
+	}
+		
 }
 
 
@@ -177,13 +190,42 @@ function Timepicker_SetEditingMode(self, ineditmode) {
 	}
 }
 
+
+function Timepicker_Newdata(self, initialvalue) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+
+function Timepicker_AcceptChanges(self) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+function Timepicker_Reset(self) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+
 function Timepicker_changed(self) {
 	Timepicker_setDisplay(self, self.Nodes.Input.value)
+	Timepicker_markChanged(self)
 	if (self.InEditMode) {
 		self.SetError(null)
 		self.Validate()
 	}
 }
+
+
+function Timepicker_markChanged(self) {
+	var display = self.Nodes.Display
+	if (self.Value!=self.GetLastValue()) {
+		display.setAttribute('changed', 'true')
+	} else {
+		display.removeAttribute('changed')
+	}
+}
+
+
+
 
 function Timepicker_setValue(self, dt) {
 	Timepicker_setDisplay(self, dt)

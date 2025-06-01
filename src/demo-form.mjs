@@ -10,17 +10,22 @@ const btn_testdised = new $fgta5.Button('btn_testdised')
 const btn_clearerror = new $fgta5.Button('btn_clearerror')
 
 const form = new $fgta5.Form('myform');
-// const obj_txt_nama = form.Inputs.obj_txt_nama
-// const obj_num_nilai = form.Inputs.obj_num_nilai
-// const obj_dt_tanggal = form.Inputs.obj_dt_tanggal
-const obj_cbo_kota = form.Inputs.obj_cbo_kota
+const obj_nama = form.Inputs.obj_nama
+const obj_disabled = form.Inputs.obj_disabled
+const obj_alamat = form.Inputs.obj_alamat
+const obj_nilai = form.Inputs.obj_nilai
+const obj_tanggal = form.Inputs.obj_tanggal
+const obj_kota = form.Inputs.obj_kota
 
 
-window.test = {
-	//obj_txt_nama: obj_txt_nama,
-	// obj_num_nilai: obj_num_nilai,
-	// obj_dt_tanggal: obj_dt_tanggal
-}
+// untuk keperluan test agar bisa diakses langsung dari console
+window.form = form
+window.obj_nama = obj_nama
+window.obj_nilai = obj_nilai
+window.obj_disabled = obj_disabled
+window.obj_alamat = obj_alamat
+window.obj_tanggal = obj_tanggal
+window.obj_kota = obj_kota
 
 
 
@@ -45,24 +50,39 @@ async function main(self, args) {
 	btn_testdised.addEventListener('click', (evt) => { btn_testdised_click(self, evt) });
 	btn_clearerror.addEventListener('click', (evt) => { btn_clearerror_click(self, evt) });
 
-
-	// obj_txt_nama.addEventListener('change', (evt) => {
-	// 	console.log('obj_txt_nama changed', evt)
-	// })
-
-	// obj_num_nilai.addEventListener('change', (evt) => {
-	// 	console.log('obj_num_nilai changed', evt)
-	// })
-
-
 	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
 	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
 	form.Render()
 
+	if (obj_nama!=null) {
+		obj_nama.addEventListener('input', (evt)=>{
+			// console.log('input', evt.testData)
+		})
 
-	obj_cbo_kota.addEventListener('change', (evt)=>{
-		console.log(evt.detail)
-	})
+		obj_nama.addEventListener('keydown', (evt)=>{
+			console.log(evt)
+			if (evt.key=='a') {
+				console.log('coba di prevent default')
+				evt.preventDefault()
+			}
+		})
+	}
+
+
+
+	if (obj_tanggal!=null) {
+		obj_tanggal.addEventListener('change', (evt)=>{
+			console.log('Tanggal berubah')
+			console.log(evt.detail)
+		})
+	}
+	
+
+	if (obj_kota!=null) {
+		obj_kota.addEventListener('change', (evt)=>{
+			console.log(evt.detail)
+		})
+	}
 
 }
 
@@ -123,13 +143,13 @@ async function btn_new_click(self, evt) {
 
 	if (newdata) {
 		form.NewData({
-			nama: "Nama Baru",   // textbox
-			nilai: 2500,  // numberbox
-			kota: {value:"JKT", display:"Jakarta"},  // combobox
-			tanggal: new Date(), // datebox
-			jam: '16:00',
-			aktif: true, // checkbox
-			alamat: "Alamat Baru", // textarea
+			// nama: "Nama Baru",   // textbox
+			nilai: 60,  // numberbox
+			// isdisabled : true,
+			// kota: null, //{value:"JKT", text:"Jakarta"},  // combobox
+			// tanggal: new Date(), // datebox
+			// jam: '11:00',
+			// alamat: "Alamat Baru", // textarea
 		})
 		form.Lock(false)
 	}

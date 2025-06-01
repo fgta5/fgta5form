@@ -1,5 +1,11 @@
 import Input from "./Input.mjs"
 
+const InputEvent = (data)=>{ return new CustomEvent('input', data) }
+const BlurEvent = (data)=>{ return new CustomEvent('blur', data) }
+const KeydownEvent = (data)=> { return new KeyboardEvent('keydown', data) }
+
+
+
 
 export default class Textbox extends Input {
 
@@ -8,13 +14,8 @@ export default class Textbox extends Input {
 		Textbox_construct(this, id)
 	}
 
-
-	get Value() { 
-		return Textbox_GetValue(this) 
-	}
-	set Value(v) { this.Element.value = v }
-
-
+	get Value() { return Textbox_GetValue(this) }
+	set Value(v) { Textbox_SetValue(this, v) }
 
 
 	#_ineditmode = true
@@ -24,6 +25,21 @@ export default class Textbox extends Input {
 		Textbox_SetEditingMode(this, ineditmode)
 	}
 
+	NewData(initialvalue) {
+		super.NewData(initialvalue)
+	}
+
+	GetLastValue() {
+		return Textbox_GetLastValue(this)
+	} 
+
+	IsChanged() { 
+		return Textbox_IsChanged(this)
+	}
+
+	addEventListener = (evt, callback) => {
+		this.Listener.addEventListener(evt, callback)
+	}
 }
 
 
@@ -35,25 +51,36 @@ function Textbox_construct(self, id) {
 	const wrapinput = document.createElement('div')
 	const label = document.querySelector(`label[for="${id}"]`)
 	
-	input.classList.add('fgta5-entry-input')
+
+	// setup container, (harus di awal seblum yang lain-lain)
+	// diperlukan untuk menampung semua element yang akan ditampilkan
 	input.parentNode.insertBefore(container, input)
 
-	wrapinput.classList.add('fgta5-entry-input-wrapper')
 
+	// tambahkan elemen-element ke container
+	// penambahakn container ke body document pada saat Input_construct di parent class Input
 	wrapinput.appendChild(input)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
 
 
-	if (input.style.backgroundColor !== '') {
-		wrapinput.style.backgroundColor = input.style.backgroundColor
-		input.style.backgroundColor = 'transparent'
-	}
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
 
 
-	var charCase = self.Element.getAttribute('character-case') 
-	if (charCase !== null && charCase.trim() !== '') {
-		input.charCase = charCase.trim().toLowerCase()
+	// setup container
+	container.setAttribute('fgta5-component', 'Textbox')
+	
+
+	// setup wrapper
+	wrapinput.classList.add('fgta5-entry-input-wrapper')
+
+
+	// setup input
+	input.classList.add('fgta5-entry-input')
+	input.getInputCaption = () => {
+		return label.innerHTML
 	}
 
 	// set input value
@@ -63,41 +90,98 @@ function Textbox_construct(self, id) {
 	self._setupDescription()
 
 	
-	input.addEventListener("input", function(event) {
+	// aditional property setup
+	// background
+	if (input.style.backgroundColor !== '') {
+		wrapinput.style.backgroundColor = input.style.backgroundColor
+		input.style.backgroundColor = 'transparent'
+	}
+
+	// character casing
+	var charCase = input.getAttribute('character-case') 
+	if (charCase !== null && charCase.trim() !== '') {
+		input.charCase = charCase.trim().toLowerCase()
+	}
+
+
+	// internal event listener
+	input.addEventListener("input", (evt)=>{
 		if (self.GetLastValue() != self.Value) {
 			input.setAttribute('changed', 'true')
 		} else {
 			input.removeAttribute('changed')
 		}
-	});
 
-	input.addEventListener('blur', function(e) {
-		Textbox_blur(self, e)
-		
+		self.Listener.dispatchEvent(InputEvent({}))
 	})
 
+	input.addEventListener('blur', (evt)=> {
+		Textbox_blur(self, evt)
+		self.Listener.dispatchEvent(BlurEvent({}))
+	})	
 
-	// tambahkan referensi elemen ke Nodes
-	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
+	input.addEventListener('keydown', (evt)=>{
+		const e = KeydownEvent({
+			cancelable: true,
+			key: evt.key,
+			code: evt.code,
+			ctrlKey: evt.ctrlKey,
+			altKey: evt.altKey,
+			shiftKey: evt.shiftKey,
+			srcElement: evt.srcElement,
+			target: evt.target
+		})
+		self.Listener.dispatchEvent(e)
 
-	self.Nodes.Input.getInputCaption = () => {
-		return label.innerHTML
+		if (e.defaultPrevented) {
+			evt.preventDefault()
+		}
+	})
+	
+}
+
+function Textbox_getValueCased(self, v) {
+	var value = v
+	var input = self.Nodes.Input
+	if (input.charCase === 'uppercase') {
+		value = v.toUpperCase()
+	} else if (input.charCase === 'lowercase') {
+		value = v.toLowerCase()
 	}
+	return value
 }
 
 
 function Textbox_GetValue(self) {
 	var input = self.Nodes.Input
-	var value = input.value
-	if (input.charCase === 'uppercase') {
-		value = value.toUpperCase()
-	} else if (input.charCase === 'lowercase') {
-		value = value.toLowerCase()
-	}
+	var value = Textbox_getValueCased(self, input.value)
 	return value
 }
 
+function Textbox_SetValue(self, v) {
+	if (v===null || v===undefined) {
+		v=''
+	}
+	self.Element.value = Textbox_getValueCased(self, v)
+}
+
+
+
+function Textbox_IsChanged(self) {
+	var lastvalue = self.GetLastValue()
+	var currentvalue = self.Value
+	if (currentvalue!=lastvalue) {
+		console.log(`Textbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
+		return true
+	} else {
+		return false
+	}
+}
+
+function Textbox_GetLastValue(self) {
+	var lastvalue = self.Nodes.LastValue.value
+	return Textbox_getValueCased(self, lastvalue)
+}
 
 function Textbox_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
@@ -111,6 +195,7 @@ function Textbox_SetEditingMode(self, ineditmode) {
 		self.SetError(null)
 	}
 }
+
 
 function Textbox_blur(self, e) {
 	if (self.InEditMode) {

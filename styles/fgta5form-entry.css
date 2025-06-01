@@ -61,6 +61,13 @@
 	transition: border-color 0.3s ease, background-color 0.3s linear; /* Animasi transisi */
 }
 
+
+.fgta5-entry-display::placeholder,
+.fgta5-entry-input::placeholder {
+	text-transform: lowercase;
+	font-style: italic;
+}
+
 .fgta5-entry-display[disabled],
 .fgta5-entry-input[disabled] {
 	background-color: var(--fgta5-color-input-disabled) !important;
@@ -100,12 +107,18 @@
 }
 
 .fgta5-entry-display[fgta5-component="Numberbox"] {
-    /* -moz-appearance: textfield; */
 	text-align: right;
 }
 
-.fgta5-entry-display[fgta5-component="Combobox"] {
+.fgta5-entry-display[fgta5-component="Datepicker"] {
+	padding-right: 1.875rem;
+}
 
+.fgta5-entry-display[fgta5-component="Timepicker"] {
+	padding-right: 1.875rem;
+}
+
+.fgta5-entry-display[fgta5-component="Combobox"] {
 	padding-right: 1.875rem;
 }
 
@@ -130,36 +143,33 @@
 }
 
 
+.fgta5-entry-button-combobox, 
 .fgta5-entry-button-datepicker {
 	background-color: transparent;
-	position: relative;
+	position: absolute;
 	border: 0;
 	cursor: pointer;
+	height: 100%;
 	width: 1.875rem; /* 30px; */
-	max-width: 1.875rem;
 	margin-top: 0px;
 	margin-bottom: 0px;	
-	margin-right: -1.875rem;
-	right: 1.875rem;
+	right: 0;
 	outline: 0;
 	padding: 0;
 }
 
-.fgta5-entry-button-combobox { 
+/* .fgta5-entry-button-combobox { 
+	background-color: transparent;
 	cursor: pointer;
 	position: absolute;
 	right: 0;
-	width: 1.875rem; /* 30px; */
-		outline: 0;
+	width: 1.875rem; 30px; 
+	outline: 0;
 	padding: 0;
 	border: 0;
 	
-}
-	/* width: 20px;
-	max-width: 20px;
-	margin-right: -20px;
-	right: 20px;
-}  */
+} */
+
 
 .fgta5-entry-button-combobox[editmode="false"] {
 	cursor: default;
@@ -174,7 +184,6 @@
     display: none;
 }
 
-.fgta5-entry-button-combobox,
 .fgta5-entry-button-datepicker > svg {
 	pointer-events: none;
 	width: 0.75rem;
@@ -192,6 +201,8 @@
     opacity: 0;
 	padding: 0;
 	margin: 0;
+	border: 0;
+	outline: 0;
 }
 
 
@@ -348,4 +359,14 @@
 
 .fgta5-combobox-dialog tbody td:hover {
 	background-color: antiquewhite;
+}
+
+
+.fgta-combobox-option-row td {
+	border-bottom: 1px dotted #ccc;
+}
+
+
+.fgta-combobox-option-row[selected] td {
+	font-weight: bold;
 }

@@ -13,6 +13,10 @@ export default class Button extends Component {
 		Button_setDisabled(this, v)
 	}
 
+	addEventListener(event, callback) {
+		this.Element.addEventListener(event, callback)
+	}
+
 }
 
 function Construct(self, id) {

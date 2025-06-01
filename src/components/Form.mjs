@@ -51,6 +51,9 @@ export default class Form extends Component {
 		return Form_GetData(this)
 	}
 
+	addEventListener(event, callback) {
+		this.Element.addEventListener(event, callback)
+	}
 
 	#readAttributes() {
 		var locked = this.Element.getAttribute('locked') 
@@ -75,6 +78,7 @@ function Construct(self, id) {
  	self.Element = formEl
 	self.Inputs = {}
 
+	self.Element.setAttribute('novalidate', '')
 	self.Element.addEventListener('submit', (event) => {
 		event.preventDefault();
 	});
@@ -161,11 +165,26 @@ function Form_Reset(self) {
 
 
 function Form_NewData(self, data) {
+	data = data!=null ? data : {} 
+
 	for (var name in self.Inputs) {
+		
 		var obj = self.Inputs[name]
 		var bindingdata = obj.GetBindingData()
 		var initialvalue = data[bindingdata]
-		obj.NewData(initialvalue)
+
+		console.log(`set data ${name} => ${initialvalue}`)
+		if (obj instanceof Combobox) {
+			var initialdata = (initialvalue!=null) ? initialvalue : {value:'',text:''}
+			obj.NewData({
+				value: initialdata.value,
+				text: initialdata.text
+			})
+		} else if (obj instanceof Checkbox) { 
+			obj.NewData(initialvalue)
+		} else {
+			obj.NewData(initialvalue)
+		}
 	}
 }
 

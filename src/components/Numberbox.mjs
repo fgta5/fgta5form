@@ -14,7 +14,7 @@ export default class Numberbox extends Input {
 		Numberbox_construct(this, id)
 	}
 
-	get Value() { return this.Element.value }
+	get Value() { return Numberbox_getValue(this) }
 	set Value(v) { 
 		this.Element.value = v 
 		Numberbox_setValue(this, v)
@@ -31,6 +31,12 @@ export default class Numberbox extends Input {
 	SetEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
 		Numberbox_SetEditingMode(this, ineditmode)
+	}
+
+
+	NewData(initialvalue) {
+		super.NewData(initialvalue)
+		Numberbox_NewData(this, initialvalue)
 	}
 
 	AcceptChanges() {
@@ -185,9 +191,17 @@ function Numberbox_construct(self, id) {
 
 }
 
-function Numberbox_setValue(self, v) {
+function Numberbox_getValue(self) {
 	var num = Number(self.Nodes.Input.value)
-	var formattedValue = self.formatterFixed.format(num)
+	return num
+}
+
+
+function Numberbox_setValue(self, v) {
+	if (isNaN(v)) {
+		v = Number(v) // v buka Angka, ubah dulu ke angka
+	}
+	var formattedValue = self.formatterFixed.format(v)
 	if (self.Nodes.Display.type === 'text') {
 		self.Nodes.Display.value = formattedValue
 	} else {
@@ -255,6 +269,9 @@ function Numberbox_displayBlur(self, e) {
 }
 
 
+function Numberbox_NewData(self, initialvalue) {
+	self.Nodes.Display.removeAttribute('changed')
+}
 
 
 function Numberbox_AcceptChanges(self) {

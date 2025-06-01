@@ -22,15 +22,9 @@ export default class Datepicker extends Input {
 		Datepicker_construct(this, id)
 	}
 
+	get Value() { return Datepicker_getValue(this) }
+	set Value(v) { Datepicker_setValue(this, v) }
 
-	get Value() { return this.Element.value }
-	set Value(v) {
-		if (v instanceof Date) {
-			v = v.toISOString().split("T")[0]
-		}
-		this.Element.value = v
-		Datepicker_setValue(this, v)
-	}
 
 	get Min() { 
 		if (this.Element.min!="") {
@@ -87,10 +81,19 @@ export default class Datepicker extends Input {
 
 
 	NewData(initialvalue) {
-		if (initialvalue=='' || initialvalue==null) {
-			initialvalue = new Date()
-		}
 		super.NewData(initialvalue)
+		Datepicker_Newdata(this, initialvalue)
+	}
+
+	AcceptChanges() {
+		super.AcceptChanges()
+		Datepicker_AcceptChanges(this)
+		
+	}
+
+	Reset() {
+		super.Reset()
+		Datepicker_Reset(this)
 	}
 	
 
@@ -105,6 +108,13 @@ function Datepicker_construct(self, id) {
 	const button = document.createElement('button')
 	const label = document.querySelector(`label[for="${id}"]`)
 
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
+	self.Nodes.Display = display
+	self.Nodes.Button = button
+
+	// setup awal Component
 	input.parentNode.insertBefore(container, input)
 	
 
@@ -149,7 +159,6 @@ function Datepicker_construct(self, id) {
 	input.classList.add('fgta5-entry-input-datepicker')
 	
 	input.addEventListener('change', (e)=>{
-		console.log('date changed')
 		Datepicker_changed(self)
 	})
 	
@@ -163,11 +172,6 @@ function Datepicker_construct(self, id) {
 	// set input description
 	self._setupDescription()
 
-	// tambahkan referensi elemen ke Nodes
-	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
-	self.Nodes.Display = display
-	self.Nodes.Button = button
 
 	if (input.value === null || input.value === '') {
 		self.Value = new Date()
@@ -176,23 +180,24 @@ function Datepicker_construct(self, id) {
 	}
 	self._setLastValue(input.value)
 
-	self.Nodes.Input.getInputCaption = () => {
-		return label.innerHTML
-	}
+
 }
 
 
 
 function Datepicker_setDisabled(self, v) {
-	if (v) {
-		self.Nodes.Display.disabled = true
-		self.Nodes.InputWrapper.setAttribute('disabled', 'true')
-		self.Nodes.Button.setAttribute('disabled', 'true')
-	} else {
-		self.Nodes.Display.disabled = false
-		self.Nodes.InputWrapper.removeAttribute('disabled')
-		self.Nodes.Button.removeAttribute('disabled')
+	var display = self.Nodes.Display
+	var inputwrap = self.Nodes.InputWrapper
+	var button = self.Nodes.Button
 
+	if (v) {
+		display.disabled = true
+		inputwrap.setAttribute('disabled', 'true')
+		button.setAttribute('disabled', 'true')
+	} else {
+		display.disabled = false
+		inputwrap.removeAttribute('disabled')
+		button.removeAttribute('disabled')
 	}
 }
 
@@ -212,16 +217,59 @@ function Datepicker_SetEditingMode(self, ineditmode) {
 	}
 }
 
+
+function Datepicker_getValue(self) {
+	return Datepicker_getIsoDateValue(self.Nodes.Input.value) 
+}
+
+
 function Datepicker_setValue(self, dt) {
 	Datepicker_setDisplay(self, dt)
 }
 
+
+function Datepicker_Newdata(self, initialvalue) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+
+function Datepicker_AcceptChanges(self) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+function Datepicker_Reset(self) {
+	self.Nodes.Display.removeAttribute('changed')
+}
+
 function Datepicker_changed(self) {
-	
 	Datepicker_setDisplay(self, self.Nodes.Input.value)
+	Datepicker_markChanged(self)
 	if (self.InEditMode) {
 		self.SetError(null)
 		self.Validate()
+	}
+
+	// trigger object change
+}
+
+
+function Datepicker_getIsoDateValue(v) {
+	var dt
+	if (typeof v==='string') {
+		dt = new Date(v)
+	} else if (v instanceof Date) {
+		dt = v
+	} 
+	return dt.toISOString().split("T")[0]
+}
+
+
+function Datepicker_markChanged(self) {
+	var display = self.Nodes.Display
+	if (self.Value!=self.GetLastValue()) {
+		display.setAttribute('changed', 'true')
+	} else {
+		display.removeAttribute('changed')
 	}
 }
 
@@ -237,10 +285,11 @@ function Datepicker_setDisplay(self, dt) {
 
 
 function Datepicker_SetError(self, msg) {
+	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
-		self.Nodes.Display.setAttribute('invalid', 'true')
+		display.setAttribute('invalid', 'true')
 	} else {
-		self.Nodes.Display.removeAttribute('invalid')
+		display.removeAttribute('invalid')
 	}
 }
 

@@ -1,8 +1,6 @@
 import Input from "./Input.mjs"
 
-const events = {
-	change: new CustomEvent('change')
-}
+
 
 const icon_cbo_button = `<?xml version="1.0" encoding="UTF-8"?>
 <svg transform="translate(0 3)" width="12" height="12" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -17,12 +15,30 @@ const icon_cbo_close = `<?xml version="1.0" encoding="UTF-8"?>
 </svg>`
 
 
+const ChangeEvent = (detail)=>{ return new CustomEvent('change', {detail: detail}) }
+
 export default class Combobox extends Input {
 
 	constructor(id) {
 		super(id)
 		Combobox_construct(this, id)
 	}
+
+	get Value() {
+		var v = this.Element.value=='' ? null : this.Element.value
+		return v
+		
+	}
+	set Value(v) { 
+		v = v==null ? '' : v
+		this.Element.value = v 
+	}
+
+
+	get Text() { return this.Nodes.Display.value}
+	set Text(v) {
+		this.Nodes.Display.value = v
+	} 
 
 	get Disabled() { return this.Element.disabled }
 	set Disabled(v) { 
@@ -36,6 +52,30 @@ export default class Combobox extends Input {
 		this.#_ineditmode = ineditmode
 		Combobox_SetEditingMode(this, ineditmode)
 	}
+
+	NewData(initialdata) {
+		Combobox_NewData(this, initialdata)
+	}
+
+	AcceptChanges() {
+		super.AcceptChanges()
+		Combobox_AcceptChanges(this)
+	}
+	
+	Reset() {
+		super.Reset()
+		Combobox_Reset(this)
+	}
+
+	_setLastValue(v, t) {
+		super._setLastValue(v)
+		Combobox_setLastValue(this, v, t)
+	}
+
+	GetLastText() {
+		return this.Nodes.LastText.value
+	} 
+
 
 	addEventListener = (evt, callback) => {
 		if (['change'].includes(evt)) {
@@ -60,18 +100,32 @@ function Combobox_construct(self, id) {
 	const label = document.querySelector(`label[for="${id}"]`)
 	const datalist = input.parentNode.querySelector(`datalist[for="${id}"]`)
 	const dialog = document.createElement('dialog')
+	const lasttext = document.createElement('input')
+
 
 	// setup container, (harus di awal seblum yang lain-lain)
 	// diperlukan untuk menampung semua element yang akan ditampilkan
 	input.parentNode.insertBefore(container, input)
 
-	// tambahkan elemen-element
+
+	// tambahkan elemen-element ke container
+	// penambahakn container ke body document pada saat Input_construct di parent class Input
 	wrapinput.appendChild(input)
 	wrapinput.appendChild(display)
 	wrapinput.appendChild(button)
 	container.appendChild(wrapinput)
 	container.appendChild(lastvalue)
-	document.body.appendChild(dialog)
+	container.appendChild(lasttext)
+	container.appendChild(dialog) 
+
+
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
+	self.Nodes.Display = display
+	self.Nodes.Button = button
+	self.Nodes.Dialog = dialog
+	self.Nodes.LastText = lasttext
 
 
 	// setup container
@@ -94,6 +148,7 @@ function Combobox_construct(self, id) {
 	display.setAttribute('type', 'text')
 	display.setAttribute('readonly', 'true')
 	display.setAttribute('fgta5-component', 'Combobox')
+	display.setAttribute('placeholder', input.getAttribute('placeholder'))
 	display.required = input.required
 
 	// setup button
@@ -103,6 +158,9 @@ function Combobox_construct(self, id) {
 		Combobox_buttonClick(self, e)
 	})
 
+
+	// setup lasttext
+	lasttext.setAttribute('type', 'hidden')
 
 	// setup label
 	label.setAttribute('for', display.id)
@@ -123,7 +181,14 @@ function Combobox_construct(self, id) {
 	// datalist
 	if (datalist!=null) {
 		datalist.remove()
-		Combobox_createStaticOptions(self, dialog, datalist)
+		var def = Combobox_createStaticOptions(self, dialog, datalist)
+		if (def!=null) {
+			input.value = def.value
+			display.value = def.text
+		}
+	} else {
+		input.value = ''
+		display.value = ''
 	}
 
 	// set input description
@@ -131,15 +196,51 @@ function Combobox_construct(self, id) {
 
 
 
-	// tambahkan referensi elemen ke Nodes
-	self.Nodes.InputWrapper = wrapinput
-	self.Nodes.Label = label 
-	self.Nodes.Display = display
-	self.Nodes.Button = button
-	self.Nodes.Dialog = dialog
+
+
+
+	// set last value
+	self._setLastValue(input.value, display.value)
+
+	self.Nodes.Input.getInputCaption = () => {
+		return label.innerHTML
+	}
 	
 }
 
+
+function Combobox_NewData(self, initialdata) {
+	if (initialdata!=null) {
+		self.Value = initialdata.value
+		self.Text = initialdata.text
+	} else {
+		self.Value = ''
+		self.Text = ''
+	}
+	self.Nodes.Display.removeAttribute('changed')
+
+	// untuk set value ambil langsung nilainya dari value element,
+	// karena self.Value akan mengembalikan null saat self.Value diisi '' (string kosong)
+	self._setLastValue(self.Nodes.Input.value, self.Text)
+	self.SetError(null)
+
+}
+
+function Combobox_AcceptChanges(self) {
+	self.Nodes.Display.removeAttribute('changed')
+	self._setLastValue(self.Value, self.Text)
+}
+
+function Combobox_Reset(self) {
+	self.Value = self.GetLastValue()
+	self.Text = self.GetLastText()
+	self.Nodes.Display.removeAttribute('changed')
+}
+
+function Combobox_setLastValue(self, v, t) {
+	self.Nodes.LastValue.value = v
+	self.Nodes.LastText.value = t
+}
 
 function Combobox_setDisabled(self, v) {
 	if (v) {
@@ -156,6 +257,20 @@ function Combobox_buttonClick(self, e) {
 	if (editmode!=="true") {
 		return
 	}
+
+
+	// kalau ada sebelumnya yang dipilih, clear dulu
+	var prevselected = self.Nodes.Dialog.querySelector(`table tr[selected]`)
+	if (prevselected != null) {
+		prevselected.removeAttribute('selected')
+	}
+
+	// set kembali baris yang sedang dipilih saat ini
+	var hl = self.Nodes.Dialog.querySelector(`table tr[value="${self.Value}"]`)
+	if (hl != null) {
+		hl.setAttribute('selected', '')
+	}
+
 
 	self.Nodes.Dialog.showModal()
 	self.Nodes.Dialog.setAttribute('showed', 'true')
@@ -197,18 +312,30 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 	var thead = dialog.getElementsByTagName('thead')[0]
 	var tbody = dialog.getElementsByTagName('tbody')[0]
 	var tfoot = dialog.getElementsByTagName('tfoot')[0]
-
+	var defaultOption = null
 	
 	thead.style.display='none'
 	tfoot.style.display='none'
 
 	for (let option of options) {
-		let value = option.value
 		let text = option.textContent || option.innerText
+		let value = (option.value==null || option.value=='') ? text : option.value
+
+		var def = option.getAttribute('default')
+		if (def!=null) {
+			defaultOption = {
+				value: value,
+				text: text
+			}
+		}
+
 
 		var tr = document.createElement('tr')
 		var td = document.createElement('td')
-		
+
+		tr.classList.add('fgta-combobox-option-row')
+		tr.setAttribute('value', value)
+
 		td.setAttribute('option', '')
 		td.setAttribute('value', value)
 		
@@ -220,20 +347,12 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 		td.addEventListener('click', (e)=>{
 			self.Nodes.Input.value = value
 			self.Nodes.Display.value = text
-
-			// trigger event
-			let change = new CustomEvent('change', {
-				detail: {value: value, text: text}
-			})
-			self.Listener.dispatchEvent(change)
-
-			// tutup
-			self.Nodes.Dialog.removeAttribute('showed')
-			setTimeout(() => {
-				self.Nodes.Dialog.close()
-			}, 200);
+			Combobox_userSelectValue(self, value, text)
 		})
 	}
+
+
+	return defaultOption
 
 }
 
@@ -262,4 +381,29 @@ function Combobox_createDialog(dialog) {
 	table.appendChild(tfoot)
 	table.appendChild(thead)
 
+}
+
+function Combobox_userSelectValue(self, value, text, data) {
+	// trigger event
+	let change = new CustomEvent('change', {
+		detail: {value: value, text: text, data:data}
+	})
+	self.Listener.dispatchEvent(change)
+
+	Combobox_markChanged(self)
+
+	// tutup
+	self.Nodes.Dialog.removeAttribute('showed')
+	setTimeout(() => {
+		self.Nodes.Dialog.close()
+	}, 200);
+}
+
+function Combobox_markChanged(self) {
+	var display = self.Nodes.Display
+	if (self.Value!=self.GetLastValue()) {
+		display.setAttribute('changed', 'true')
+	} else {
+		display.removeAttribute('changed')
+	}
 }
