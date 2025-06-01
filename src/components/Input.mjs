@@ -154,6 +154,7 @@ function Input_setLastValue(self, v) {
 }
 
 function Input_GetLastValue(self) {
+	console.log('Input_GetLastValue', self.Nodes.LastValue.value)
 	return self.Nodes.LastValue.value
 }
 
@@ -165,12 +166,9 @@ function Input_NewData(self, initialvalue) {
 	// } else if (typeof initialvalue !== 'string') {
 	// 	initialvalue = String(initialvalue)
 	// }
-	self.Value = initialvalue
 
-	console.log('initial value', initialvalue)
-	console.log('set last value', self.Nodes.Input.value)
-	self._setLastValue(self.Nodes.Input.value)
-	self.SetError(null)
+	self.Value = initialvalue
+	self.AcceptChanges()
 }
 
 function Input_AcceptChanges(self) {
@@ -181,8 +179,7 @@ function Input_AcceptChanges(self) {
 
 function Input_Reset(self) {
 	self.Nodes.Input.value = self.Nodes.LastValue.value
-	self.Nodes.Input.removeAttribute('changed')
-	self.SetError(null)
+	self.AcceptChanges()
 }
 
 function Input_IsChanged(self) {

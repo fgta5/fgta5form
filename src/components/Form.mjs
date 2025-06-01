@@ -173,7 +173,6 @@ function Form_NewData(self, data) {
 		var bindingdata = obj.GetBindingData()
 		var initialvalue = data[bindingdata]
 
-		console.log(`set data ${name} => ${initialvalue}`)
 		if (obj instanceof Combobox) {
 			var initialdata = (initialvalue!=null) ? initialvalue : {value:'',text:''}
 			obj.NewData({

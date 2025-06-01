@@ -1,6 +1,9 @@
 import Input from "./Input.mjs"
 
 
+const ChangeEvent = (data)=>{ return new CustomEvent('change', data) }
+
+
 export default class Numberbox extends Input {
 
 	constructor(id) {
@@ -60,7 +63,6 @@ export default class Numberbox extends Input {
 
 
 	GetLastValue() {
-		console.log('class: get last value')
 		return Numberbox_GetLastValue(this)
 	} 
 
@@ -214,8 +216,8 @@ function Numberbox_getValue(self) {
 
 
 function Numberbox_setValue(self, v) {
-	self.Element.value = v 
-	
+	self.Nodes.Input.value = v
+
 	if (isNaN(v)) {
 		v = Number(v) // v buka Angka, ubah dulu ke angka
 	}
@@ -274,17 +276,20 @@ function Numberbox_displayBlur(self, e) {
 	if (self.InEditMode) {
 		var num = Number(display.value)
 		if (isNaN(num)) {
+			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:true}}))
 			self.SetError('Invalid number')
 		} else {
 			self.SetError(null)
-
+			
 			input.value = num
-			self.Validate()
-
+			var invalid = !self.Validate()
 			var formattedValue = self.formatterFixed.format(num)
 			display.setAttribute('type', 'text')
 			display.value = formattedValue
+
+			self.Listener.dispatchEvent(ChangeEvent({detail: {invalid:invalid, value:num, formatted:formattedValue}}))
 		}
+
 	}
 }
 
@@ -308,9 +313,9 @@ function Numberbox_SetError(self, msg) {
 
 
 function Numberbox_markChanged(self) {
-	console.log('mark change')
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
+	
 	if (self.Value!=self.GetLastValue()) {
 		input.setAttribute('changed', 'true')
 		display.setAttribute('changed', 'true')
@@ -321,7 +326,6 @@ function Numberbox_markChanged(self) {
 }
 
 function Numberbox_GetLastValue(self) {
-	console.log('lastvalue', self.Nodes.LastValue.value)
 	var lastvalue = Number(self.Nodes.LastValue.value)
 	return lastvalue
 }

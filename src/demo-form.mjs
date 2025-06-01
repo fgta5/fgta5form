@@ -78,7 +78,9 @@ async function main(self, args) {
 
 
 	if (obj_nilai!=null) {
-
+		obj_nilai.addEventListener('change', (evt)=>{
+			console.log(evt.detail)
+		})
 
 	}
 
