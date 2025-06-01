@@ -66,6 +66,18 @@ async function main(self, args) {
 
 
 
+	if (obj_disabled!=null) {
+		obj_disabled.addEventListener('checked', (evt)=>{
+			console.log('checked')
+		})
+
+		obj_disabled.addEventListener('unchecked', (evt)=>{
+			console.log('unchecked')
+		})
+	}
+
+
+
 	if (obj_tanggal!=null) {
 		obj_tanggal.addEventListener('change', (evt)=>{
 			console.log('Tanggal berubah')

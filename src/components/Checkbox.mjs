@@ -71,6 +71,7 @@ function Checkbox_construct(self, id) {
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.Label = label 
 	
+	
 
 	// setup input awal component
 	input.parentNode.insertBefore(container, input)
@@ -121,39 +122,39 @@ function Checkbox_getDisabled(self) {
 }
 
 function Checkbox_setDisabled(self, v) {
-	
-	var editmode = self.Nodes.Input.getAttribute('editmode')
+	var input = self.Nodes.Input
+
+	var editmode = input.getAttribute('editmode')
 	var ineditmode = ((editmode==null || editmode=='' || editmode=='false')) ? false : true
 
-	
-
 	if (v) {
-		self.Nodes.Input.setAttribute('permanent-disabled', 'true')
-		self.Nodes.Caption.setAttribute('permanent-disabled', 'true')
+		input.setAttribute('permanent-disabled', 'true')
+		input.parentNode.setAttribute('permanent-disabled', 'true')
 	} else {
-		self.Nodes.Input.removeAttribute('permanent-disabled')
-		self.Nodes.Caption.removeAttribute('permanent-disabled')
+		input.removeAttribute('permanent-disabled')
+		input.parentNode.removeAttribute('permanent-disabled')
 		if (!ineditmode) {
-			self.Nodes.Input.disabled = true	
+			input.disabled = true	
 		}
 	}
 }
 
 
 function Checkbox_SetEditingMode(self, ineditmode) {
+	var input = self.Nodes.Input
 	var attrval = ineditmode ? 'true' : 'false'
-	var permdisattr = self.Nodes.Input.getAttribute('permanent-disabled')
+	var permdisattr = input.getAttribute('permanent-disabled')
 	var permanentDisabled = ((permdisattr==null || permdisattr=='' || permdisattr=='false')) ? false : true
 
-	self.Nodes.Input.setAttribute('editmode', attrval)
+	input.setAttribute('editmode', attrval)
 	if (ineditmode) {
 		if (permanentDisabled) {
-			self.Nodes.Input.setAttribute('disabled', 'true')
+			input.setAttribute('disabled', 'true')
 		} else {
-			self.Nodes.Input.removeAttribute('disabled')
+			input.removeAttribute('disabled')
 		}
 	} else {
-		self.Nodes.Input.setAttribute('disabled', 'true')
+		input.setAttribute('disabled', 'true')
 	}
 }
 
@@ -187,7 +188,7 @@ function Checkbox_IsChanged(self) {
 	var lastvalue = self.GetLastValue()
 	var currentvalue = self.Value
 	if (currentvalue!=lastvalue) {
-		console.log(`Checkbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
+		// console.log(`Checkbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
 	} else {
 		return false
@@ -211,8 +212,14 @@ function Checkbox_getValue(self) {
 }
 
 function Checkbox_setValue(self, v) {
+	var input = self.Nodes.Input
 	var checked = Checkbox_getBoolValue(v)
-	self.Element.checked = checked
+	input.checked = checked
+	if (checked) {
+		input.value = 1
+	} else {
+		input.value = 0
+	}
 
 	Checkbox_markChanged(self)
 }
@@ -224,13 +231,14 @@ function Checkbox_GetLastValue(self) {
 
 function Checkbox_Reset(self) {
 	var checked = self.GetLastValue()
-	self.Nodes.Input.checked = checked
+	self.Value = checked
+	self._setLastValue(checked)
 }
 
 
 function Checkbox_NewData(self, initialvalue) {
 	var checked = Checkbox_getBoolValue(initialvalue)
-	self.Nodes.Input.checked = checked
+	self.Value = checked
 	self._setLastValue(checked)
 }
 

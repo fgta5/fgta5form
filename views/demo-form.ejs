@@ -55,7 +55,8 @@
 				<div style="display: flex; column-gap: 10px; row-gap: 16px; flex-wrap: wrap;">
 
 
-									
+					<% if (false) { %> 		
+					<!-- Textbox -->			
 					<div class="demo-input-field" field="obj_nama">
 						<label for="obj_nama">Nama</label>
 						<input id="obj_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
@@ -72,14 +73,16 @@
 							invalid-message-maxlength="Nama maksimal 15 karakter"
 							>
 					</div>
- 					
+					<% } %> 
 
-					<!-- 
+
+					<% if (true) { %> 
+					<!-- Checkbox -->		
 					<div class="demo-input-field" field="obj_disabled">
 						<label for="obj_disabled">Disabled</label>
-						<input type="checkbox" id="obj_disabled" fgta5-component="Checkbox" binding="isdisabled" checked>
+						<input type="checkbox" id="obj_disabled" fgta5-component="Checkbox" binding="isdisabled">
 					</div>
-					-->
+					<% } %> 
 
 
 					<!-- 
