@@ -56,15 +56,11 @@ async function main(self, args) {
 
 	if (obj_nama!=null) {
 		obj_nama.addEventListener('input', (evt)=>{
-			// console.log('input', evt.testData)
+			console.log('input', evt)
 		})
 
 		obj_nama.addEventListener('keydown', (evt)=>{
-			console.log(evt)
-			if (evt.key=='a') {
-				console.log('coba di prevent default')
-				evt.preventDefault()
-			}
+			console.log('keydown', evt)
 		})
 	}
 

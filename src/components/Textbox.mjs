@@ -37,9 +37,6 @@ export default class Textbox extends Input {
 		return Textbox_IsChanged(this)
 	}
 
-	addEventListener = (evt, callback) => {
-		this.Listener.addEventListener(evt, callback)
-	}
 }
 
 

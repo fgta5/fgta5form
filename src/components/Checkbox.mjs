@@ -1,6 +1,9 @@
 import Input from "./Input.mjs"
 
 
+const CheckedEvent = (data)=>{ return new CustomEvent('checked', data) }
+const UnCheckedEvent = (data)=>{ return new CustomEvent('unchecked', data) }
+
 /*
 * reference:
 * https://moderncss.dev/pure-css-custom-checkbox-style/
@@ -170,6 +173,12 @@ function Checkbox_checkedChanged(self) {
 		input.setAttribute('changed', 'true')
 	} else {
 		input.removeAttribute('changed')
+	}
+
+	if (input.checked) {
+		self.Listener.dispatchEvent(CheckedEvent({}))
+	} else {
+		self.Listener.dispatchEvent(UnCheckedEvent({}))
 	}
 }
 
