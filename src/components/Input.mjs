@@ -166,6 +166,9 @@ function Input_NewData(self, initialvalue) {
 	// 	initialvalue = String(initialvalue)
 	// }
 	self.Value = initialvalue
+
+	console.log('initial value', initialvalue)
+	console.log('set last value', self.Nodes.Input.value)
 	self._setLastValue(self.Nodes.Input.value)
 	self.SetError(null)
 }

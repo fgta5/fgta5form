@@ -68,23 +68,32 @@ function Checkbox_construct(self, id) {
 	const label = document.querySelector(`label[for="${id}"]`)
 	const checkboxlabel = document.createElement("label")
 
+
+	// setup container, (harus di awal seblum yang lain-lain)
+	// diperlukan untuk menampung semua element yang akan ditampilkan
+	input.parentNode.insertBefore(container, input)
+
+
+	// tambahkan elemen-element ke container
+	// penambahakn container ke body document pada saat Input_construct di parent class Input
+	checkboxlabel.appendChild(input)
+	checkboxlabel.appendChild(document.createTextNode(label.innerHTML))
+	container.appendChild(checkboxlabel)
+	container.appendChild(lastvalue)
+
+
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.Label = label 
 	
 	
+	// setup container
+	container.setAttribute('fgta5-component', 'Checkbox')
 
-	// setup input awal component
-	input.parentNode.insertBefore(container, input)
+	// setup input
 	input.classList.add('fgta5-checkbox-input')
 	
 	// setup checkbox label untuk menampung checkbox
 	checkboxlabel.classList.add('fgta5-checkbox')
-	checkboxlabel.appendChild(input)
-	checkboxlabel.appendChild(document.createTextNode(label.innerHTML))
-
-	// setup container
-	container.appendChild(checkboxlabel)
-	container.appendChild(lastvalue)
 	
 	
 	// ganti original label tag menjadi div 
@@ -106,7 +115,6 @@ function Checkbox_construct(self, id) {
 		Checkbox_checkedChanged(self)		
 	});
 
-	
 }
 
 function Checkbox_getDisabled(self) {

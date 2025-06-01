@@ -85,19 +85,18 @@
 					<% } %> 
 
 
-					<!-- 
+					<% if (false) { %> 
 					<div class="demo-input-field" field="obj_alamat">
 						<label for="obj_alamat">Alamat</label>
 						<input id="obj_alamat"  fgta5-component="Textbox" placeholder="alamat anda" autocomplete="off" spellcheck="false" 
-							x-style="width: 100%;"
-							maxlength="90" validator="" 
+							required minlength="3" maxlength="90" 
 							binding="alamat"
 							invalid-message="Alamat harus diisi, minimal 3 karakter, maksimal 90 karakter"
 							>
 					</div>
-					-->
+					<% } %> 
 
-					<!-- 
+					<% if (true) { %> 
 					<div class="demo-input-field" field="obj_nilai">
 						<label for="obj_nilai">Nilai</label>
 						<input id="obj_nilai"  fgta5-component="Numberbox" placeholder="isi nilai" autocomplete="off" spellcheck="false" 
@@ -109,7 +108,7 @@
 							invalid-message="nilai harus dalam range 50 s/d 200"
 						>
 					</div> 
-					-->
+					<% } %> 
 
 					<!-- 	
 					<div class="demo-input-field" field="obj_tanggal">

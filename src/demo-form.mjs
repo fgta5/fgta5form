@@ -77,6 +77,11 @@ async function main(self, args) {
 	}
 
 
+	if (obj_nilai!=null) {
+
+
+	}
+
 
 	if (obj_tanggal!=null) {
 		obj_tanggal.addEventListener('change', (evt)=>{
