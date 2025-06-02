@@ -1,16 +1,17 @@
 import Component from "./Component.mjs"
 
 export default class Input extends Component {
-	EditingMode = false;
-
+	/* Construct Input */
 	constructor(id) {
 		super(id)
 		Input_construct(this, id)
+		Input_readValidators(this)
 	}
-
+	
+	/* mengembalikan nama class contructor, misalnya 'Textbox' */
 	get Type() { return this.constructor.name }
 
-	
+
 	get Value() { return this.Element.value }
 	set Value(v) { this.Element.value = v }
 
@@ -19,17 +20,318 @@ export default class Input extends Component {
 
 	#_form
 	get Form() { return this.#_form }
-	set Form(v) { this.#_form = v }
+	bindForm(form) { this.#_form = form }
 
-	SetEditingMode(editingmode) {} 
-	SetError(msg) {}
-	GetLastValue() {} 
+	#_ineditmode = true
+	get InEditMode() { return this.#_ineditmode }
+	SetEditingMode(ineditmode) { 
+		this.#_ineditmode = ineditmode 
+	}
+	
+	NewData(initialvalue) {
+		Input_NewData(this, initialvalue)
+	}
 
-	Validate() { return true }
+	AcceptChanges() {
+		Input_AcceptChanges(this)
+	}
+	
+	Reset() {
+		Input_Reset(this)
+	}
+	
+	IsChanged() { 
+		return Input_IsChanged(this)
+	}
 
+	SetError(msg) {
+		Input_SetError(this, msg)
+	}
+
+	_setLastValue(v) {
+		Input_setLastValue(this, v)
+	}
+
+	GetLastValue() {
+		return Input_GetLastValue(this)
+	} 
+
+
+	GetBindingData() {
+		var binding = this.Element.getAttribute('binding')
+		if (binding === null) {
+			return null
+		} else {
+			return binding
+		}
+	}
+
+	Validate() { 
+		// console.log(`Validating input '${this.Id}'`)
+		return Input_Validate(this) 
+	}
+
+	#_validators = {}
+	get Validators() { return this.#_validators }
+	AddValidator(fnName, fnParams, message) {
+		this.#_validators[fnName] = {
+			param: fnParams,
+			message: message
+		}
+	}
+	RemoveValidator(str) {
+		if (this.#_validators[str] !== undefined) {
+			delete this.#_validators[str]
+		}			
+	}
+
+	_setupDescription() {
+		var description = this.Element.getAttribute('description')
+		if (description !== null && description.trim() !== '') {
+			description = description.trim()
+			const decrdiv = document.createElement('div')
+			decrdiv.classList.add('fgta5-entry-description')
+			decrdiv.innerHTML = description
+			this.Nodes.Container.appendChild(decrdiv)
+		}		
+	}
+
+	MarkAsRequired(r) {
+		Input_MarkAsRequired(this, r)
+	}
+
+	addEventListener(evt, callback) {
+		this.Listener.addEventListener(evt, callback)
+	}
 }
 
 function Input_construct(self, id) {
+	const container = document.createElement('div')
+	const lastvalue = document.createElement('input')
+
+	lastvalue.setAttribute('type', 'hidden') 
+	lastvalue.classList.add('fgta5-entry-lastvalue')
+
+	container.classList.add('fgta5-entry-container')
+
+	self.InitialValue = '';
+
+	self.Element.getInputCaption = () => {
+		return self.Id;
+	}
+
+	self.Listener = new EventTarget()
+	self.Nodes = {
+		Input: self.Element,
+		Container: container,
+		LastValue: lastvalue,
+	}
+
 
 }
 
+
+function Input_SetError(self, msg) {
+	var errdiv = self.Nodes.Container.querySelector('.fgta5-entry-error')
+	if (msg!== null && msg !== '') {
+		self.Nodes.Input.setAttribute('invalid', 'true')
+		if (!errdiv) {
+			 errdiv = document.createElement('div')
+			 errdiv.classList.add('fgta5-entry-error')
+			 self.Nodes.Container.insertBefore(errdiv, self.Nodes.InputWrapper.nextSibling)
+		}
+		errdiv.innerHTML = msg
+	} else {
+		self.Nodes.Input.removeAttribute('invalid')
+		if (errdiv) {
+			errdiv.remove()
+		}
+	}
+}
+
+
+function Input_setLastValue(self, v) {
+	self.Nodes.LastValue.value = v
+}
+
+function Input_GetLastValue(self) {
+	return self.Nodes.LastValue.value
+}
+
+function Input_NewData(self, initialvalue) {
+	self.Value = initialvalue
+	self.AcceptChanges()
+}
+
+function Input_AcceptChanges(self) {
+	self._setLastValue(self.Nodes.Input.value)
+	self.Nodes.Input.removeAttribute('changed')
+	self.SetError(null)
+}
+
+function Input_Reset(self) {
+	self.Nodes.Input.value = self.Nodes.LastValue.value
+	self.AcceptChanges()
+}
+
+function Input_IsChanged(self) {
+	// bandingkan nilai last value dan input value
+	// bandingkan langsung dari nilai yang ada di element, jangan gunakan self.GetLastValue dan self.Value
+	// karena nilai dari properti self.Value dan method GetLastValue bisa di modif sesuai tipe component
+	if (self.Nodes.LastValue.value != self.Nodes.Input.value) {
+		console.log(`Input '${self.Id}' is changed from '${self.Nodes.LastValue.value}' to '${self.Nodes.Input.value}'`)
+		return true
+	} else {
+		return false
+	}
+}
+
+
+function Input_Validate(self) {
+	for (const [fnName, args] of Object.entries(self.Validators)) {
+		const fnValidate = $validators[fnName];
+		const fnParams = args.param;
+		const fnMessage = args.message;
+
+		try {
+			if (typeof fnValidate !== 'function') {
+				var err = new Error(`Validator function '${fnName}' is not defined or not a function`)
+				console.error(err);
+				throw err
+			}
+
+			if (fnName=='mindate') {
+				var t = 0
+			}
+
+
+			var valid = fnValidate(self.Nodes.Input.value, fnParams)
+			if (!valid) {
+				var err = new Error( `Invalid value '${self.Nodes.Input.value}' for '${self.Nodes.Input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
+				console.log(err.message);
+
+				var msg = fnMessage
+				if (msg === null || msg === '') {
+					msg = err.message
+				}
+				throw new Error(msg)
+			}
+		} catch(err) {
+			self.SetError(err.message)
+			return false
+		}
+	}
+
+	return true
+}
+
+
+function clearTime(dt) {
+	dt.setHours(0)
+	dt.setMinutes(0)
+	dt.setSeconds(0)
+}
+
+function Input_readValidators(self) {
+	const cname = self.Nodes.Input.getAttribute('fgta5-component')
+	var default_invalid_message = self.Nodes.Input.getAttribute(`invalid-message`)
+
+	var required = self.Nodes.Input.getAttribute('required')
+	if (required != null) {
+		if (required.toLowerCase() !== 'false') {
+			var msg = window.$validators.getInvalidMessage('required', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('required', null, msg)
+		}
+	}
+
+	var minlength = self.Nodes.Input.getAttribute('minlength')
+	if (minlength != null) {
+		minlength = parseInt(minlength)
+		if (!isNaN(minlength)) {
+			var msg = window.$validators.getInvalidMessage('minlength', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('minlength', minlength, msg)
+		}
+	}
+
+	var maxlength = self.Nodes.Input.getAttribute('maxlength')
+	if (maxlength != null) {
+		maxlength = parseInt(maxlength)
+		if (!isNaN(maxlength)) {
+			var msg = window.$validators.getInvalidMessage('maxlength', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('maxlength', maxlength, msg)
+		}
+	}
+
+	var pattern = self.Nodes.Input.getAttribute('pattern')
+	if (pattern != null) {
+		if (pattern.trim() !== '') {
+			var msg = window.$validators.getInvalidMessage('pattern', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('pattern', pattern, msg)
+		}
+	}
+
+
+	var min = self.Nodes.Input.getAttribute('min')
+	if (min != null) {
+		if (cname=="Datepicker") {
+			var mindate = new Date(min)
+			clearTime(mindate)
+			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('mindate', mindate, msg)
+		} else if (cname=="Timepicker") {
+			var mintime = min
+			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('mintime', mintime, msg)
+		} else {
+			min = parseInt(min)
+			if (!isNaN(min)) {
+				var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
+				self.AddValidator('min', min, msg)
+			}
+		}
+	}
+
+	var max = self.Nodes.Input.getAttribute('max')
+	if (max != null) {
+		if (cname=="Datepicker") {
+			var maxdate = new Date(max)
+			clearTime(maxdate)
+			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('maxdate', maxdate, msg)
+		} else if (cname=="Timepicker") {
+			var maxtime = max
+			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
+			self.AddValidator('maxtime', maxtime, msg)
+		} else {
+			max = parseInt(max)
+			if (!isNaN(max)) {
+				var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
+				self.AddValidator('max', max, msg)
+			}
+		}
+	}
+
+
+	var validator = self.Nodes.Input.getAttribute('validator')
+	if (validator != null && validator.trim() !== '') {
+		validator = validator.split(',')
+		for (var i=0; i<validator.length; i++) {
+			var str = validator[i].trim()
+			var { fnName, fnParams } = $fgta5.Validators.parseFunctionParam(str)
+			var msg = window.$validators.getInvalidMessage('pattern', self.Nodes.Input, default_invalid_message)
+			self.AddValidator(fnName, fnParams, msg)
+		}
+	}
+}
+
+
+function Input_MarkAsRequired(self, required) {
+	var label = self.Nodes.Label;
+	if (label!=null && label !=undefined) {
+		if (required) {
+			self.Nodes.Label.setAttribute('required', '')
+		} else {
+			self.Nodes.Label.removeAttribute('required')
+		}
+	}
+}

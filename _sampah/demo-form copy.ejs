@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>fgta5form</title>
+		<title><%= title %></title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" href="favicon.ico">
+	
 
-		<link rel="stylesheet" href="fgta5-component.css" />
-		<!-- <link rel="stylesheet" href="dist/fgta5.min.css" /> -->
-		
-		
-		<link rel="stylesheet" href="fgta5dev.css" />
+		<style>
+			body {
+				overscroll-behavior-y: contain;
+				user-select: none
+			}
+		</style>
 
-		<script type="module">
-			import $fgta5 from './src/main.mjs'
-			// import $fgta5 from './dist/fgta5.min.js'
-			window.$fgta5 = $fgta5
-		</script>
+
+		<%- include(style); %>
+
+		<%- include(script); %>
+
+
+		<link rel="stylesheet" href="./styles/demo.css" />
+		<link rel="stylesheet" href="./styles/demo-form.css" />
 	</head>
 	<body>
 		<header>
-			<h1>Fgta5form Development</h1>
+			<h1>Form</h1>
 		</header>
 		
 		<main>
 			<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
-				
 				<div>
 					<button id="btn_edittogle">Togle Edit State</button>
 					<button id="btn_reset">Reset</button>
 					<button id="btn_save">Save</button>
 					<button id="btn_new">New</button>
-					<button id="btn_nonaktif" disabled>Non Aktif</button>
 				</div>
 
-				<button id="btn_testvalidation">Test Form Validation</button>
-				<button id="btn_testdised">Test Disabled/Enabled</button>
-				<button id="btn_clearerror">Clear Error</button>
+				<div>
+					<button id="btn_testvalidation">Test Form Validation</button>
+					<button id="btn_testdised">Test Disabled/Enabled</button>
+					<button id="btn_clearerror">Clear Error</button>
+				</div>
 			</div>
-
+			
 
 			<h2 id="txtState">Edit/View</h2>
-			<form id="form" locked="True">
+			<form id="myform" locked="True">
 				<div style="display: flex; column-gap: 10px; row-gap: 5px; flex-wrap: wrap;">
 					
-					<div class="input-field">
+					<div class="demo-input-field">
 						<label for="obj_txt_nama">Nama</label>
 						<input required id="obj_txt_nama" fgta5-component="Textbox" placeholder="Nama" autocomplete="off" spellcheck="false" minlength="3" width="300" validator="" class="mytextbox">
 					</div>
 
-					<div class="input-field">
+					<!-- <div class="input-field">
 						<label for="obj_cbo_kota">Kota</label>
 						<input required id="obj_cbo_kota" fgta5-component="Combobox" placeholder="Kota" fieldValue="kota_id" fieldDisplay="kota_name" class="mycombo">
 						<datalist for="obj_cbo_kota">
@@ -57,7 +61,7 @@
 							<option value="SBY">Surabaya</option>
 							<option value="BAL">Bali</option>
 						</datalist>
-					</div>
+					</div> -->
 
 <!-- 
 					<div class="input-field">
@@ -74,14 +78,6 @@
 				
 				</div>
 
-
-
-
-
-
-
-				
-				<div style="height: 800px;">&nbsp;</div>
 			</form>
 
 			
@@ -89,6 +85,9 @@
 
 
 		</main>
+
+		<hr>
+		<a href="/">index</a>
 
 		<div id="fgta5-loading-pagemask">
 			<div style="font-family: system-ui, sans-serif">
@@ -99,7 +98,7 @@
 
 
 	<script type="module">
-		import Page from './fgta5dev.mjs'
+		import Page from './src/demo-form.mjs'
 
 		window.addEventListener("load", async (event) => {
 			var $page = new Page();

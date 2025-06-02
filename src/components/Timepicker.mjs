@@ -1,112 +1,85 @@
 import Input from "./Input.mjs"
 
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-const button_icon = `<svg transform="translate(0 3)" width="12" height="12" stroke="currentColor" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-		<rect x="1.3095" y="6.6682" width="21.393" height="1.8579" fill="none" stroke-width="2"/>
-		<rect x=".81949" y="10" width="22.341" height="13.251" fill="none" stroke-width="1.02"/>
-		<rect x="3.8664" y="1.1531" width="2.5776" height="1.4923" fill="none" stroke-width="2"/>
-		<rect x="17.223" y="1.1203" width="2.5776" height="1.6958" fill="none" stroke-width="2"/>
-		<path d="m1.2888 16.278 21.367-0.13566" fill="none" stroke-width="1.02"/>
-		<path d="m8.2775 10.07-0.13566 12.888" fill="none" stroke-width="1.02"/>
-		<path d="m15.799 9.9671-0.13566 12.888" fill="none" stroke-width="1.02"/>
-		</svg>`
+const button_icon = `<?xml version="1.0" encoding="UTF-8"?>
+<svg transform="translate(0 3)" width="12" height="12" stroke="currentColor" stroke-linecap="round" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m12.339 12.142 0.01403-6.5322" fill="none" stroke-width="2"/>
+<path d="m8.4232 14.469 3.7103-1.9861" fill="none" stroke-width="2.4"/>
+<ellipse cx="12.004" cy="11.983" rx="10.102" ry="9.9964" fill="none" stroke-width="2.4"/>
+</svg>
+
+`
 
 
 /*
  * https://weblog.west-wind.com/posts/2023/Feb/06/A-Button-Only-Date-Picker-and-JavaScript-Date-Control-Binding
  */
-export default class Datepicker extends Input {
-
+export default class Timepicker extends Input {
 	constructor(id) {
 		super(id)
-		Datepicker_construct(this, id)
+		Timepicker_construct(this, id)
 	}
 
-	get Value() { return Datepicker_getValue(this) }
-	set Value(v) { Datepicker_setValue(this, v) }
+	get Min() { return this.Element.min }
+	set Min(v) { this.Element.min = v }
+
+	get Max() { return this.Element.max }
+	set Max(v) { this.Element.max = v }
 
 
-	get Min() { 
-		if (this.Element.min!="") {
-			var dt = new Date(this.Element.min );
-			return dt
-		} else {
-			return null
-		}
-	}
-	set Min(v) {
-		if (v instanceof Date) {
-			this.Element.min = v.toISOString().split("T")[0]
-		} else if (typeof v === "string") {
-			this.Element.min = v
-		}
-	}
-
-	get Max() { 
-		if (this.Element.max!="") {
-			var dt = new Date(this.Element.max);
-			return dt
-		} else {
-			return null
-		}
-	}
-	set Max(v) {
-		if (v instanceof Date) {
-			this.Element.max = v.toISOString().split("T")[0]
-		} else if (typeof v === "string") {
-			this.Element.max = v
-		}
-	}
-
+	get Value() { return Timepicker_getValue(this) }
+	set Value(v) { Timepicker_setValue(this, v) }
 
 	get Disabled() { return this.Element.disabled }
 	set Disabled(v) { 
 		this.Element.disabled = v 
-		Datepicker_setDisabled(this, v)
+		Timepicker_setDisabled(this, v)
 	}
-
 
 	#_ineditmode = true
 	get InEditMode() { return this.#_ineditmode }
 	SetEditingMode(ineditmode) {
 		this.#_ineditmode = ineditmode
-		Datepicker_SetEditingMode(this, ineditmode)
+		Timepicker_SetEditingMode(this, ineditmode)
 	}
 
-
-
-
+	
 	NewData(initialvalue) {
-		if (initialvalue===undefined || initialvalue===null) {
-			initialvalue = ''
+		if (initialvalue=='' || initialvalue==null) {
+			initialvalue = '00:00'
 		}
 		super.NewData(initialvalue)
-		// Datepicker_Newdata(this, initialvalue)
+		// Timepicker_Newdata(this, initialvalue)
 	}
 
 	AcceptChanges() {
 		super.AcceptChanges()
-		Datepicker_AcceptChanges(this)
+		Timepicker_AcceptChanges(this)
 		
 	}
 
 	Reset() {
 		super.Reset()
-		Datepicker_Reset(this)
+		Timepicker_Reset(this)
 	}
+	
 
 	SetError(msg) {
 		super.SetError(msg)
-		Datepicker_SetError(this, msg)
+		Timepicker_SetError(this, msg)
 	}
 
 	GetLastValue() {
-		return Datepicker_GetLastValue(this)
+		return Timepicker_GetLastValue(this)
 	} 
 
 }
 
-function Datepicker_construct(self, id) {
+
+
+
+function Timepicker_construct(self, id) {
 	const container = self.Nodes.Container
 	const lastvalue = self.Nodes.LastValue
 	const input = self.Nodes.Input
@@ -115,11 +88,10 @@ function Datepicker_construct(self, id) {
 	const button = document.createElement('button')
 	const label = document.querySelector(`label[for="${id}"]`)
 
-
-
 	// setup container, (harus di awal seblum yang lain-lain)
 	// diperlukan untuk menampung semua element yang akan ditampilkan
 	input.parentNode.insertBefore(container, input)
+	
 
 
 	// tambahkan elemen-element ke container
@@ -137,22 +109,20 @@ function Datepicker_construct(self, id) {
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 
-	
-
 
 	// setup container
-	container.setAttribute('fgta5-component', 'Datepicker')
+	container.setAttribute('fgta5-component', 'Timepicker')
 
 
 	// setup wrapper
 	wrapinput.classList.add('fgta5-entry-input-wrapper')
 
 
-
 	// display
 	display.setAttribute('id', `${id}-display`)
 	display.setAttribute('type', 'text')
-	display.setAttribute('fgta5-component', 'Datepicker')
+	display.setAttribute('picker', 'time')
+	display.setAttribute('fgta5-component', 'Timepicker')
 	display.setAttribute('readonly', 'true')
 	display.classList.add('fgta5-entry-display')
 	display.classList.add('fgta5-entry-display-datepicker')
@@ -171,16 +141,17 @@ function Datepicker_construct(self, id) {
 
 
 	// main input
-	input.setAttribute('type', 'date')
+	input.setAttribute('type', 'time')
+	input.setAttribute('picker', 'time')
 	input.removeAttribute('class')
 	input.removeAttribute('style')
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
-		input.getInputCaption = () => {
+	input.getInputCaption = () => {
 		return label.innerHTML
 	}
-	
 
+	
 	// picker button
 	button.id = self.Id + '-button'
 	button.insertAdjacentHTML("beforeend", button_icon)
@@ -196,35 +167,31 @@ function Datepicker_construct(self, id) {
 
 	// additional property setup
 
-	// required
+	// required field
 	var required = input.getAttribute('required')
 	if (required != null) {
 		self.MarkAsRequired(true)
 	}
 
-	if (input.value != null && input.value != '') {
-		self.Value = input.value
-		self._setLastValue(input.value)
-		self.AcceptChanges()
+	if (input.value == null || input.value == '') {
+		input.value = '00:00'
 	}
+	self.Value = input.value
+	self._setLastValue(input.value)
+	self.AcceptChanges()
 
-	
+
 	// set input description
 	self._setupDescription()
 
 
-
-	// internal event
 	input.addEventListener('change', (e)=>{
-		Datepicker_changed(self)
+		Timepicker_changed(self)
 	})
-
-
 }
 
 
-
-function Datepicker_setDisabled(self, v) {
+function Timepicker_setDisabled(self, v) {
 	var display = self.Nodes.Display
 	var inputwrap = self.Nodes.InputWrapper
 	var button = self.Nodes.Button
@@ -241,7 +208,7 @@ function Datepicker_setDisabled(self, v) {
 }
 
 
-function Datepicker_SetEditingMode(self, ineditmode) {
+function Timepicker_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
 	var input = self.Nodes.Input
 	var display = self.Nodes.Display
@@ -260,32 +227,11 @@ function Datepicker_SetEditingMode(self, ineditmode) {
 }
 
 
-function Datepicker_getValue(self) {
-	if (self.Nodes.Input.value=='') {
-		return null
-	} else {
-		return Datepicker_getIsoDateValue(self.Nodes.Input.value) 
-	}
-}
-
-
-function Datepicker_setValue(self, dt) {
-	self.Nodes.Input.value = dt
-	Datepicker_setDisplay(self, dt)
-	Datepicker_markChanged(self)
-}
-
-
-// function Datepicker_Newdata(self, initialvalue) {
-// 	self.AcceptChanges()
-// }
-
-
-function Datepicker_AcceptChanges(self) {
+function Timepicker_AcceptChanges(self) {
 	self.Nodes.Display.removeAttribute('changed')
 }
 
-function Datepicker_Reset(self) {
+function Timepicker_Reset(self) {
 	var lastvalue = self.GetLastValue()
 	if (lastvalue==null) {
 		self.Value = ''
@@ -294,39 +240,20 @@ function Datepicker_Reset(self) {
 	}
 }
 
-function Datepicker_changed(self) {
+
+function Timepicker_changed(self) {
 	var input = self.Nodes.Input
-	Datepicker_setDisplay(self, input.value)
+	Timepicker_setDisplay(self, input.value)
 	
-	Datepicker_markChanged(self)
+	Timepicker_markChanged(self)
 	if (self.InEditMode) {
 		self.SetError(null)
 		self.Validate()
 	}
-
-	// trigger object change
 }
 
 
-function Datepicker_getIsoDateValue(v) {
-	var dt
-	if (typeof v==='string') {
-		dt = new Date(v)
-	} else if (v instanceof Date) {
-		dt = v
-	} 
-	return dt.toISOString().split("T")[0]
-}
-
-// function Datepicker_getFormattedValue(isodate) {
-// 	var date = new Date(isodate);
-//     var options = { day: '2-digit', month: 'short', year: 'numeric' };
-// 	var formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
-// 	return formattedDate
-// }
-
-
-function Datepicker_markChanged(self) {
+function Timepicker_markChanged(self) {
 	var display = self.Nodes.Display
 	if (self.Value!=self.GetLastValue()) {
 		display.setAttribute('changed', 'true')
@@ -335,20 +262,35 @@ function Datepicker_markChanged(self) {
 	}
 }
 
-function Datepicker_setDisplay(self, dtiso) {
-	var display = self.Nodes.Display
-	if (dtiso=='') {
-		display.value = ''
+
+
+function Timepicker_getValue(self) {
+	var input = self.Nodes.Input
+	if (input.value=='') {
+		return null
 	} else {
-		const date = new Date(dtiso);
-		const options = { day: '2-digit', month: 'short', year: 'numeric' };
-		const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
-		display.value = formattedDate
+		return input.value
 	}
 }
 
 
-function Datepicker_SetError(self, msg) {
+
+function Timepicker_setValue(self, dt) {
+    if (!timeRegex.test(dt)) {
+		throw new Error(`invalid HH:ss format for '${dt}'`)
+	}
+
+	self.Nodes.Input.value = dt
+	Timepicker_setDisplay(self, dt)
+	Timepicker_markChanged(self)
+}
+
+
+function Timepicker_setDisplay(self, tm) {
+	self.Nodes.Display.value = tm
+}
+
+function Timepicker_SetError(self, msg) {
 	var display = self.Nodes.Display
 	if (msg!== null && msg !== '') {
 		display.setAttribute('invalid', 'true')
@@ -357,7 +299,8 @@ function Datepicker_SetError(self, msg) {
 	}
 }
 
-function Datepicker_GetLastValue(self) {
+
+function Timepicker_GetLastValue(self) {
 	var lastvalue = self.Nodes.LastValue.value
 	if (lastvalue=='') {
 		return null
@@ -365,4 +308,3 @@ function Datepicker_GetLastValue(self) {
 		return lastvalue
 	}
 }
-

@@ -1,5 +1,10 @@
 import Input from "./Input.mjs"
-import { customValidation, textLengthValidation } from "../validator.mjs"
+
+const InputEvent = (data)=>{ return new CustomEvent('input', data) }
+const BlurEvent = (data)=>{ return new CustomEvent('blur', data) }
+const KeydownEvent = (data)=> { return new KeyboardEvent('keydown', data) }
+
+
 
 
 export default class Textbox extends Input {
@@ -9,149 +14,200 @@ export default class Textbox extends Input {
 		Textbox_construct(this, id)
 	}
 
+	get Value() { return Textbox_GetValue(this) }
+	set Value(v) { Textbox_SetValue(this, v) }
 
-	SetEditingMode(editingmode) {
-		Textbox_SetEditingMode(this, editingmode)
+
+	#_ineditmode = true
+	get InEditMode() { return this.#_ineditmode }
+	SetEditingMode(ineditmode) {
+		this.#_ineditmode = ineditmode
+		Textbox_SetEditingMode(this, ineditmode)
 	}
 
-	SetError(msg) {
-		Textbox_SetError(this, msg)
+	NewData(initialvalue) {
+		super.NewData(initialvalue)
 	}
 
-	Validate() {
-		return Textbox_Validate(this)
+	GetLastValue() {
+		return Textbox_GetLastValue(this)
+	} 
+
+	IsChanged() { 
+		return Textbox_IsChanged(this)
 	}
+
 
 }
 
+
+
 function Textbox_construct(self, id) {
-	console.log(`construct textbox ${id}`)
+	const container = self.Nodes.Container
+	const lastvalue = self.Nodes.LastValue
+	const input = self.Nodes.Input
+	const wrapinput = document.createElement('div')
+	const label = document.querySelector(`label[for="${id}"]`)
+	
 
-	const el = self.Element
-	const elContainer =document.createElement('div')
-	const wrap = document.createElement("div")
-	const lbl = document.querySelector(`label[for="${self.Id}"]`)
+	// setup container, (harus di awal seblum yang lain-lain)
+	// diperlukan untuk menampung semua element yang akan ditampilkan
+	input.parentNode.insertBefore(container, input)
 
-	self.Wrapper = wrap
-	self.Label = lbl
 
-	el.classList.add('fgta5-textbox')
-	el.parentNode.insertBefore(wrap, el)
+	// tambahkan elemen-element ke container
+	// penambahakn container ke body document pada saat Input_construct di parent class Input
+	wrapinput.appendChild(input)
+	container.appendChild(wrapinput)
+	container.appendChild(lastvalue)
 
-	// Pindahkan input ke dalam div
-	wrap.appendChild(el);
-	wrap.classList.add('fgta5-wrapper-textbox')	
 
-	// masukkan text wrapper ke dalam container
-	wrap.parentNode.insertBefore(elContainer, wrap)
-	elContainer.appendChild(wrap)
-	elContainer.classList.add('fgta5-input-container')
+	// tambahkan referensi elemen ke Nodes
+	self.Nodes.InputWrapper = wrapinput
+	self.Nodes.Label = label 
 
-	// Default Event
-	el.addEventListener('change', (event) => {
-		var isValid = self.Validate()
-		if (!isValid) {
-			event.stopImmediatePropagation();
+
+	// setup container
+	container.setAttribute('fgta5-component', 'Textbox')
+	
+
+	// setup wrapper
+	wrapinput.classList.add('fgta5-entry-input-wrapper')
+
+
+	// setup input
+	input.classList.add('fgta5-entry-input')
+	input.getInputCaption = () => {
+		return label.innerHTML
+	}
+
+	// label
+	label.classList.add('fgta5-entry-label')
+
+	// set input value
+	self._setLastValue(self.Value)
+
+	// set input description
+	self._setupDescription()
+
+	
+	// aditional property setup
+	// background
+	if (input.style.backgroundColor !== '') {
+		wrapinput.style.backgroundColor = input.style.backgroundColor
+		input.style.backgroundColor = 'transparent'
+	}
+
+	// character casing
+	var charCase = input.getAttribute('character-case') 
+	if (charCase !== null && charCase.trim() !== '') {
+		input.charCase = charCase.trim().toLowerCase()
+	}
+
+	// required field
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
+	}
+
+
+	// internal event listener
+	input.addEventListener("input", (evt)=>{
+		if (self.GetLastValue() != self.Value) {
+			input.setAttribute('changed', 'true')
+		} else {
+			input.removeAttribute('changed')
 		}
-	});
+
+		self.Listener.dispatchEvent(InputEvent({}))
+	})
+
+	input.addEventListener('blur', (evt)=> {
+		Textbox_blur(self, evt)
+		self.Listener.dispatchEvent(BlurEvent({}))
+	})	
+
+	input.addEventListener('keydown', (evt)=>{
+		const e = KeydownEvent({
+			cancelable: true,
+			key: evt.key,
+			code: evt.code,
+			ctrlKey: evt.ctrlKey,
+			altKey: evt.altKey,
+			shiftKey: evt.shiftKey,
+			srcElement: evt.srcElement,
+			target: evt.target
+		})
+		self.Listener.dispatchEvent(e)
+
+		if (e.defaultPrevented) {
+			evt.preventDefault()
+		}
+	})
 	
 }
 
-function Textbox_SetEditingMode(self, editingmode) {
-	const el = self.Element
-	const wrap = self.Wrapper
-
-	self.EditingMode = editingmode
-	// if (el.disabled) {
-	// 	return
-	// }
-	console.log('textbox set editing mode: ', editingmode)
-	if (editingmode) {
-		el.classList.add('fgta5-input-editmode')
-		el.readOnly = false
-		wrap.removeAttribute('readonly')
-	} else {
-		el.classList.remove('fgta5-input-editmode')
-		el.readOnly = true
-		wrap.setAttribute('readonly', "true")
+function Textbox_getValueCased(self, v) {
+	var value = v
+	var input = self.Nodes.Input
+	if (input.charCase === 'uppercase') {
+		value = v.toUpperCase()
+	} else if (input.charCase === 'lowercase') {
+		value = v.toLowerCase()
 	}
-
+	return value
 }
 
-function Textbox_SetError(self, msg) {
-	const el = self.Element
-	const wrap = self.Wrapper
 
-	var errormessage = msg
-	if (msg===undefined) {
-		errormessage = el.getAttribute('errormessage') // ambil error dari attribut
-	} else if (msg===null) {
-		errormessage = null  // errormessage==null berarti tidak ada error
-	} 
-
-	if (errormessage) {
-		// tampilkan error
-		el.setAttribute('error', errormessage)
-		el.classList.add('fgta5-input-error')
-		wrap.classList.add('fgta5-input-error')
-
-		console.error(errormessage)
-		var errmsg = wrap.parentNode.querySelector('.fgta5-errormessage')
-		if (!errmsg) {
-			errmsg = document.createElement('div')
-			errmsg.innerText = errormessage
-			errmsg.classList.add('fgta5-errormessage')
-			wrap.parentNode.appendChild(errmsg)
-		}
-	} else {
-		// hapus error
-		el.setAttribute('error', null)
-		el.classList.remove('fgta5-input-error')
-		wrap.classList.remove('fgta5-input-error')
-
-		var errmsg = wrap.parentNode.querySelector('.fgta5-errormessage')
-		if (errmsg) {
-			errmsg.parentNode.removeChild(errmsg)
-		}
-	}
+function Textbox_GetValue(self) {
+	var input = self.Nodes.Input
+	var value = Textbox_getValueCased(self, input.value)
+	return value
 }
 
-function Textbox_Validate(self) {
-	const el = self.Element
-	const wrap = self.Wrapper
-	const lbl = self.Label
+function Textbox_SetValue(self, v) {
+	if (v===null || v===undefined) {
+		v=''
+	}
+	self.Element.value = Textbox_getValueCased(self, v)
+}
 
 
-	var minlength = el.getAttribute('minlength')  // minimum panjang input text
-	var maxlength = el.getAttribute('maxlength')  // maximum panjang input text
-	var validator = el.getAttribute('validator')  // fungsi-fungsi yang akan dipakai untuk validasi, pisahkan dengan koma 
-	var invalid = el.getAttribute('invalid')      // ambil pesan error dari attribut
-	var isRequired = el.getAttribute('required') != null   // value bukan "" atau null
-	var isEmpty = self.Value == null || self.Value == ""    // value "" atau null
-	var labeltext = lbl ? lbl.innerText : null
 
-	try {
-		if (isRequired && isEmpty) {
-			var errormessage = invalid!=null ? invalid : `field ${labeltext} is required`	
-			throw new Error(errormessage)
-		}
-
-		if (!textLengthValidation(self.Value, minlength, maxlength)) {
-			var errormessage = invalid!=null ? invalid : `field ${labeltext} must be at least ${minlength} and maximum ${maxlength} characters long`
-			throw new Error(errormessage)
-		}
-
-		var errormessage = customValidation(self.Value, validator)
-		if (errormessage) {
-			throw new Error(errormessage)
-		}
-		
-		self.SetError(null) // hapus pesan error jika ada
+function Textbox_IsChanged(self) {
+	var lastvalue = self.GetLastValue()
+	var currentvalue = self.Value
+	if (currentvalue!=lastvalue) {
+		console.log(`Textbox '${self.Id}' is changed from '${lastvalue}' to '${currentvalue}'`)
 		return true
-	} catch (e) {
-		self.SetError(e.message) // tampilkan pesan error
+	} else {
 		return false
-	}	
+	}
 }
 
+function Textbox_GetLastValue(self) {
+	var lastvalue = self.Nodes.LastValue.value
+	return Textbox_getValueCased(self, lastvalue)
+}
+
+function Textbox_SetEditingMode(self, ineditmode) {
+	var attrval = ineditmode ? 'true' : 'false'
+	self.Nodes.Input.setAttribute('editmode', attrval)
+	self.Nodes.InputWrapper.setAttribute('editmode', attrval)
+
+	if (ineditmode) {
+		self.Nodes.Input.removeAttribute('readonly')
+	} else {
+		self.Nodes.Input.setAttribute('readonly', 'true')
+		self.SetError(null)
+	}
+}
+
+
+function Textbox_blur(self, e) {
+	if (self.InEditMode) {
+		self.SetError(null)
+		self.Validate()
+	}
+}
 

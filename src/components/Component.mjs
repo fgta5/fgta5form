@@ -11,11 +11,6 @@ export default class Component {
 			this.Element = document.getElementById(id)
 		}
 	}
-	
-	addEventListener(event, callback) {
-		this.Element.addEventListener(event, callback)
-	}
-
 
 	static GenerateId() {
 		return `comp-${++counter}`;
