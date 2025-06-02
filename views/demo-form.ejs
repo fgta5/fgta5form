@@ -111,7 +111,7 @@
 					</div> 
 					<% } %> 
 
-					<% if (true) { %> 
+					<% if (false) { %> 
 					<div class="demo-input-field" field="obj_tanggal">
 						<label for="obj_tanggal">Tanggal</label>
 						<input id="obj_tanggal" fgta5-component="Datepicker" placeholder="dd MMM yyyy" autocomplete="off" spellcheck="false" 
@@ -125,13 +125,13 @@
 					</div>
 					<% } %> 
 
-					<% if (false) { %> 
+					<% if (true) { %> 
 					<div class="demo-input-field" field="obj_jam">
 						<label for="obj_jam">Jam</label>
 						<input id="obj_jam" fgta5-component="Timepicker" placeholder="hh:mm" autocomplete="off" spellcheck="false" 
 							required
-							min="08:00" max="12:00"
-							value="09:20"
+							x-min="08:00" x-max="12:00"
+							x-value="09:20"
 							binding="jam"
 							description="isi jam"
 							invalid-message="jam harus dalam range 08:00 s/d 12:00"

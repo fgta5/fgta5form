@@ -149,7 +149,7 @@ function Datepicker_construct(self, id) {
 
 
 
-
+	// display
 	display.setAttribute('id', `${id}-display`)
 	display.setAttribute('type', 'text')
 	display.setAttribute('fgta5-component', 'Datepicker')
@@ -170,15 +170,18 @@ function Datepicker_construct(self, id) {
 	}
 
 
+	// main input
 	input.setAttribute('type', 'date')
 	input.removeAttribute('class')
 	input.removeAttribute('style')
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
-	
+		input.getInputCaption = () => {
+		return label.innerHTML
+	}
 	
 
-	// button
+	// picker button
 	button.id = self.Id + '-button'
 	button.insertAdjacentHTML("beforeend", button_icon)
 	button.classList.add('fgta5-entry-button-datepicker')	
@@ -192,6 +195,8 @@ function Datepicker_construct(self, id) {
 
 
 	// additional property setup
+
+	// required
 	var required = input.getAttribute('required')
 	if (required != null) {
 		self.MarkAsRequired(true)
@@ -200,9 +205,11 @@ function Datepicker_construct(self, id) {
 	if (input.value != null && input.value != '') {
 		self.Value = input.value
 		self._setLastValue(input.value)
+		self.AcceptChanges()
 	}
 
 	
+	// set input description
 	self._setupDescription()
 
 
@@ -236,15 +243,18 @@ function Datepicker_setDisabled(self, v) {
 
 function Datepicker_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
+	var input = self.Nodes.Input
+	var display = self.Nodes.Display
+	var inputwrap = self.Nodes.InputWrapper
 
-	self.Nodes.Display.setAttribute('editmode', attrval)
-	self.Nodes.Input.setAttribute('editmode', attrval)
-	self.Nodes.InputWrapper.setAttribute('editmode', attrval)
+	display.setAttribute('editmode', attrval)
+	input.setAttribute('editmode', attrval)
+	inputwrap.setAttribute('editmode', attrval)
 
 	if (ineditmode) {
-		self.Nodes.Input.removeAttribute('readonly')
+		input.removeAttribute('readonly')
 	} else {
-		self.Nodes.Input.setAttribute('readonly', 'true')
+		input.setAttribute('readonly', 'true')
 		self.SetError(null)
 	}
 }

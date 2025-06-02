@@ -15,16 +15,19 @@ const obj_disabled = form.Inputs.obj_disabled
 const obj_alamat = form.Inputs.obj_alamat
 const obj_nilai = form.Inputs.obj_nilai
 const obj_tanggal = form.Inputs.obj_tanggal
+const obj_jam = form.Inputs.obj_jam
 const obj_kota = form.Inputs.obj_kota
 
 
-// untuk keperluan test agar bisa diakses langsung dari console
+// untuk keperluan test & debug agar bisa diakses langsung dari console
+// PERHATIAN! jangan lakukan ini untuk production
 window.form = form
 window.obj_nama = obj_nama
 window.obj_nilai = obj_nilai
 window.obj_disabled = obj_disabled
 window.obj_alamat = obj_alamat
 window.obj_tanggal = obj_tanggal
+window.obj_jam = obj_jam
 window.obj_kota = obj_kota
 
 
