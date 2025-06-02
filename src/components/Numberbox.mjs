@@ -119,12 +119,6 @@ function Numberbox_construct(self, id) {
 	input.setAttribute('step', step)
 	input.getInputCaption = () => { return label.innerHTML }
 	
-	
-
-
-	// label
-	label.setAttribute('for', display.id)
-
 
 	// setup display
 	display.id = self.Id + '-display'
@@ -141,6 +135,10 @@ function Numberbox_construct(self, id) {
 	display.setAttribute('fgta5-component', 'Numberbox')
 
 	
+	// label
+	label.setAttribute('for', display.id)
+
+
 	// additional property setup
 	if (input.value === null || input.value === '') {
 		input.value = 0

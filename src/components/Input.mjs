@@ -154,7 +154,6 @@ function Input_setLastValue(self, v) {
 }
 
 function Input_GetLastValue(self) {
-	console.log('Input_GetLastValue', self.Nodes.LastValue.value)
 	return self.Nodes.LastValue.value
 }
 
