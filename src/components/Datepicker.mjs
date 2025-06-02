@@ -104,7 +104,6 @@ export default class Datepicker extends Input {
 		return Datepicker_GetLastValue(this)
 	} 
 
-
 }
 
 function Datepicker_construct(self, id) {
@@ -187,11 +186,17 @@ function Datepicker_construct(self, id) {
 
 	// label
 	label.setAttribute('for', button.id)
+	label.classList.add('fgta5-entry-label')
 
 
 
 
 	// additional property setup
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
+	}
+
 	if (input.value != null && input.value != '') {
 		self.Value = input.value
 		self._setLastValue(input.value)
@@ -350,3 +355,4 @@ function Datepicker_GetLastValue(self) {
 		return lastvalue
 	}
 }
+

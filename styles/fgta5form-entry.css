@@ -19,6 +19,18 @@
 }
 
 
+.fgta5-entry-label[disabled] {
+	opacity: 0.5;
+}
+
+.fgta5-entry-label[required]::after {
+	content: '*';
+	margin-left: 2px;
+	color: red;
+	opacity: 1 !important;
+}
+
+
 .fgta5-entry-input-wrapper {
 	border: none;
 	border-bottom: 1px solid var(--fgta5-color-input-line);

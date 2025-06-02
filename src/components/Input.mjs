@@ -96,9 +96,11 @@ export default class Input extends Component {
 		}		
 	}
 
+	MarkAsRequired(r) {
+		Input_MarkAsRequired(this, r)
+	}
 
-
-	addEventListener = (evt, callback) => {
+	addEventListener(evt, callback) {
 		this.Listener.addEventListener(evt, callback)
 	}
 }
@@ -318,6 +320,18 @@ function Input_readValidators(self) {
 			var { fnName, fnParams } = $fgta5.Validators.parseFunctionParam(str)
 			var msg = window.$validators.getInvalidMessage('pattern', self.Nodes.Input, default_invalid_message)
 			self.AddValidator(fnName, fnParams, msg)
+		}
+	}
+}
+
+
+function Input_MarkAsRequired(self, required) {
+	var label = self.Nodes.Label;
+	if (label!=null && label !=undefined) {
+		if (required) {
+			self.Nodes.Label.setAttribute('required', '')
+		} else {
+			self.Nodes.Label.removeAttribute('required')
 		}
 	}
 }

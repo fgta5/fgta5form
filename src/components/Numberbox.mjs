@@ -137,9 +137,16 @@ function Numberbox_construct(self, id) {
 	
 	// label
 	label.setAttribute('for', display.id)
+	label.classList.add('fgta5-entry-label')
 
 
 	// additional property setup
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
+	}
+
+
 	if (input.value === null || input.value === '') {
 		input.value = 0
 	}

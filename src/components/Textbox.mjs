@@ -37,6 +37,7 @@ export default class Textbox extends Input {
 		return Textbox_IsChanged(this)
 	}
 
+
 }
 
 
@@ -80,6 +81,9 @@ function Textbox_construct(self, id) {
 		return label.innerHTML
 	}
 
+	// label
+	label.classList.add('fgta5-entry-label')
+
 	// set input value
 	self._setLastValue(self.Value)
 
@@ -98,6 +102,12 @@ function Textbox_construct(self, id) {
 	var charCase = input.getAttribute('character-case') 
 	if (charCase !== null && charCase.trim() !== '') {
 		input.charCase = charCase.trim().toLowerCase()
+	}
+
+	// required field
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
 	}
 
 
@@ -200,3 +210,4 @@ function Textbox_blur(self, e) {
 		self.Validate()
 	}
 }
+

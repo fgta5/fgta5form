@@ -164,6 +164,14 @@ function Combobox_construct(self, id) {
 
 	// setup label
 	label.setAttribute('for', display.id)
+	label.classList.add('fgta5-entry-label')
+
+
+	// required field
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
+	}
 
 	// dialog
 	Combobox_createDialog(dialog)

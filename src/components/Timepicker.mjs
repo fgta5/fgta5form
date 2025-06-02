@@ -68,7 +68,7 @@ export default class Timepicker extends Input {
 		super.Reset()
 		Timepicker_Reset(this)
 	}
-		
+	
 }
 
 
@@ -137,7 +137,14 @@ function Timepicker_construct(self, id) {
 	button.id = self.Id + '-button'
 
 	label.setAttribute('for', button.id)
+	label.classList.add('fgta5-entry-label')
 
+
+	// required field
+	var required = input.getAttribute('required')
+	if (required != null) {
+		self.MarkAsRequired(true)
+	}
 
 	// set input description
 	self._setupDescription()
