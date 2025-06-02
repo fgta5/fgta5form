@@ -60,6 +60,7 @@
 					<div class="demo-input-field" field="obj_nama">
 						<label for="obj_nama">Nama</label>
 						<input id="obj_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
+							required
 							value="agung" 
 							style="background-color: aquamarine; "
 							character-case="uppercase"
@@ -114,11 +115,12 @@
 					<div class="demo-input-field" field="obj_tanggal">
 						<label for="obj_tanggal">Tanggal</label>
 						<input id="obj_tanggal" fgta5-component="Datepicker" placeholder="dd MMM yyyy" autocomplete="off" spellcheck="false" 
-							min="2025-05-17" max="2025-06-27"
-							value="2025-05-18"
+							required
+							min="2025-06-02" x-max="2025-06-27"
+							x-value="2025-05-18"
 							binding="tanggal"
 							description="isi tanggal anda"
-							invalid-message="tanggal harus dalam range 2025-05-17 s/d 2025-05-27"
+							x-invalid-message="tanggal harus dalam range 2025-05-17 s/d 2025-05-27"
 							>
 					</div>
 					<% } %> 
@@ -127,6 +129,7 @@
 					<div class="demo-input-field" field="obj_jam">
 						<label for="obj_jam">Jam</label>
 						<input id="obj_jam" fgta5-component="Timepicker" placeholder="hh:mm" autocomplete="off" spellcheck="false" 
+							required
 							min="08:00" max="12:00"
 							value="09:20"
 							binding="jam"
@@ -140,6 +143,7 @@
 					<div class="demo-input-field" field="obj_kota">
 						<label for="obj_kota">Kota</label>
 						<input id="obj_kota" fgta5-component="Combobox" placeholder="pilih kota" autocomplete="off" spellcheck="false" 
+							required
 							binding="kota"
 							description="kota alamat domisili"
 							invalid-message="kota harus diisi"

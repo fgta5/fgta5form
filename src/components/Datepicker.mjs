@@ -74,15 +74,14 @@ export default class Datepicker extends Input {
 	}
 
 
-	SetError(msg) {
-		super.SetError(msg)
-		Datepicker_SetError(this, msg)
-	}
 
 
 	NewData(initialvalue) {
+		if (initialvalue===undefined || initialvalue===null) {
+			initialvalue = ''
+		}
 		super.NewData(initialvalue)
-		Datepicker_Newdata(this, initialvalue)
+		// Datepicker_Newdata(this, initialvalue)
 	}
 
 	AcceptChanges() {
@@ -95,7 +94,16 @@ export default class Datepicker extends Input {
 		super.Reset()
 		Datepicker_Reset(this)
 	}
-	
+
+	SetError(msg) {
+		super.SetError(msg)
+		Datepicker_SetError(this, msg)
+	}
+
+	GetLastValue() {
+		return Datepicker_GetLastValue(this)
+	} 
+
 
 }
 
@@ -108,44 +116,55 @@ function Datepicker_construct(self, id) {
 	const button = document.createElement('button')
 	const label = document.querySelector(`label[for="${id}"]`)
 
+
+
+	// setup container, (harus di awal seblum yang lain-lain)
+	// diperlukan untuk menampung semua element yang akan ditampilkan
+	input.parentNode.insertBefore(container, input)
+
+
+	// tambahkan elemen-element ke container
+	// penambahakn container ke body document pada saat Input_construct di parent class Input
+	wrapinput.appendChild(display)
+	wrapinput.appendChild(button)
+	button.appendChild(input)
+	container.appendChild(wrapinput)
+	container.appendChild(lastvalue)
+
+
 	// tambahkan referensi elemen ke Nodes
 	self.Nodes.InputWrapper = wrapinput
 	self.Nodes.Label = label 
 	self.Nodes.Display = display
 	self.Nodes.Button = button
 
-	// setup awal Component
-	input.parentNode.insertBefore(container, input)
 	
 
-	wrapinput.classList.add('fgta5-entry-input-wrapper')
-	display.classList.add('fgta5-entry-display')
-	display.classList.add('fgta5-entry-display-datepicker')
-	button.classList.add('fgta5-entry-button-datepicker')	
 
-	wrapinput.appendChild(display)
-	wrapinput.appendChild(button)
-	button.innerHTML = button_icon
-	button.appendChild(input)
-	container.appendChild(wrapinput)
-	container.appendChild(lastvalue)
+	// setup container
 	container.setAttribute('fgta5-component', 'Datepicker')
+
+
+	// setup wrapper
+	wrapinput.classList.add('fgta5-entry-input-wrapper')
+
+
+
 
 	display.setAttribute('id', `${id}-display`)
 	display.setAttribute('type', 'text')
 	display.setAttribute('fgta5-component', 'Datepicker')
 	display.setAttribute('readonly', 'true')
-
+	display.classList.add('fgta5-entry-display')
+	display.classList.add('fgta5-entry-display-datepicker')
 	var placeholder = input.getAttribute('placeholder')
 	if (placeholder!=null && placeholder !='') {
 		display.setAttribute('placeholder', placeholder)
 	}
-
 	var cssclass = input.getAttribute('class')
 	if (cssclass!=null && cssclass !='') {
 		display.setAttribute('class', cssclass)
 	}
-	
 	var cssstyle = input.getAttribute('style')
 	if (cssstyle!=null && cssstyle !='') {
 		display.setAttribute('style', cssstyle)
@@ -158,27 +177,35 @@ function Datepicker_construct(self, id) {
 	input.classList.add('fgta5-entry-input')
 	input.classList.add('fgta5-entry-input-datepicker')
 	
-	input.addEventListener('change', (e)=>{
-		Datepicker_changed(self)
-	})
 	
 
-
+	// button
 	button.id = self.Id + '-button'
+	button.insertAdjacentHTML("beforeend", button_icon)
+	button.classList.add('fgta5-entry-button-datepicker')	
 
+
+	// label
 	label.setAttribute('for', button.id)
 
 
-	// set input description
+
+
+	// additional property setup
+	if (input.value != null && input.value != '') {
+		self.Value = input.value
+		self._setLastValue(input.value)
+	}
+
+	
 	self._setupDescription()
 
 
-	if (input.value === null || input.value === '') {
-		self.Value = new Date()
-	} else {
-		self.Value = input.value
-	}
-	self._setLastValue(input.value)
+
+	// internal event
+	input.addEventListener('change', (e)=>{
+		Datepicker_changed(self)
+	})
 
 
 }
@@ -219,18 +246,24 @@ function Datepicker_SetEditingMode(self, ineditmode) {
 
 
 function Datepicker_getValue(self) {
-	return Datepicker_getIsoDateValue(self.Nodes.Input.value) 
+	if (self.Nodes.Input.value=='') {
+		return null
+	} else {
+		return Datepicker_getIsoDateValue(self.Nodes.Input.value) 
+	}
 }
 
 
 function Datepicker_setValue(self, dt) {
+	self.Nodes.Input.value = dt
 	Datepicker_setDisplay(self, dt)
+	Datepicker_markChanged(self)
 }
 
 
-function Datepicker_Newdata(self, initialvalue) {
-	self.Nodes.Display.removeAttribute('changed')
-}
+// function Datepicker_Newdata(self, initialvalue) {
+// 	self.AcceptChanges()
+// }
 
 
 function Datepicker_AcceptChanges(self) {
@@ -238,11 +271,18 @@ function Datepicker_AcceptChanges(self) {
 }
 
 function Datepicker_Reset(self) {
-	self.Nodes.Display.removeAttribute('changed')
+	var lastvalue = self.GetLastValue()
+	if (lastvalue==null) {
+		self.Value = ''
+	} else {
+		self.Value = lastvalue
+	}
 }
 
 function Datepicker_changed(self) {
-	Datepicker_setDisplay(self, self.Nodes.Input.value)
+	var input = self.Nodes.Input
+	Datepicker_setDisplay(self, input.value)
+	
 	Datepicker_markChanged(self)
 	if (self.InEditMode) {
 		self.SetError(null)
@@ -263,6 +303,13 @@ function Datepicker_getIsoDateValue(v) {
 	return dt.toISOString().split("T")[0]
 }
 
+// function Datepicker_getFormattedValue(isodate) {
+// 	var date = new Date(isodate);
+//     var options = { day: '2-digit', month: 'short', year: 'numeric' };
+// 	var formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
+// 	return formattedDate
+// }
+
 
 function Datepicker_markChanged(self) {
 	var display = self.Nodes.Display
@@ -273,14 +320,16 @@ function Datepicker_markChanged(self) {
 	}
 }
 
-function Datepicker_setDisplay(self, dt) {
-	const date = new Date(dt);
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-
-	const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
-	self.Nodes.Display.value = formattedDate
-
-
+function Datepicker_setDisplay(self, dtiso) {
+	var display = self.Nodes.Display
+	if (dtiso=='') {
+		display.value = ''
+	} else {
+		const date = new Date(dtiso);
+		const options = { day: '2-digit', month: 'short', year: 'numeric' };
+		const formattedDate = date.toLocaleDateString('en-ID', options).replace('.', ''); 
+		display.value = formattedDate
+	}
 }
 
 
@@ -293,3 +342,11 @@ function Datepicker_SetError(self, msg) {
 	}
 }
 
+function Datepicker_GetLastValue(self) {
+	var lastvalue = self.Nodes.LastValue.value
+	if (lastvalue=='') {
+		return null
+	} else {
+		return lastvalue
+	}
+}

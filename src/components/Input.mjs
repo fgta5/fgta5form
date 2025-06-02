@@ -149,7 +149,6 @@ function Input_SetError(self, msg) {
 
 
 function Input_setLastValue(self, v) {
-	// console.log(`Input '${self.Id}' set last value from '${self.Nodes.LastValue.value}' to '${v}'`)
 	self.Nodes.LastValue.value = v
 }
 
@@ -158,14 +157,6 @@ function Input_GetLastValue(self) {
 }
 
 function Input_NewData(self, initialvalue) {
-	// if (initialvalue === undefined || initialvalue === null) {
-	// 	initialvalue = ''
-	// } else if (initialvalue instanceof Date) {
-	// 	initialvalue = initialvalue.toISOString().split("T")[0]
-	// } else if (typeof initialvalue !== 'string') {
-	// 	initialvalue = String(initialvalue)
-	// }
-
 	self.Value = initialvalue
 	self.AcceptChanges()
 }
@@ -233,6 +224,11 @@ function Input_Validate(self) {
 }
 
 
+function clearTime(dt) {
+	dt.setHours(0)
+	dt.setMinutes(0)
+	dt.setSeconds(0)
+}
 
 function Input_readValidators(self) {
 	const cname = self.Nodes.Input.getAttribute('fgta5-component')
@@ -277,6 +273,7 @@ function Input_readValidators(self) {
 	if (min != null) {
 		if (cname=="Datepicker") {
 			var mindate = new Date(min)
+			clearTime(mindate)
 			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('mindate', mindate, msg)
 		} else if (cname=="Timepicker") {
@@ -296,6 +293,7 @@ function Input_readValidators(self) {
 	if (max != null) {
 		if (cname=="Datepicker") {
 			var maxdate = new Date(max)
+			clearTime(maxdate)
 			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('maxdate', maxdate, msg)
 		} else if (cname=="Timepicker") {
