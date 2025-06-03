@@ -66,5 +66,17 @@ app.get('/release/:page', function(req, res) {
 	});
 });
 
+app.get('/getdata', async (req, res) => {
+	var sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
+	var jsondata = []
+	for (var i=0; i<=1000; i++) {
+		// await sleep(20)
+		jsondata.push({value:`v-${i}`, text:`data-${i}`, nama:`nama-${i}`, alamat:`alamat-${i}`})
+	}
+
+	res.send(JSON.stringify(jsondata))
+})
+
+
 app.listen(3000);
 console.log('Server is listening on port 3000');

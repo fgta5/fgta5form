@@ -5,7 +5,7 @@ export default class Input extends Component {
 	constructor(id) {
 		super(id)
 		Input_construct(this, id)
-		Input_readValidators(this)
+		this._readValidators()
 	}
 	
 	/* mengembalikan nama class contructor, misalnya 'Textbox' */
@@ -28,6 +28,21 @@ export default class Input extends Component {
 		this.#_ineditmode = ineditmode 
 	}
 	
+	#invalidMessages = {}
+	get InvalidMessages() { return this.#invalidMessages }
+	_readValidators() {
+		let input = this.Element
+		var prefix = 'invalid-message'
+		Array.from(input.attributes).forEach(attr => {
+			if (attr.name.startsWith(prefix)) {
+				var key = attr.name === prefix ? "default" : attr.name.replace(`${prefix}-`, "");
+				this.#invalidMessages[key] = attr.value;
+			}
+		});
+		Input_readValidators(this)
+	}
+
+
 	NewData(initialvalue) {
 		Input_NewData(this, initialvalue)
 	}
@@ -84,6 +99,13 @@ export default class Input extends Component {
 			delete this.#_validators[str]
 		}			
 	}
+	ClearValidators() {
+		this.#_validators = {}
+	}
+	ReadValidators() {
+		Input_readValidators(this)
+	}
+
 
 	_setupDescription() {
 		var description = this.Element.getAttribute('description')
@@ -96,12 +118,23 @@ export default class Input extends Component {
 		}		
 	}
 
+	#isrequired = false
+	IsRequired() { return this.#isrequired}
 	MarkAsRequired(r) {
+		this.#isrequired = r
 		Input_MarkAsRequired(this, r)
 	}
 
+
 	addEventListener(evt, callback) {
 		this.Listener.addEventListener(evt, callback)
+	}
+
+
+	#handlers = {}
+	get Handlers() { return this.#handlers }
+	Handle(name, fn) {
+		this.#handlers[name] = fn
 	}
 }
 
@@ -187,41 +220,65 @@ function Input_IsChanged(self) {
 }
 
 
+function Input_GetErrorValidation(self, fnName) {
+	const validatorData = self.Validators[fnName]
+	const fnValidate = $validators[fnName];
+	const fnParams = validatorData.param;
+	const fnMessage = validatorData.message;
+	const input = self.Nodes.Input
+
+	try {
+		if (typeof fnValidate !== 'function') {
+			var err = new Error(`Validator function '${fnName}' is not defined or not a function`)
+			console.error(err);
+			throw err
+		}
+
+		var valid = fnValidate(input.value, fnParams)
+		if (!valid) {
+			var defmsg = self.InvalidMessages['default']
+			if (fnMessage!=null) {
+				throw new Error(fnMessage)
+			} else if (defmsg != null) {
+				throw new Error(defmsg)
+			} else {
+				throw new Error( `Invalid value '${input.value}' for '${input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
+			}
+		}
+		return null
+	} catch(err) {
+		return err
+	}
+}
+
+
 function Input_Validate(self) {
-	for (const [fnName, args] of Object.entries(self.Validators)) {
-		const fnValidate = $validators[fnName];
-		const fnParams = args.param;
-		const fnMessage = args.message;
+	// prioritas untama untuk proses validasi adalah required
+	// jalankan validasi required dulu,
+	// baru kemudian loop validasi yang lain, tapi kemudian skip required karena telah dieksekusi
 
-		try {
-			if (typeof fnValidate !== 'function') {
-				var err = new Error(`Validator function '${fnName}' is not defined or not a function`)
-				console.error(err);
-				throw err
-			}
-
-			if (fnName=='mindate') {
-				var t = 0
-			}
-
-
-			var valid = fnValidate(self.Nodes.Input.value, fnParams)
-			if (!valid) {
-				var err = new Error( `Invalid value '${self.Nodes.Input.value}' for '${self.Nodes.Input.getInputCaption()}' using validator '${fnName}(${fnParams??''})'` )
-				console.log(err.message);
-
-				var msg = fnMessage
-				if (msg === null || msg === '') {
-					msg = err.message
-				}
-				throw new Error(msg)
-			}
-		} catch(err) {
+	const vnamereq = 'required'
+	if (self.Validators[vnamereq]!=null) {
+		var err = Input_GetErrorValidation(self, vnamereq) // prioritas utama untuk validasi
+		if (err!=null) {
 			self.SetError(err.message)
 			return false
 		}
 	}
 
+	// lanjutkan untuk validasi berikutnya
+	for (const fnName in self.Validators) {
+		if (fnName==vnamereq) {
+			continue
+		}
+		var err = Input_GetErrorValidation(self, fnName) 
+		if (err!=null) {
+			self.SetError(err.message)
+			return false
+		}
+	}
+
+	self.SetError(null)
 	return true
 }
 
@@ -234,79 +291,69 @@ function clearTime(dt) {
 
 function Input_readValidators(self) {
 	const cname = self.Nodes.Input.getAttribute('fgta5-component')
-	var default_invalid_message = self.Nodes.Input.getAttribute(`invalid-message`)
+	var attrname = ''
 
-	var required = self.Nodes.Input.getAttribute('required')
-	if (required != null) {
-		if (required.toLowerCase() !== 'false') {
-			var msg = window.$validators.getInvalidMessage('required', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('required', null, msg)
-		}
-	}
-
-	var minlength = self.Nodes.Input.getAttribute('minlength')
+	attrname = 'minlength'
+	var minlength = self.Nodes.Input.getAttribute(attrname)
 	if (minlength != null) {
 		minlength = parseInt(minlength)
 		if (!isNaN(minlength)) {
-			var msg = window.$validators.getInvalidMessage('minlength', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('minlength', minlength, msg)
+			self.AddValidator(attrname, minlength, self.InvalidMessages[attrname])
 		}
 	}
 
-	var maxlength = self.Nodes.Input.getAttribute('maxlength')
+	attrname = 'maxlength'
+	var maxlength = self.Nodes.Input.getAttribute(attrname)
 	if (maxlength != null) {
 		maxlength = parseInt(maxlength)
 		if (!isNaN(maxlength)) {
-			var msg = window.$validators.getInvalidMessage('maxlength', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('maxlength', maxlength, msg)
+			self.AddValidator(attrname, maxlength, self.InvalidMessages[attrname])
 		}
 	}
 
-	var pattern = self.Nodes.Input.getAttribute('pattern')
+	attrname = 'pattern'
+	var pattern = self.Nodes.Input.getAttribute(attrname)
 	if (pattern != null) {
 		if (pattern.trim() !== '') {
-			var msg = window.$validators.getInvalidMessage('pattern', self.Nodes.Input, default_invalid_message)
-			self.AddValidator('pattern', pattern, msg)
+			self.AddValidator('pattern', pattern, self.InvalidMessages[attrname])
 		}
 	}
 
 
-	var min = self.Nodes.Input.getAttribute('min')
+	attrname = 'min'
+	var min = self.Nodes.Input.getAttribute(attrname)
 	if (min != null) {
+		var msg = self.InvalidMessages[attrname]
 		if (cname=="Datepicker") {
 			var mindate = new Date(min)
 			clearTime(mindate)
-			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('mindate', mindate, msg)
 		} else if (cname=="Timepicker") {
 			var mintime = min
-			var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('mintime', mintime, msg)
 		} else {
 			min = parseInt(min)
 			if (!isNaN(min)) {
-				var msg = window.$validators.getInvalidMessage('min', self.Nodes.Input, default_invalid_message)
-				self.AddValidator('min', min, msg)
+				self.AddValidator(attrname, min, msg)
 			}
 		}
 	}
 
-	var max = self.Nodes.Input.getAttribute('max')
+	attrname = 'max'
+	var max = self.Nodes.Input.getAttribute(attrname)
 	if (max != null) {
+		var msg = self.InvalidMessages[attrname]
 		if (cname=="Datepicker") {
 			var maxdate = new Date(max)
 			clearTime(maxdate)
-			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('maxdate', maxdate, msg)
 		} else if (cname=="Timepicker") {
 			var maxtime = max
-			var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
 			self.AddValidator('maxtime', maxtime, msg)
 		} else {
 			max = parseInt(max)
 			if (!isNaN(max)) {
-				var msg = window.$validators.getInvalidMessage('max', self.Nodes.Input, default_invalid_message)
-				self.AddValidator('max', max, msg)
+				self.AddValidator(attrname, max, msg)
 			}
 		}
 	}
@@ -318,20 +365,23 @@ function Input_readValidators(self) {
 		for (var i=0; i<validator.length; i++) {
 			var str = validator[i].trim()
 			var { fnName, fnParams } = $fgta5.Validators.parseFunctionParam(str)
-			var msg = window.$validators.getInvalidMessage('pattern', self.Nodes.Input, default_invalid_message)
-			self.AddValidator(fnName, fnParams, msg)
+			self.AddValidator(fnName, fnParams, self.InvalidMessages[fnName])
 		}
 	}
 }
 
-
 function Input_MarkAsRequired(self, required) {
+	var attrname = 'required'
 	var label = self.Nodes.Label;
 	if (label!=null && label !=undefined) {
 		if (required) {
-			self.Nodes.Label.setAttribute('required', '')
+			self.Nodes.Label.setAttribute(attrname, '')
+			self.Nodes.Input.setAttribute(attrname, '')
+			self.AddValidator(attrname, null, self.InvalidMessages[attrname])
 		} else {
-			self.Nodes.Label.removeAttribute('required')
+			self.Nodes.Label.removeAttribute(attrname)
+			self.Nodes.Input.removeAttribute(attrname)
+			self.RemoveValidator(attrname)
 		}
 	}
 }

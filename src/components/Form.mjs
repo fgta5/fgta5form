@@ -71,7 +71,6 @@ export default class Form extends Component {
 
 
 function Construct(self, id) {
-	// console.log(`construct form ${id}`)
 	var formEl =  document.getElementById(id)
 
 	self.Id = id
@@ -109,6 +108,7 @@ function Construct(self, id) {
 		}
 	
 	}
+	
 }
 
 

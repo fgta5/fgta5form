@@ -55,7 +55,7 @@
 				<div style="display: flex; column-gap: 10px; row-gap: 16px; flex-wrap: wrap;">
 
 
-					<% if (true) { %> 		
+					<% if (false) { %> 		
 					<!-- Textbox -->			
 					<div class="demo-input-field" field="obj_nama">
 						<label for="obj_nama">Nama</label>
@@ -125,7 +125,7 @@
 					</div>
 					<% } %> 
 
-					<% if (true) { %> 
+					<% if (false) { %> 
 					<div class="demo-input-field" field="obj_jam">
 						<label for="obj_jam">Jam</label>
 						<input id="obj_jam" fgta5-component="Timepicker" placeholder="hh:mm" autocomplete="off" spellcheck="false" 
@@ -139,11 +139,11 @@
 					</div>
 					<% } %> 
 					
-					<% if (false) { %> 
+					<% if (true) { %> 
 					<div class="demo-input-field" field="obj_kota">
 						<label for="obj_kota">Kota</label>
 						<input id="obj_kota" fgta5-component="Combobox" placeholder="pilih kota" autocomplete="off" spellcheck="false" 
-							required
+							no-required
 							binding="kota"
 							description="kota alamat domisili"
 							invalid-message="kota harus diisi"

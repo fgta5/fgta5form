@@ -381,4 +381,11 @@
 
 .fgta-combobox-option-row[selected] td {
 	font-weight: bold;
+	/* pointer-events: none; */
+	cursor: default;
+}
+
+.fgta-combobox-option-row[value=""] td {
+	font-style: italic;
+	color:#606060;
 }

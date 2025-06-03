@@ -1,5 +1,10 @@
+'use strict';
+
 import Input from "./Input.mjs"
 
+const ChangeEvent = (data) => { return new CustomEvent('change', data) }
+const OptionFormattingEvent = (data) => { return new CustomEvent('optionformatting', data) }
+const SelectingEvent = (data) => { return new CustomEvent('selecting', data) }
 
 
 const icon_cbo_button = `<?xml version="1.0" encoding="UTF-8"?>
@@ -15,7 +20,6 @@ const icon_cbo_close = `<?xml version="1.0" encoding="UTF-8"?>
 </svg>`
 
 
-const ChangeEvent = (detail)=>{ return new CustomEvent('change', {detail: detail}) }
 
 export default class Combobox extends Input {
 
@@ -24,21 +28,11 @@ export default class Combobox extends Input {
 		Combobox_construct(this, id)
 	}
 
-	get Value() {
-		var v = this.Element.value=='' ? null : this.Element.value
-		return v
-		
-	}
-	set Value(v) { 
-		v = v==null ? '' : v
-		this.Element.value = v 
-	}
+	get Value() { return Combobox_getValue(this) }
+	set Value(v) {  throw Error('Value is readonly') }
 
-
-	get Text() { return this.Nodes.Display.value}
-	set Text(v) {
-		this.Nodes.Display.value = v
-	} 
+	get Text() { return  Combobox_getText(this) }
+	set Text(v) { throw Error('Text is readonly') }
 
 	get Disabled() { return this.Element.disabled }
 	set Disabled(v) { 
@@ -72,23 +66,55 @@ export default class Combobox extends Input {
 		Combobox_setLastValue(this, v, t)
 	}
 
-	GetLastText() {
-		return this.Nodes.LastText.value
+	GetLastValue() {
+		return Combobox_GetLastValue(this)
 	} 
 
+	GetLastText() {
+		return Combobox_GetLastText(this)
+	} 
 
-	addEventListener = (evt, callback) => {
-		if (['change'].includes(evt)) {
-			this.Listener.addEventListener(evt, callback)
-		} else {
-			super.addEventListener(evt, callback)
+	SetSelected(value, text) {
+		if (text===undefined || text===null) {
+			text = value
 		}
+		Combobox_SetSelected(this, value, text)
+	}
+
+
+	ClearOptions() {
+		Combobox_ClearOptions(this)
+	}
+
+	AddOptions(data) {
+		Combobox_AddOptions(this, data)
+	}
+
+	SetOptions(data) {
+		Combobox_SetOptions(this, data)
+	}
+
+	
+	Wait(iswaiting) {
+		Combobox_Wait(this, iswaiting)
+	}
+
+	CreateDataLoader(url) {
+		return Combobox_CreateDataLoader(this, url)
 	}
 	
+	// untuk keperluan abort fetch data yang dibatalkan
+	// apabila belum selesai tapi dialog sudah ditutup
+	AbortHandler
+
 }
 
 
-
+function Combobox_SetSelected(self, value, text) {
+	self.Nodes.Input.value = value
+	self.Nodes.Display.value = text
+	Combobox_markChanged(self)
+}
 
 function Combobox_construct(self, id) {
 	const container = self.Nodes.Container
@@ -182,6 +208,7 @@ function Combobox_construct(self, id) {
 			dialog.close()
 			dialog.removeAttribute('removing')
 			dialog.removeAttribute('showed')
+			Combobox_closed(self)
 		}, 200);
     });
 
@@ -201,37 +228,47 @@ function Combobox_construct(self, id) {
 
 	// set input description
 	self._setupDescription()
-
-
-
-
-
-
-	// set last value
 	self._setLastValue(input.value, display.value)
-
-	self.Nodes.Input.getInputCaption = () => {
-		return label.innerHTML
-	}
 	
 }
 
 
-function Combobox_NewData(self, initialdata) {
-	if (initialdata!=null) {
-		self.Value = initialdata.value
-		self.Text = initialdata.text
+function Combobox_getValue(self) {
+	var input = self.Nodes.Input
+	if (input.value=='') {
+		return null
 	} else {
-		self.Value = ''
-		self.Text = ''
+		return input.value
+	}
+}
+
+function Combobox_getText(self) {
+	return self.Nodes.Display.value
+}
+
+
+function Combobox_NewData(self, initialdata) {
+	var input = self.Nodes.Input
+	var display = self.Nodes.Display
+
+
+	if (initialdata===undefined) {
+		input.value = ''
+		display.value = ''
+	} else if (typeof initialdata==='string') {
+		input.value = initialdata
+		display.value = initialdata
+	} else if (initialdata!=null) {
+		input.value = initialdata.value
+		display.value = initialdata.text
+	} else {
+		input.value = ''
+		input.value = ''
 	}
 	self.Nodes.Display.removeAttribute('changed')
 
-	// untuk set value ambil langsung nilainya dari value element,
-	// karena self.Value akan mengembalikan null saat self.Value diisi '' (string kosong)
-	self._setLastValue(self.Nodes.Input.value, self.Text)
 	self.SetError(null)
-
+	self.AcceptChanges()
 }
 
 function Combobox_AcceptChanges(self) {
@@ -260,42 +297,6 @@ function Combobox_setDisabled(self, v) {
 	}
 }
 
-function Combobox_buttonClick(self, e) {
-	var editmode = self.Nodes.Button.getAttribute('editmode')
-	if (editmode!=="true") {
-		return
-	}
-
-
-	// kalau ada sebelumnya yang dipilih, clear dulu
-	var prevselected = self.Nodes.Dialog.querySelector(`table tr[selected]`)
-	if (prevselected != null) {
-		prevselected.removeAttribute('selected')
-	}
-
-	// set kembali baris yang sedang dipilih saat ini
-	var hl = self.Nodes.Dialog.querySelector(`table tr[value="${self.Value}"]`)
-	if (hl != null) {
-		hl.setAttribute('selected', '')
-	}
-
-
-	self.Nodes.Dialog.showModal()
-	self.Nodes.Dialog.setAttribute('showed', 'true')
-
-	var btnClose = self.Nodes.Dialog.querySelector('.fgta5-combobox-dialog-head > button')
-	if (btnClose.onclick==null) {
-		btnClose.onclick=(e) => {
-			self.Nodes.Dialog.setAttribute('removing', 'true')
-			setTimeout(() => {
-				self.Nodes.Dialog.close()
-				self.Nodes.Dialog.removeAttribute('removing')
-				self.Nodes.Dialog.removeAttribute('showed')
-			}, 200);
-		}
-	}
-
-}
 
 function Combobox_SetEditingMode(self, ineditmode) {
 	var attrval = ineditmode ? 'true' : 'false'
@@ -313,10 +314,44 @@ function Combobox_SetEditingMode(self, ineditmode) {
 	}
 }
 
+
+function Combobox_createOptionRow(self, value, text, data) {
+	let tr = document.createElement('tr')
+	var td = document.createElement('td')
+
+	tr.classList.add('fgta-combobox-option-row')
+	tr.setAttribute('value', value)
+
+	td.setAttribute('option', '')
+	td.setAttribute('value', value)
+	td.innerHTML = text
+
+	tr.appendChild(td)
+
+	td.addEventListener('click', (e)=>{
+		self.Nodes.Input.value = value
+		self.Nodes.Display.value = text
+		Combobox_userSelectValue(self, value, text, data)
+	})
+
+	// CATATAN:
+	// dispatch event di sini tidak berlaku untuk static options
+	// karena event handler pada main program baru akan diexekusi setelah pembuatan content option statis
+	self.Listener.dispatchEvent(OptionFormattingEvent({
+		detail: {
+			value: value,
+			text: text,
+			tr: tr,
+			data: data
+		}
+	}))
+
+	return tr
+} 
+
 function Combobox_createStaticOptions(self, dialog, datalist) {
 	const options = datalist.getElementsByTagName("option");
 	
-
 	var thead = dialog.getElementsByTagName('thead')[0]
 	var tbody = dialog.getElementsByTagName('tbody')[0]
 	var tfoot = dialog.getElementsByTagName('tfoot')[0]
@@ -325,6 +360,16 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 	thead.style.display='none'
 	tfoot.style.display='none'
 
+
+	// jika tidak harus diisi,
+	// tambahkan opsi none
+	if (!self.IsRequired()) {
+		var tr = Combobox_createOptionRow(self, '', 'none', {})
+		tr.setAttribute('data-none', '')
+		tbody.appendChild(tr)
+	}
+
+	// selanjutnya isi data berdasar options default
 	for (let option of options) {
 		let text = option.textContent || option.innerText
 		let value = (option.value==null || option.value=='') ? text : option.value
@@ -337,28 +382,8 @@ function Combobox_createStaticOptions(self, dialog, datalist) {
 			}
 		}
 
-
-		var tr = document.createElement('tr')
-		var td = document.createElement('td')
-
-		tr.classList.add('fgta-combobox-option-row')
-		tr.setAttribute('value', value)
-
-		td.setAttribute('option', '')
-		td.setAttribute('value', value)
-		
-		td.innerHTML = text
-
-		tr.appendChild(td)
-		tbody.appendChild(tr)
-
-		td.addEventListener('click', (e)=>{
-			self.Nodes.Input.value = value
-			self.Nodes.Display.value = text
-			Combobox_userSelectValue(self, value, text)
-		})
+		tbody.appendChild(Combobox_createOptionRow(self, value, text, { option: option }))
 	}
-
 
 	return defaultOption
 
@@ -393,10 +418,10 @@ function Combobox_createDialog(dialog) {
 
 function Combobox_userSelectValue(self, value, text, data) {
 	// trigger event
-	let change = new CustomEvent('change', {
-		detail: {value: value, text: text, data:data}
-	})
-	self.Listener.dispatchEvent(change)
+	self.Listener.dispatchEvent(ChangeEvent({
+		sender: self,
+		detail: {value: value, text: text, data:data, sender: self}
+	}))
 
 	Combobox_markChanged(self)
 
@@ -404,6 +429,7 @@ function Combobox_userSelectValue(self, value, text, data) {
 	self.Nodes.Dialog.removeAttribute('showed')
 	setTimeout(() => {
 		self.Nodes.Dialog.close()
+		Combobox_closed(self)
 	}, 200);
 }
 
@@ -414,4 +440,203 @@ function Combobox_markChanged(self) {
 	} else {
 		display.removeAttribute('changed')
 	}
+}
+
+
+function Combobox_GetLastValue(self) {
+	var lastvalue = self.Nodes.LastValue.value
+	if (lastvalue=='') {
+		return null
+	} else {
+		return lastvalue
+	}
+}
+
+function Combobox_GetLastText(self) {
+	return this.Nodes.LastText.value
+}
+
+
+function Combobox_ClearOptions(self, tbody) {
+	const dialog = self.Nodes.Dialog
+	if (tbody==undefined || tbody==null) {
+		tbody = dialog.getElementsByTagName('tbody')[0]
+	}
+
+	tbody.replaceChildren()
+}
+
+function Combobox_AddOptions(self, data, tbody) {
+	if (data==undefined || data==null) {
+		return
+	}
+
+	const dialog = self.Nodes.Dialog
+	if (tbody==undefined || tbody==null) {
+		tbody = dialog.getElementsByTagName('tbody')[0]
+	}
+
+	for (let row of data) {
+		tbody.appendChild(Combobox_createOptionRow(self, row.value, row.text, data))
+	}
+}
+
+function Combobox_SetOptions(self, data) {
+	const dialog = self.Nodes.Dialog
+	const tbody = dialog.getElementsByTagName('tbody')[0]
+
+	// hapus dulu datanya
+	Combobox_ClearOptions(self, tbody)
+	
+	// cek apakah tidak required
+	// jika tidak required, tambahkan none di paling atas
+	if (!self.IsRequired()) {
+		// Combobox_addOptionRow(self, tbody, '', '')
+	}
+
+
+	// tampilkan data pada pilihan
+	Combobox_AddOptions(self, data, tbody)
+}
+
+function Combobox_closed(self) {
+	console.log('combobox closed')
+	if (typeof self.AbortHandler==='function') {
+		self.AbortHandler()
+	}
+}
+
+function Combobox_buttonClick(self, e) {
+	const dialog = self.Nodes.Dialog
+	const tbody = dialog.getElementsByTagName('tbody')[0]
+
+	var editmode = self.Nodes.Button.getAttribute('editmode')
+	if (editmode!=="true") {
+		return
+	}
+
+
+
+
+	var markSelected = () => {
+		// kalau ada sebelumnya yang dipilih, clear dulu
+		var prevselected = dialog.querySelector(`table tr[selected]`)
+		if (prevselected != null) {
+			prevselected.removeAttribute('selected')
+		}
+
+		// set kembali baris yang sedang dipilih saat ini
+		var value = self.Value
+		var trval = value==null ? '' : value
+		var hl = dialog.querySelector(`table tr[value="${trval}"]`)
+		if (hl != null) {
+			hl.setAttribute('selected', '')
+		}
+	}
+
+
+	// required atau nggak
+	var addNoneIfNotRequired = () => {
+		var none = tbody.querySelector('tr[data-none]')
+		if (self.IsRequired()) {
+			// hilangkan none
+			none.remove()
+		} else {
+			// tambahkan none jika belum ada
+			if (none==null) {
+				var tr = Combobox_createOptionRow(self, '', 'none', {})
+				tr.setAttribute('data-none', '')
+				tbody.prepend(tr)
+			}
+		}
+	}
+
+
+	markSelected()
+	addNoneIfNotRequired()
+
+
+	// selecting event
+	self.Listener.dispatchEvent(SelectingEvent({
+		detail: {
+			sender: self,
+			markSelected: markSelected,
+			addNoneIfNotRequired: addNoneIfNotRequired,
+			addRow: (value, text, data) => {
+				var tr = Combobox_createOptionRow(self, value, text, data)
+				tbody.appendChild(tr)
+			}
+		}
+	}))
+
+
+
+	dialog.showModal()
+	dialog.setAttribute('showed', 'true')
+
+	var btnClose = dialog.querySelector('.fgta5-combobox-dialog-head > button')
+	if (btnClose.onclick==null) {
+		btnClose.onclick=(e) => {
+			dialog.setAttribute('removing', 'true')
+			setTimeout(() => {
+				dialog.close()
+				dialog.removeAttribute('removing')
+				dialog.removeAttribute('showed')
+				Combobox_closed(self)
+			}, 200);
+		}
+	}
+
+}
+
+
+
+function Combobox_CreateDataLoader(self) {
+	const controller = new AbortController();
+	const signal = controller.signal;
+
+	return {
+		Abort: () => {
+			controller.abort()
+		},
+
+		Load: async (url, loadedCallback) => {
+			try {
+				const response = await fetch(url, { signal });
+				const data = await response.json();
+				if (typeof loadedCallback == 'function') {
+					loadedCallback(data)
+				}
+			} catch (err) {
+				if (err.name === "AbortError") {
+					console.log("Request dibatalkan!");
+				} else {
+					console.error("Terjadi kesalahan:", err);
+				}
+			}
+		}
+	}
+}
+
+
+function Combobox_Wait(self, iswaiting) {
+	const dialog = self.Nodes.Dialog
+	var tbody = dialog.getElementsByTagName('tbody')[0]
+
+	iswaiting = iswaiting===undefined ? true : iswaiting
+	if (iswaiting) {
+		var tr = document.createElement('tr')
+		var td = document.createElement('td')
+
+		tr.setAttribute('data-waiting', '')
+		td.innerHTML = 'Please Wait ...'
+		tr.appendChild(td)
+		tbody.appendChild(tr)
+	} else {
+		var el = tbody.querySelector('[data-waiting]')
+		if (el!=null) {
+			el.remove()
+		}
+	}
+
 }

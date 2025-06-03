@@ -53,17 +53,14 @@ async function main(self, args) {
 	btn_testdised.addEventListener('click', (evt) => { btn_testdised_click(self, evt) });
 	btn_clearerror.addEventListener('click', (evt) => { btn_clearerror_click(self, evt) });
 
-	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
-	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
-	form.Render()
 
 	if (obj_nama!=null) {
 		obj_nama.addEventListener('input', (evt)=>{
-			console.log('input', evt)
+			// console.log('input', evt)
 		})
 
 		obj_nama.addEventListener('keydown', (evt)=>{
-			console.log('keydown', evt)
+			// console.log('keydown', evt)
 		})
 	}
 
@@ -100,12 +97,46 @@ async function main(self, args) {
 		obj_kota.addEventListener('change', (evt)=>{
 			console.log(evt.detail)
 		})
+
+		obj_kota.addEventListener('optionformatting', (evt)=>{
+			console.log(evt.detail)
+		})
+
+		obj_kota.addEventListener('selecting', (evt)=>{
+			obj_kota_selecting(evt)
+		})
+		
 	}
+
+
+	form.addEventListener('locked', (evt) => { form_locked(self, evt) });
+	form.addEventListener('unlocked', (evt) => { form_unlocked(self, evt) });
+	form.Render()
 
 }
 
 
+async function obj_kota_selecting(evt) {
+	const cbo = evt.detail.sender
+	const loader = cbo.CreateDataLoader()
 
+	cbo.ClearOptions()
+	cbo.Wait()
+	cbo.AbortHandler = () => {
+		loader.Abort()
+	}	
+	
+	loader.Load('http://localhost:3000/getdata', (data)=>{
+		cbo.ClearOptions()
+		evt.detail.addNoneIfNotRequired()
+		for (var row of data) {
+			evt.detail.addRow(row.value, row.text, row)
+		}
+		evt.detail.markSelected()
+		cbo.Wait(false)
+	})
+	
+}
 
 async function btn_edittogle_click(self, evt) {
 	if (!form.IsLocked()) {
