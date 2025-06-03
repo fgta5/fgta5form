@@ -1,6 +1,7 @@
 'use strict';
 
 import Input from "./Input.mjs"
+import Dataloader from "./DataLoader.mjs";
 
 const ChangeEvent = (data) => { return new CustomEvent('change', data) }
 const OptionFormattingEvent = (data) => { return new CustomEvent('optionformatting', data) }
@@ -98,14 +99,28 @@ export default class Combobox extends Input {
 	Wait(iswaiting) {
 		Combobox_Wait(this, iswaiting)
 	}
-
-	CreateDataLoader(url) {
-		return Combobox_CreateDataLoader(this, url)
-	}
 	
 	// untuk keperluan abort fetch data yang dibatalkan
 	// apabila belum selesai tapi dialog sudah ditutup
 	AbortHandler
+
+	// kelengkapan combobox
+	#hasdatapaging
+	get HasDataPaging() { return this.#hasdatapaging  }
+	set HasDataPaging(hasdatapaging) {
+		
+		Combobox_SetDataPaging(this, hasdatapaging)
+	}
+
+
+	get HasDataFilter() {}
+	get FetchUrl() {}
+
+
+	_setDataProperty(attributes) {
+
+	}
+
 
 }
 
@@ -225,6 +240,10 @@ function Combobox_construct(self, id) {
 		input.value = ''
 		display.value = ''
 	}
+
+
+	// baca attribut kelengkapan combobox
+	self._read
 
 	// set input description
 	self._setupDescription()
@@ -587,35 +606,6 @@ function Combobox_buttonClick(self, e) {
 		}
 	}
 
-}
-
-
-
-function Combobox_CreateDataLoader(self) {
-	const controller = new AbortController();
-	const signal = controller.signal;
-
-	return {
-		Abort: () => {
-			controller.abort()
-		},
-
-		Load: async (url, loadedCallback) => {
-			try {
-				const response = await fetch(url, { signal });
-				const data = await response.json();
-				if (typeof loadedCallback == 'function') {
-					loadedCallback(data)
-				}
-			} catch (err) {
-				if (err.name === "AbortError") {
-					console.log("Request dibatalkan!");
-				} else {
-					console.error("Terjadi kesalahan:", err);
-				}
-			}
-		}
-	}
 }
 
 

@@ -116,9 +116,9 @@ async function main(self, args) {
 }
 
 
-async function obj_kota_selecting(evt) {
+function obj_kota_selecting(evt) {
 	const cbo = evt.detail.sender
-	const loader = cbo.CreateDataLoader()
+	const loader = new $fgta5.Dataloader() // cbo.CreateDataLoader()
 
 	cbo.ClearOptions()
 	cbo.Wait()
@@ -126,8 +126,8 @@ async function obj_kota_selecting(evt) {
 		loader.Abort()
 	}	
 	
-	loader.Load('http://localhost:3000/getdata', (data)=>{
-		cbo.ClearOptions()
+	var args
+	loader.Load('http://localhost:3000/getdata', {method: 'POST'}, (err, data)=>{
 		evt.detail.addNoneIfNotRequired()
 		for (var row of data) {
 			evt.detail.addRow(row.value, row.text, row)
