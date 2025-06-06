@@ -4,6 +4,7 @@
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
 	min-width: 270px;
 	user-select: none;
+	z-index: 1000;
 }
 
 .fgta5-modal-message::backdrop {

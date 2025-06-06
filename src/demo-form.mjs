@@ -99,7 +99,7 @@ async function main(self, args) {
 		})
 
 		obj_kota.addEventListener('optionformatting', (evt)=>{
-			console.log(evt.detail)
+			// console.log(evt.detail)
 		})
 
 		obj_kota.addEventListener('selecting', (evt)=>{
@@ -118,23 +118,35 @@ async function main(self, args) {
 
 function obj_kota_selecting(evt) {
 	const cbo = evt.detail.sender
+	const dialog = evt.detail.dialog
 	const loader = new $fgta5.Dataloader() // cbo.CreateDataLoader()
 
-	cbo.ClearOptions()
+	var searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+	var args = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			searchtext: searchtext,
+			offset: evt.detail.offset,
+			limit: evt.detail.limit,
+			test_delay: 50,
+			test_stop_at: 35
+		})
+	}
+
+
 	cbo.Wait()
-	cbo.AbortHandler = () => {
-		loader.Abort()
-	}	
-	
-	var args
-	loader.Load('http://localhost:3000/getdata', {method: 'POST'}, (err, data)=>{
-		evt.detail.addNoneIfNotRequired()
-		for (var row of data) {
+	cbo.AbortHandler = () => { loader.Abort() }	
+	loader.Load('http://localhost:3000/getdata', args, (err, result)=>{
+		for (var row of result.data) {
 			evt.detail.addRow(row.value, row.text, row)
 		}
-		evt.detail.markSelected()
+		dialog.setNext(result.nextoffset, result.limit)
 		cbo.Wait(false)
 	})
+	
 	
 }
 

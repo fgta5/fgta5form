@@ -1,13 +1,13 @@
 {
   "name": "fgta5form",
   "version": "0.2.0",
-  "description": "",
+  "description": "fgta5form libary",
   "type": "module",
   "main": "rollup.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./server-dev.js"
   },
-  "author": "",
+  "author": "agung nugroho",
   "license": "ISC",
   "devDependencies": {
     "cssnano": "^7.0.6",
@@ -20,5 +20,9 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "serve-favicon": "^2.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-personal:fgta5/fgta5js.git"
   }
 }

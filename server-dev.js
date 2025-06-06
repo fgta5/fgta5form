@@ -12,6 +12,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(favicon('favicon.ico'))
+app.use(express.json()); 
 
 
 app.use('/dist', express.static('dist'))
@@ -67,14 +68,50 @@ app.get('/release/:page', function(req, res) {
 });
 
 app.post('/getdata', async (req, res) => {
+	
+	var test_max_row = 20
 	var sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)) };
-	var jsondata = []
-	for (var i=0; i<=1000; i++) {
-		await sleep(5)
-		jsondata.push({value:`v-${i}`, text:`data-${i}`, nama:`nama-${i}`, alamat:`alamat-${i}`})
+	
+	// siapkan template data untuk result
+	var jsonresult = {
+		searchtext: '',
+		nextoffset: 0,
+		limit: 30,
+		data: []
 	}
 
-	res.send(JSON.stringify(jsondata))
+	// jika req.body kosong, berarti saat pertama search tanpa parameter apa2
+
+
+
+	// ambil parameter dari request body
+	const { searchtext, limit, offset, test_delay, test_stop_at } = req.body;
+
+
+	var test_max_row = test_stop_at!=undefined?test_stop_at : test_max_row
+	var endofresult = false
+	for (var i=offset; i<(offset+limit); i++) {
+		
+		// test maksimal data di test_max_row
+		if (i>=test_max_row) {
+			endofresult = true
+			break
+		}
+
+		if (test_delay!==undefined) {
+			await sleep(test_delay)
+		}
+		
+		var nama = `${searchtext!=''?searchtext:'data'}-${i}`
+		var alamat = `alamat-${nama}`
+
+		jsonresult.data.push({value:nama, text:nama, nama:nama, alamat:alamat})
+	}
+
+	jsonresult.nextoffset = !endofresult ? offset+limit : null
+	jsonresult.limit = limit
+
+	res.send(JSON.stringify(jsonresult))
 })
 
 

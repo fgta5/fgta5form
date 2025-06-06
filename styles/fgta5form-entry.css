@@ -374,6 +374,22 @@
 }
 
 
+.fgta5-combobox-dialog-filter {
+	display: flex;
+	margin: 10px;
+	column-gap: 10px;
+}
+
+.fgta5-combobox-dialog-filter input::placeholder {
+	text-transform: lowercase;
+	font-style: italic;
+}
+
+.fgta5-combobox-dialog-nextbutton {
+	margin: 10px 10px 50px 10px;
+}
+
+
 .fgta-combobox-option-row td {
 	border-bottom: 1px dotted #ccc;
 }
@@ -389,3 +405,4 @@
 	font-style: italic;
 	color:#606060;
 }
+
