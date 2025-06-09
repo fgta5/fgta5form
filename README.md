@@ -36,17 +36,17 @@ Put in HTML head
 	<div class="demo-input-field" field="obj_nama">
 		<label for="obj_nama">Nama</label>
 		<input id="obj_nama"  fgta5-component="Textbox" placeholder="nama anda" autocomplete="off" spellcheck="false" 
-							required
-							value="agung" 
-							style="background-color: aquamarine; "
-							character-case="uppercase"
-							required minlength="3" maxlength="15"
-							binding="nama"
-							description="isi dengan nama anda, minimal 3 karakter, maksimal 15 karakter"
-							invalid-message="Nama harus diisi, minimal 3 karakter, maksimal 15 karakter"
-							invalid-message-required="Nama harus diisi"
-							invalid-message-minlength="Nama minimal 3 karakter"
-							invalid-message-maxlength="Nama maksimal 15 karakter"
+			required
+			value="agung" 
+			style="background-color: aquamarine; "
+			character-case="uppercase"
+			required minlength="3" maxlength="15"
+			binding="nama"
+			description="isi dengan nama anda, minimal 3 karakter, maksimal 15 karakter"
+			invalid-message="Nama harus diisi, minimal 3 karakter, maksimal 15 karakter"
+			invalid-message-required="Nama harus diisi"
+			invalid-message-minlength="Nama minimal 3 karakter"
+			invalid-message-maxlength="Nama maksimal 15 karakter"
 		>
 	</div>
 
