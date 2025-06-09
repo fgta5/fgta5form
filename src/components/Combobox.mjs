@@ -461,7 +461,13 @@ function Combobox_createDialog(self, dialog) {
 
 	srcinput.setAttribute('placeholder', 'Search')
 	srcinput.setAttribute('maxlength', 30)
+	srcinput.addEventListener('keypress', (evt)=>{
+		if (evt.key==="Enter") {
+			srcbuton.click()
+		}
+	})
 	
+
 	srcbuton.innerHTML = 'Submit'
 	srcbuton.addEventListener('click', (evt)=>{
 		var searchtext = srcinput.value
@@ -701,6 +707,16 @@ function Combobox_buttonClick(self, e) {
 
 		// tambahkan data yang dipilih
 		Combobox_Search(self, searchtext, limit, offset)
+
+		// set focus pada input search
+		setTimeout(()=>{
+			var inputsearch = dialog.querySelector(".fgta5-combobox-dialog-filter input")
+			if (inputsearch!=null) {
+				inputsearch.focus()
+			}
+		}, 100)
+
+
 	}
 
 	// set jika dalam waktu 1 detik masih dalam posisi waiting, munculkan mask

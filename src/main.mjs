@@ -10,6 +10,7 @@ import Checkbox from './components/Checkbox.mjs';
 import Datepicker from './components/Datepicker.mjs';	
 import Timepicker from './components/Timepicker.mjs';	
 import Combobox from './components/Combobox.mjs';	
+import Filebox from './components/Filebox.mjs';
 import Dataloader from './components/DataLoader.mjs';	
 
 
@@ -23,6 +24,7 @@ const $fgta5 = {
 	Datepicker: Datepicker,
 	Timepicker: Timepicker,
 	Combobox: Combobox,
+	Filebox: Filebox,
 	MessageBox: MessageBox,
 	MessageBoxButton: MessageBoxButton,
 	Modal: Modal,

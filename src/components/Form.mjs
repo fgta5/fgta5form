@@ -5,6 +5,8 @@ import Checkbox from "./Checkbox.mjs"
 import Datepicker from "./Datepicker.mjs"
 import Timepicker from "./Timepicker.mjs"
 import Combobox from "./Combobox.mjs"
+import Filebox from "./Filebox.mjs"
+
 
 const formLockedEvent = new CustomEvent('locked')
 const formUnLockedEvent = new CustomEvent('unlocked')
@@ -105,6 +107,8 @@ function Construct(self, id) {
 			self.Inputs[input.id] = new Combobox(input.id)
 		} else if  (fgtacomp=='Checkbox') {
 			self.Inputs[input.id] = new Checkbox(input.id)
+		} else if (fgtacomp=='Filebox') {
+			self.Inputs[input.id] = new Filebox(input.id)
 		}
 	
 	}
