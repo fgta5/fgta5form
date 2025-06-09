@@ -3,7 +3,7 @@
 .demo-input-field {
 	display: flex;
 	column-gap: 10px;
-	background-color: aliceblue;
+	/* background-color: aliceblue; */
 }
 
 .demo-input-field > label {
@@ -54,8 +54,12 @@
 	width: 10px;
 }
 
+.demo-input-field[field=obj_nilai] {
+	flex-basis: 100%; /* definisikan flex-basis, apabila dalam satu baris hanya akan terdapat maximal 1 field */
+}
+
 .demo-input-field[field=obj_nilai] .fgta5-entry-container {
-	width: 3.75rem;
+	max-width: 3.75rem;
 }
 
 
