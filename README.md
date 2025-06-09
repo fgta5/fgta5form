@@ -2,7 +2,7 @@
 
 
 
-![](https://img.shields.io/github/stars/fgta5/fgta5form) ![](https://img.shields.io/github/forks/fgta5/fgta5form) ![](https://img.shields.io/github/tag/fgta5/fgta5form) ![](https://img.shields.io/github/release/fgta5/fgta5form) ![](https://img.shields.io/github/issues/fgta5/fgta5form) ![]
+![](https://img.shields.io/github/stars/fgta5/fgta5form) ![](https://img.shields.io/github/forks/fgta5/fgta5form) ![](https://img.shields.io/github/tag/fgta5/fgta5form) ![](https://img.shields.io/github/release/fgta5/fgta5form) ![](https://img.shields.io/github/issues/fgta5/fgta5form)
 
 
 This is a javascript library to simplify creating html form, by extending from standard form, by adding important features but still not exist in current html form specification, such as simplify detect value changes, accept value changes, reset value to last saved version, get json data, etc.
