@@ -18,9 +18,9 @@ Put in HTML head
 	...
 
 	<!-- fgta5form //-->
-	<link rel="stylesheet" href="dist/fgta5-v1.0.0-min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5-v1.0.0-min.css" />
 	<script type="module">
-		import $fgta5 from './dist/fgta5-v1.0.0-min.js'
+		import $fgta5 from 'https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5-v1.0.0-min.js'
 		window.$fgta5 = $fgta5
 	</script>
 	
