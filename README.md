@@ -18,8 +18,8 @@ Put in HTML head
 	...
 
 	<!-- fgta5form //-->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5-v1.0.0-min.css" />
-	<script src="https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5-v1.0.0-min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5form-v1.0.0-min.css" />
+	<script src="https://cdn.jsdelivr.net/gh/fgta5/fgta5form@v1.0/dist/fgta5form-v1.0.0-min.js"></script>
 	
     ...
 
